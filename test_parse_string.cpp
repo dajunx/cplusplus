@@ -1,5 +1,4 @@
 #include "define.h"
-#include "template_test.h"
 #include <vector>
 #include <string>
 typedef unsigned int uint32_t;
