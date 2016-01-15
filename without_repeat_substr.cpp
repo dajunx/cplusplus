@@ -21,7 +21,7 @@ int lengthOfLongestSubstring(string s)
 	char* substr_temp = new char[s.length() + 1];
 	strcpy(substr_temp, s.c_str());
 	substr_temp[s.length()] = '\0';
-	char* p_substr = substr_temp;	// whileÑ­»·Ò»´Î£¬ÏòºóÒÆ¶¯Ò»¸öµ¥´Ê
+	char* p_substr = substr_temp;	// whileå¾ªç¯ä¸€æ¬¡ï¼Œå‘åç§»åŠ¨ä¸€ä¸ªå•è¯
 	while ( '\0' != *substr_temp)
 	{
 		for (vector<int>::iterator iIt = vec_char.begin(); iIt != vec_char.end();++iIt)
@@ -51,12 +51,5 @@ int main(int argCount,char ** args)
 	}
 	input_str.append("abcdefghijklmnopqrstuvwxyzAB");
 	lengthOfLongestSubstring(input_str);
-	/*
-	for (int i=0;i<326;i++)
-	{
-		input_str.append("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ ");
-	}
-	input_str.append("abcdefghijklmnopqrstuvwxyzAB");
-	*/
 	return 0;
 };
