@@ -5,18 +5,7 @@ using namespace std;
 int lengthOfLongestSubstring(string s)
 {
 	int nSubstrMaxNonRepeatLength = 0;
-	unordered_map<char,vector<int> > cache_;
-	unordered_map<char,vector<int> >::iterator it;
-	vector<int> vec_char;
-	vector<int> vec_(1,0);
-	for (int i=32;i<127;i++)
-	{
-		if(s.find((char)i) != string::npos)
-		{
-			vec_char.push_back(i);
-			cache_.insert(pair<char,vector<int> >((char)i,vec_));
-		}
-	}
+	string no_rept_substr;
 
 	char* substr_temp = new char[s.length() + 1];
 	strcpy(substr_temp, s.c_str());
@@ -24,20 +13,25 @@ int lengthOfLongestSubstring(string s)
 	char* p_substr = substr_temp;	// while循环一次，向后移动一个单词
 	while ( '\0' != *substr_temp)
 	{
-		for (vector<int>::iterator iIt = vec_char.begin(); iIt != vec_char.end();++iIt)
+		size_t pos = no_rept_substr.find(*substr_temp);
+		if (pos == string::npos)
 		{
-			it = cache_.find((char)*iIt);
-			if ((char)*iIt == *substr_temp && it != cache_.end())
-			{
-				cache_[*iIt].push_back(0);
-			}
-			else if(it != cache_.end())
-			{
-				if(++it->second.back() > nSubstrMaxNonRepeatLength)
-					nSubstrMaxNonRepeatLength = it->second.back();
-			}
+			no_rept_substr.push_back(*substr_temp);
+			if(no_rept_substr.size() > nSubstrMaxNonRepeatLength) nSubstrMaxNonRepeatLength = no_rept_substr.size();
 		}
-		substr_temp ++;
+		else if((int)pos == 0)
+		{
+			if(no_rept_substr.size() > nSubstrMaxNonRepeatLength) nSubstrMaxNonRepeatLength = no_rept_substr.size();
+			no_rept_substr.erase(0,1); // 删除首字母重复
+			no_rept_substr.push_back(*substr_temp);
+		}
+		else
+		{
+			no_rept_substr.erase(0,pos+1);
+			no_rept_substr.push_back(*substr_temp);
+			if(no_rept_substr.size() > nSubstrMaxNonRepeatLength) nSubstrMaxNonRepeatLength = no_rept_substr.size();
+		}
+		substr_temp++;
 	}
 	if (s.size() > 0 && 0 == nSubstrMaxNonRepeatLength) nSubstrMaxNonRepeatLength++;
 	return nSubstrMaxNonRepeatLength;
