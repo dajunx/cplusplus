@@ -4,33 +4,52 @@
 #include <math.h>
 #include <stdio.h>
 #include <vector>
+#include <stdint.h>
 using namespace std;
 
 int reverse(int x)
 {
-	static vector<int> ret_vec;
-	if( 0 == ret_vec.size() && (2147418111 <= x || 0 == x))
+	int64_t tmp = x;
+	bool bIsNegativeNum = false;
+	if(0 == x || 2147483647 < x || -2147483648 == x || 2147483648 == x)
 		return 0;
-	else if( 0!= ret_vec.size() && 0 == x)
+	else if(x < 0)
 	{
-		std::vector<int>::reverse_iterator rit = ret_vec.rbegin();
-		int ret_tmp = 0, i = 1;
-		for(;rit!=ret_vec.rend();++rit)
-		{
-			ret_tmp += (*rit)*i;
-			i*= 10;
-		}
-		return ret_tmp;
+		tmp = -tmp;
+		bIsNegativeNum = true;
 	}
-	ret_vec.push_back(x%10);
-	int ret = reverse(x/10);
-	if(ret >= 2147418111)
+
+	vector<int64_t> ret_;
+	for (int i = 10;tmp > 0;)
+	{
+		ret_.push_back(tmp%i);
+		tmp = tmp / i;
+	}
+
+	int length = ret_.size() -1;
+	int64_t key = 1;
+	while (length --)
+	{
+		key *= 10;
+	}
+
+	tmp = 0;
+	for (vector<int64_t>::iterator it = ret_.begin(); it!=ret_.end();++it)
+	{
+		tmp += static_cast<int64_t>((*it)*key);
+		key = key/10;
+	}
+	if (0 == tmp || 2147483647 < tmp || -2147483648 == tmp || 2147483648 == tmp)
 		return 0;
-	return ret;
+	else if(bIsNegativeNum) 
+		return static_cast<int>(-tmp);
+	else
+		return static_cast<int>(tmp);
 }
 
 int main()
 {
-	int i = reverse(1230);
+	int k = sizeof(int64_t);
+	int i = reverse(1534236469);
 	return 0;
 }
