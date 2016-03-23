@@ -10,21 +10,25 @@ void ListMsg(const lm::helloworld & msg)
 	cout << msg.str() << endl; 
 }
 
-int main()
+void put_disk(lm::helloworld & msg)
 {
-	lm::helloworld msg1;
-	msg1.set_id(101);
-	msg1.set_str("hello");
+	msg.set_id(101);
+	msg.set_str("hello");
 
 	// Write the new address book back to disk. 
 	fstream output("./log", ios::out | ios::trunc | ios::binary);
 
-	if (!msg1.SerializeToOstream(&output))
+	if (!msg.SerializeToOstream(&output))
 	{
 		cerr << "Failed to write msg." << endl;
-		return -1;
+		output.close();
+		return;
 	}
+	output.close();
+}
 
+void read_from_disk()
+{
 	// write
 	lm::helloworld msg2;
 	{
@@ -32,10 +36,33 @@ int main()
 		if (!msg2.ParseFromIstream(&input))
 		{
 			cerr << "Failed to parse address book." << endl;
-			return -1;
+			input.close();
+			return;
 		}
+		input.close();
 	}
 	ListMsg(msg2);
+}
 
+int main()
+{
+	lm::helloworld msg;
+	put_disk(msg);
+
+	/*
+	string buf;
+	msg.SerializeToString(&buf);
+	lm::helloworld* tmp = new lm::helloworld();
+	tmp->ParseFromString(buf);
+	cout<<tmp->id()<<tmp->str()<<endl;
+	*/
+
+	// void *
+	void* data = new char(msg.ByteSize());
+	msg.SerializeToArray(data, msg.ByteSize());
+	lm::helloworld* tmp = new lm::helloworld();
+	tmp->ParsePartialFromArray(data, msg.ByteSize());
+	cout<<tmp->id()<<tmp->str()<<endl;
+	//read_from_disk();
 	return 0;
 }
