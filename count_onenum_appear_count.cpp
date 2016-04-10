@@ -46,10 +46,36 @@ int count_appear_onenum(const int& N)
   return num;
 }
 
+int normal_count_appear_onenum(const int& N)
+{
+  int num = 0;
+  for(int i = 1;i <= N; i++)
+  {
+    int tmp = i;
+    bool b_print_apear_onenum_N = false;
+    for(;tmp > 0;) 
+    {   
+      if(tmp%10 == 1)
+      {   
+        num++;
+        if(b_print_apear_onenum_N == false)
+        {   
+          std::cout<<" the N is "<<i<<std::endl;
+          b_print_apear_onenum_N = true;
+        }   
+      }   
+      tmp = tmp/10;
+    }   
+  }
+  return num;
+}
+
 int main()
 {
-  int N = 777777;
-  int one_count = count_appear_onenum(N);
+  int N = 9999999;
+  // int one_count = count_appear_onenum(N);
+  // std::cout<<"N is "<<N<<", one_count is "<<one_count<<std::endl;
+  int one_count = normal_count_appear_onenum(N);
   std::cout<<"N is "<<N<<", one_count is "<<one_count<<std::endl;
   return 0;
 }
