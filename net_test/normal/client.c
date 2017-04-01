@@ -16,7 +16,7 @@ void handle(int connfd);
 
 int main(int argc, char **argv)
 {
-    char * servInetAddr;
+    char * servInetAddr = (char*)malloc(10);
     sprintf(servInetAddr,"%s","127.0.0.1");
     int servPort = 6888;
     char buf[MAXLINE];
@@ -62,7 +62,7 @@ void handle(int sockfd)
             break;//read eof
         }
         /*
-        //Ò²¿ÉÒÔ²»ÓÃ±ê×¼¿âµÄ»º³åÁ÷,Ö±½ÓÊ¹ÓÃÏµÍ³º¯ÊıÎŞ»º´æ²Ù×÷
+        //ä¹Ÿå¯ä»¥ä¸ç”¨æ ‡å‡†åº“çš„ç¼“å†²æµ,ç›´æ¥ä½¿ç”¨ç³»ç»Ÿå‡½æ•°æ— ç¼“å­˜æ“ä½œ
         if (read(STDIN_FILENO, sendline, MAXLINE) == 0) {
             break;//read eof
         }
@@ -75,7 +75,7 @@ void handle(int sockfd)
             break;
         }
         write(STDOUT_FILENO, recvline, n);
-        //Èç¹ûÓÃ±ê×¼¿âµÄ»º´æÁ÷Êä³öÓĞÊ±»á³öÏÖÎÊÌâ
+        //å¦‚æœç”¨æ ‡å‡†åº“çš„ç¼“å­˜æµè¾“å‡ºæœ‰æ—¶ä¼šå‡ºç°é—®é¢˜
         //fputs(recvline, stdout);
     }
 }
