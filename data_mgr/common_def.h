@@ -23,7 +23,7 @@ void parse_cmd_and_content(char* content, std::vector<std::string>& cmd_pair)
 {
   if (!content) return;
 
-  std::string content(content);
+  //std::string content(content);
 }
 
 #endif
