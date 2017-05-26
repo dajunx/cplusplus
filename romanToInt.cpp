@@ -48,10 +48,69 @@ int romanToInt(string s) {
   return total_num;
 }
 
+bool intToRoman(int i, string& roman_str)
+{
+  //待处理的整型数字必须大于0且小于3999
+  if (i <= 0 || i > 3999) {
+    return false;
+  }
+
+  map<int, char> map_roman_int;
+  map_roman_int[1]    = 'I';
+  map_roman_int[5]    = 'V';
+  map_roman_int[10]   = 'X';
+  map_roman_int[50]   = 'L';
+  map_roman_int[100]  = 'C';
+  map_roman_int[500]  = 'D';
+  map_roman_int[1000] = 'M';
+
+  roman_str.clear();
+  do
+  {
+    if (i/1000 > 0) {
+      i -= 1000;
+      roman_str.append(1, map_roman_int[1000]);
+    } else if (i/500 > 0) {
+      i -= 500;
+      roman_str.append(1, map_roman_int[500]);
+    } else if (i/100 > 0) {
+      i -= 100;
+      roman_str.append(1, map_roman_int[100]);
+    } else if (i/50 > 0) {
+      i -= 50;
+      roman_str.append(1, map_roman_int[50]);
+    } else if (i/10 > 0) {
+      i -= 10;
+      roman_str.append(1, map_roman_int[10]);
+    } else if (i/5 > 0) {
+      i -= 5;
+      roman_str.append(1, map_roman_int[5]);
+    } else if (i/1 > 0) {
+      i -= 1;
+      roman_str.append(1, map_roman_int[1]);
+    }
+
+  } while (i > 0);
+  
+
+  return true;
+}
+
 int main()     
 {
   string input_romain_str("MCMXCVI");
-  romanToInt(input_romain_str);
+  //romanToInt(input_romain_str);
+  for (int i = 1; i< 4000;++i)
+  {
+    if (true == intToRoman(i, input_romain_str)) {
+      int i_ret = romanToInt(input_romain_str);
+      if (i != i_ret) {
+        std::cout<<"err, i:"<<i<<", conver_to string:"<<input_romain_str<<std::endl;
+        break;
+      }
+    }
+  }
+  
 
   int i = 0;
   return 0;
