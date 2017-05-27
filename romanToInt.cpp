@@ -50,6 +50,7 @@ int romanToInt(string s) {
 
 bool intToRoman(int i, string& roman_str)
 {
+  //TODO 逻辑有bug，i 为4 的时候 罗马数字并不是IIII
   //待处理的整型数字必须大于0且小于3999
   if (i <= 0 || i > 3999) {
     return false;
