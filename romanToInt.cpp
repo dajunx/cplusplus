@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <string>
 using namespace std;
@@ -48,51 +49,81 @@ int romanToInt(string s) {
   return total_num;
 }
 
-bool intToRoman(int i, string& roman_str)
+bool intToRoman(int num, string& roman_str)
 {
-  //TODO 逻辑有bug，i 为4 的时候 罗马数字并不是IIII
   //待处理的整型数字必须大于0且小于3999
-  if (i <= 0 || i > 3999) {
+  if (num <= 0 || num > 3999) {
     return false;
   }
 
   map<int, char> map_roman_int;
-  map_roman_int[1]    = 'I';
-  map_roman_int[5]    = 'V';
-  map_roman_int[10]   = 'X';
-  map_roman_int[50]   = 'L';
-  map_roman_int[100]  = 'C';
-  map_roman_int[500]  = 'D';
-  map_roman_int[1000] = 'M';
+  map_roman_int[1]    = 'I'; //1
+  map_roman_int[2]    = 'V'; //5
+  map_roman_int[3]    = 'X'; //10
+  map_roman_int[4]    = 'L'; //50
+  map_roman_int[5]    = 'C'; //100
+  map_roman_int[6]    = 'D'; //500
+  map_roman_int[7]    = 'M'; //1000
 
   roman_str.clear();
-  do
+  int i_copy = num;
+  for (int seq = 1;i_copy > 0;)
   {
-    if (i/1000 > 0) {
-      i -= 1000;
-      roman_str.append(1, map_roman_int[1000]);
-    } else if (i/500 > 0) {
-      i -= 500;
-      roman_str.append(1, map_roman_int[500]);
-    } else if (i/100 > 0) {
-      i -= 100;
-      roman_str.append(1, map_roman_int[100]);
-    } else if (i/50 > 0) {
-      i -= 50;
-      roman_str.append(1, map_roman_int[50]);
-    } else if (i/10 > 0) {
-      i -= 10;
-      roman_str.append(1, map_roman_int[10]);
-    } else if (i/5 > 0) {
-      i -= 5;
-      roman_str.append(1, map_roman_int[5]);
-    } else if (i/1 > 0) {
-      i -= 1;
-      roman_str.append(1, map_roman_int[1]);
+    int pos = 0;
+    if (i_copy > 10) {
+      pos = i_copy%10;
+    }
+    else if (i_copy == 10) {
+      roman_str.insert(roman_str.begin(), map_roman_int[seq+2]);
+      break;
+    } else {
+      pos = i_copy;
     }
 
-  } while (i > 0);
-  
+    switch(pos)
+    {
+    case 1:
+    case 2:
+    case 3:
+      {
+        for (;pos > 0;)
+        {
+          roman_str.insert(roman_str.begin(), map_roman_int[seq]);
+          pos--;
+        }
+        break;
+      }
+    case 4:
+      {
+        roman_str.insert(roman_str.begin(), map_roman_int[seq+1]);
+        roman_str.insert(roman_str.begin(), map_roman_int[seq]);        
+        break;
+      }
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      {
+        pos -= 5;
+        for (;pos > 0;)
+        {
+          roman_str.insert(roman_str.begin(), map_roman_int[seq]);
+          pos--;
+        }
+        roman_str.insert(roman_str.begin(), map_roman_int[seq+1]);
+        break;
+      }
+    case 9:
+      {
+        roman_str.insert(roman_str.begin(), map_roman_int[seq+2]);
+        roman_str.insert(roman_str.begin(), map_roman_int[seq]);        
+      }
+    default:
+      break;
+    }
+    i_copy /= 10;
+    seq += 2;
+  }  
 
   return true;
 }
@@ -100,17 +131,27 @@ bool intToRoman(int i, string& roman_str)
 int main()     
 {
   string input_romain_str("MCMXCVI");
-  //romanToInt(input_romain_str);
+  std::fstream fs;
+  fs.open ("linjj.txt", std::fstream::in | std::fstream::out | std::fstream::app);
   for (int i = 1; i< 4000;++i)
   {
     if (true == intToRoman(i, input_romain_str)) {
-      int i_ret = romanToInt(input_romain_str);
-      if (i != i_ret) {
-        std::cout<<"err, i:"<<i<<", conver_to string:"<<input_romain_str<<std::endl;
-        break;
-      }
+      fs<<i<<" "<<input_romain_str<<std::endl;
     }
   }
+  fs.close();
+
+  //romanToInt(input_romain_str);
+//   for (int i = 1; i< 4000;++i)
+//   {
+//     if (true == intToRoman(i, input_romain_str)) {
+//       int i_ret = romanToInt(input_romain_str);
+//       if (i != i_ret) {
+//         std::cout<<"err, i:"<<i<<", conver_to string:"<<input_romain_str<<std::endl;
+//         break;
+//       }
+//     }
+//   }
   
 
   int i = 0;
