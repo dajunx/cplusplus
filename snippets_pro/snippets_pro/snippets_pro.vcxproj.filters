@@ -1,17 +1,307 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="boost">
+      <UniqueIdentifier>{22c4c596-a00a-46ec-ab7e-5274ac272bab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="boost\boost">
+      <UniqueIdentifier>{f6fc1f64-9b72-4d4f-8b74-9f817e68f8fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="boost\多线程">
+      <UniqueIdentifier>{23111761-5001-4f63-9d3a-210aa443737d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="boost\network">
+      <UniqueIdentifier>{a079670a-04a6-481f-80e5-000e18556f89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="boost\生产者消费者模型">
+      <UniqueIdentifier>{52546a99-e78d-4114-a376-4b6c367becd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus">
+      <UniqueIdentifier>{22124ad2-db7a-48e5-81d9-d428f1c799cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\cplusplus">
+      <UniqueIdentifier>{0eb09586-86f5-4463-8d01-bf3e94ce8598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\template">
+      <UniqueIdentifier>{27af3dfb-7b1c-4112-8fa1-df06515c26ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\设计模式">
+      <UniqueIdentifier>{a3e9896f-37d7-4860-865a-b3cd3bd22ff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\stl">
+      <UniqueIdentifier>{a3d26af9-7009-4f9d-89de-5e6ee9fdac1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\network">
+      <UniqueIdentifier>{636fe99c-92dc-4183-85c8-3f9dbd4fa6fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\接口使用">
+      <UniqueIdentifier>{bb6a2f8f-df06-4750-9162-6fada84a495f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ptime_detail_ymdhms.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="bind_stl_fun.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="cancle_steady_timer.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem_copy_file_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem_create_rm_parse_file.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="steady_timer_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="header_content_staticfun_included_by_multicpp_err.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="linux_get_file_property.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem_read_write_content_2_file.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="judge_task_io_service_reactor_type.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="boost_random.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem_path_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="function_lib_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="bind_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="unified_com_client_M_test_stopfun_count.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="shared_ptr_use_count_in_multiuse_method.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="shared_ptr_cyclic_references.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="print_thread_id_code_spipet.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="calculate_ptime_cost_time.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="property_tree_rw_ini_file.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="use_io_service_wrap.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="io_service_run_inline_thread.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="io_service_common_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_mutex.cpp">
+      <Filter>boost\多线程</Filter>
+    </ClCompile>
+    <ClCompile Include="once_outine_test.cpp">
+      <Filter>boost\多线程</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_local_data_save.cpp">
+      <Filter>boost\多线程</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_condition_test.cpp">
+      <Filter>boost\多线程</Filter>
+    </ClCompile>
+    <ClCompile Include="asio_udp_client.cpp">
+      <Filter>boost\network</Filter>
+    </ClCompile>
+    <ClCompile Include="asio_udp_server.cpp">
+      <Filter>boost\network</Filter>
+    </ClCompile>
+    <ClCompile Include="sync_tcp_client.cpp">
+      <Filter>boost\network</Filter>
+    </ClCompile>
+    <ClCompile Include="async_tcp_service1.cpp">
+      <Filter>boost\network</Filter>
+    </ClCompile>
+    <ClCompile Include="async_tcp_service0.cpp">
+      <Filter>boost\network</Filter>
+    </ClCompile>
+    <ClCompile Include="vector_test.cpp">
+      <Filter>normal_cplusplus\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="select_module_keyboard.cpp">
+      <Filter>normal_cplusplus\network</Filter>
+    </ClCompile>
+    <ClCompile Include="mysql_connector_cplusplus_conn_select_test.cpp">
+      <Filter>normal_cplusplus\接口使用</Filter>
+    </ClCompile>
+    <ClCompile Include="mysql_connector_cplusplus_use_procedure.cpp">
+      <Filter>normal_cplusplus\接口使用</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>normal_cplusplus\设计模式</Filter>
+    </ClCompile>
+    <ClCompile Include="cplusplus_class_template.cpp">
+      <Filter>normal_cplusplus\template</Filter>
+    </ClCompile>
+    <ClCompile Include="template_keyword_typename.cpp">
+      <Filter>normal_cplusplus\template</Filter>
+    </ClCompile>
+    <ClCompile Include="scarce_usage.cpp">
+      <Filter>normal_cplusplus\template</Filter>
+    </ClCompile>
+    <ClCompile Include="typedef_combine_template_err.cpp">
+      <Filter>normal_cplusplus\template</Filter>
+    </ClCompile>
+    <ClCompile Include="a_named_pipe.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="msg_dispatch.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="log4cplus_test.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="cplusplus_friend_fun_class.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="array_copy_snippet.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="type_conversion_operator_fun.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="get_operator_fun_address.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="cplusplus_random_example.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="random_shuffle_test.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="set_container_random.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="class_inline_class.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="macro_FILE_warnning.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="load_file_content_into_pchar.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="i_plusplus_i_operator.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="functor_fun.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="non_boost_function_bind_usage.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="typedef_typename_usage.cpp">
+      <Filter>normal_cplusplus\template</Filter>
+    </ClCompile>
+    <ClCompile Include="not_template_bind_example.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="template_bind_example.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="delegate_test.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="visit_class_fun_and_normal_fun.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="simple_file_read_and_write.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="ipv6_test.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="property_tree_write_read_json.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="vector_iterator_err.cpp">
+      <Filter>normal_cplusplus\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="vector_speed_by_set_capacity.cpp">
+      <Filter>normal_cplusplus\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="va_start_va_end_va_list_example.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="boost_multi_index_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="normal_funciton_point.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="steady_clock_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="cplusplus_time_test.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="boost_function_bind_mixed_usage.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="calculate_fun_duration_time.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="boost_example_01.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="a_web_weak_ptr_header.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="atomic_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="cplusplus_random_base_from_time.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="new_operator_another_method.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="string_algo_snippet.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="function_bypass_parameter_usage.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="wrap_usage.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="bind_life_cycle_example.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="simple_random_02.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="functio_return_value_life_cycle.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="complex_fun_point.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="trie_example1.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="trie_example2.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
