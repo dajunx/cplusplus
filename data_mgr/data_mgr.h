@@ -42,4 +42,5 @@ public:
 public:
   std::map<std::string, std::string> string_map_data_;
 };
+
 #endif
