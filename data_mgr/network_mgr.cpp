@@ -33,8 +33,11 @@ void server::handle_read(const boost::system::error_code& error,
     data_[bytes_transferred] = '\0';
     std::cout << __FUNCTION__ << ", data:" << data_ << std::endl;
 
-    std::string msg_tmp(data_);
-    boost::shared_ptr<msg_parameter> ptr_msg_para_ = boost::make_shared<msg_parameter>("set", "lin");
+    std::string msg_tmp, key, value;
+    parse_cmd_and_content(data_, msg_tmp, key, value);
+
+    
+    boost::shared_ptr<msg_parameter> ptr_msg_para_ = boost::make_shared<msg_parameter>(key, value);
     if (ptr_dis_msg_->check_point_msg(msg_tmp)) {
       ptr_dis_msg_->dispatch_msg(msg_tmp, ptr_msg_para_);
     }

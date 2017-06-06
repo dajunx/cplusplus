@@ -1,6 +1,6 @@
 
 #include "network_mgr.h" //网络
-#include "message_dispatch.h" // 消息分发
+//#include "message_dispatch.h" // 消息分发
 
 int main()
 {

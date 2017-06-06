@@ -1,6 +1,6 @@
 #ifndef MESSAGE_DISPATCH
 #define MESSAGE_DISPATCH
-#include "common_def.h"
+//#include "common_def.h"
 #include "data_mgr.h"
 
 struct msg_parameter

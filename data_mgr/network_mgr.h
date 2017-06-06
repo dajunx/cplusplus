@@ -1,6 +1,6 @@
 #ifndef NETWORK_MGR
 #define NETWORK_MGR
-#include "common_def.h"
+//#include "common_def.h"
 #include "message_dispatch.h"
 
 #define max_length 1024
