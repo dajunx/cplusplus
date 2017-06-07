@@ -38,13 +38,19 @@ void server::handle_read(const boost::system::error_code& error,
     data_[bytes_transferred] = '\0';
     std::cout << __FUNCTION__ << ", data:" << data_ << std::endl;
 
-    std::string msg_tmp, key, value;
-    parse_cmd_and_content(data_, msg_tmp, key, value);
+    std::vector<std::string> vec_data;
+    vec_data.resize(3);
+    parse_cmd_and_content(data_, vec_data);
 
     
-    boost::shared_ptr<msg_parameter> ptr_msg_para_ = boost::make_shared<msg_parameter>(key, value);
-    if (ptr_dis_msg_->check_point_msg(msg_tmp)) {
-      ptr_dis_msg_->dispatch_msg(msg_tmp, ptr_msg_para_);
+    boost::shared_ptr<msg_parameter> ptr_msg_para_ = boost::make_shared<msg_parameter>(vec_data[1], vec_data[2]);
+    if (ptr_dis_msg_->check_point_msg(vec_data[0])) {
+      ptr_dis_msg_->dispatch_msg(vec_data[0], ptr_msg_para_);
+    }
+
+    memset(data_, 0, bytes_transferred);
+    if (!ptr_msg_para_->key_.empty()) {
+      strncpy(data_, ptr_msg_para_->value_.c_str(), ptr_msg_para_->value_.size());
     }
 
     boost::asio::async_write(*ptr_socket,

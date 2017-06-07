@@ -1,6 +1,6 @@
 #ifndef MESSAGE_DISPATCH
 #define MESSAGE_DISPATCH
-//#include "common_def.h"
+#include "common_def.h"
 #include "data_mgr.h"
 
 struct msg_parameter
@@ -19,9 +19,10 @@ typedef boost::function<void(boost::shared_ptr<msg_parameter>)> fun_;
 class message_mgr : public boost::enable_shared_from_this<message_mgr>
 {
 public:
-  message_mgr()
+  message_mgr(boost::shared_ptr<data_mgr>& ptr_data_mgr)
+    : ptr_data_mgr_(ptr_data_mgr)
   {
-    ptr_data_mgr_ = boost::make_shared<data_mgr>();
+    //ptr_data_mgr_ = boost::make_shared<data_mgr>();
   }
   ~message_mgr() {}
 
@@ -36,7 +37,6 @@ public:
 
   void funset(boost::shared_ptr<msg_parameter> ptr_parameter)
   {
-    std::cout<<"fun :"<<__FUNCTION__<<std::endl;
     if (ptr_parameter && ptr_data_mgr_->add_data(ptr_parameter->key_, ptr_parameter->value_)) {
       std::cout<<"fun :"<<__FUNCTION__<<", OK"<<std::endl;
     }
@@ -44,7 +44,6 @@ public:
 
   void funget(boost::shared_ptr<msg_parameter> ptr_parameter)
   {
-    std::cout<<"fun :"<<__FUNCTION__<<std::endl;
     if (ptr_parameter && ptr_data_mgr_->get_data(ptr_parameter->key_, ptr_parameter->value_)) {
       std::cout<<"fun :"<<__FUNCTION__<<", OK"<<std::endl;
     }
@@ -52,7 +51,7 @@ public:
 
   void funsave(boost::shared_ptr<msg_parameter> ptr_parameter)
   {
-    std::cout<<"fun :"<<__FUNCTION__<<std::endl;
+    ptr_data_mgr_->save_data();
   }
 
   void funquit(boost::shared_ptr<msg_parameter> ptr_parameter)
@@ -81,7 +80,7 @@ public:
 
 public:
   std::map<std::string, fun_> fun_map_;
-  boost::shared_ptr<data_mgr> ptr_data_mgr_;
+  boost::shared_ptr<data_mgr>& ptr_data_mgr_;
 };
 
 #endif

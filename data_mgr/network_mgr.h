@@ -10,11 +10,11 @@ typedef boost::shared_ptr<tcp::socket> socket_ptr;
 class server
 {
 public:
-  server(boost::asio::io_service& io_service, short port)
+  server(boost::asio::io_service& io_service, short port, boost::shared_ptr<data_mgr>& ptr_data_mgr)
     : io_service_(io_service)
     , acceptor_(io_service, tcp::endpoint(tcp::v4(), port))
     , running_(true)
-    , ptr_dis_msg_(boost::make_shared<message_mgr>())
+    , ptr_dis_msg_(boost::make_shared<message_mgr>(ptr_data_mgr))
   { }
 
   void receive_client_conn();
