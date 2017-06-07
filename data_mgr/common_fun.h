@@ -1,7 +1,7 @@
 #ifndef COMMON_FUN
 #define COMMON_FUN
 
-#include "common_def.h"
+#include "data_mgr.h"
 
 // 解析命令，返还一对命令/值 对;
 // set foo lin; get foo; shutdown;

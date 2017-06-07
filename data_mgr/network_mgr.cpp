@@ -8,7 +8,11 @@ void server::receive_client_conn()
                                               (io_service_);
   vec_socket_ptr_.push_back(ptr_socket);
   boost::system::error_code ecc;
+
+  //main进程在此处阻塞，等待新的client连接
   ecc = acceptor_.accept(*ptr_socket, ecc);
+
+  //接受的client连接 post到io_service线程进行处理(数据交互 ...)
   io_service_.post(boost::bind(&server::handle_accept, this, ecc, ptr_socket));
 }
 
