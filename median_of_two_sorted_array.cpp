@@ -39,41 +39,48 @@ double find_two_sorted_median1(std::vector<int>& nums1, std::vector<int>& nums2)
 
   int array_total_size = nums1.size() + nums2.size();
   int left_pos = 0, right_pos = 0, passed_num_count = 0;
-  int num1_pos = 0, num2_pos = 0;
-  int left_num = 0, right_num = 0;
+  //int num1_pos = 0, num2_pos = 0;
+  //int left_num = 0, right_num = 0;
   int tmp[2] = {0}, pos = 0;
   std::vector<int>::iterator it1 = nums1.begin(), it2 = nums2.begin();
 
+  //找出中间值
   if (array_total_size%2 == 0) {
     //偶
-    left_pos = array_total_size/2;
-    right_pos = left_pos + 1;
+    left_pos = array_total_size/2 - 1;
+    right_pos = 1;
   } else {
     //奇
     left_pos = array_total_size/2;
   }
 
+  bool com_left_arr = true;
   while (1)
   {
+    //走到了数组中间位置
     if(left_pos == 0 && right_pos == 0) {
       break;
     }
 
-    if (it1 == nums1.end() && it2 == nums2.end())
-    {
-      int i = 0; /// err
-    }
-    else if (it1 == nums1.end() && it2 != nums2.end())
-    {
+    if(it1 == nums1.end() && it2 == nums2.end()) {
+      ///
+      break;
+    } else if(it1 == nums1.end() && it2 != nums2.end()) {
       pos == 0 ? left_pos-- : right_pos --;
-      tmp[pos] = *it2++;
-    } else if (it2 == nums2.end() && it1 != nums1.end())
-    {
+      tmp[pos] = tmp[pos] < *it2 ? *it2 : tmp[pos];
+      it2++;
+    } else if (it2 == nums2.end() && it1 != nums1.end()) {
       pos == 0 ? left_pos-- : right_pos --;
-      tmp[pos] = *it1++;
-    } else if(*it1 < *it2)
-    {
-      tmp[pos] = *it < *it2 ? *it2,
+      tmp[pos] = tmp[pos] < *it1 ? *it1 : tmp[pos];
+      it1++;
+    } else if (*it1 <= *it2) {
+      pos == 0 ? left_pos-- : right_pos --;
+      tmp[pos] = tmp[pos] < *it2 ? *it2 : tmp[pos];
+      it1++;
+    } else if (*it1 > *it2) {
+      pos == 0 ? left_pos-- : right_pos --;
+      tmp[pos] = tmp[pos] < *it1 ? *it1 : tmp[pos];
+      it2++;
     }
 
     if(left_pos == 0) {
@@ -81,14 +88,17 @@ double find_two_sorted_median1(std::vector<int>& nums1, std::vector<int>& nums2)
     }
   }
 
+  tmp[1] == 0 ? ret = tmp[0] : ret = static_cast<double>(tmp[0] + tmp[1])/2;
+
   return ret;
 }
 
 int main()
 {
-  int a[] = {1, 2, 3, 5, 8, 9}, b[] = {5, 8, 9};
+  //int a[] = {1, 2, 3, 5, 8, 9}, b[] = {5, 8, 9};
+  int a[] = {1, 2, 3}, b[] = {3};
   std::vector<int> num1(a, a + sizeof(a)/sizeof(int)), num2(b, b+ sizeof(b)/sizeof(int));
-  double ret = find_two_sorted_median(num1, num2);
+  double ret = find_two_sorted_median1(num1, num2);
 
   return 0;
 }
