@@ -99,6 +99,7 @@
     <ClCompile Include="cplusplus_random_base_from_time.cpp" />
     <ClCompile Include="cplusplus_random_example.cpp" />
     <ClCompile Include="cplusplus_time_test.cpp" />
+    <ClCompile Include="cpp_virtual_fun_post_test.cpp" />
     <ClCompile Include="delegate_test.cpp" />
     <ClCompile Include="filesystem_copy_file_test.cpp" />
     <ClCompile Include="filesystem_create_rm_parse_file.cpp" />
@@ -122,6 +123,7 @@
     <ClCompile Include="msg_dispatch.cpp" />
     <ClCompile Include="mysql_connector_cplusplus_conn_select_test.cpp" />
     <ClCompile Include="mysql_connector_cplusplus_use_procedure.cpp" />
+    <ClCompile Include="mysql_multi_thread_conn_test.cpp" />
     <ClCompile Include="new_operator_another_method.cpp" />
     <ClCompile Include="non_boost_function_bind_usage.cpp" />
     <ClCompile Include="normal_funciton_point.cpp" />

@@ -1,6 +1,8 @@
 //mysql-connector-c++  连接/查询mysql
 //暂时用的3rd库里面的动态库进行编译
 
+//使用lib：  F:\Work\3rd\mysql-connector-c++\build\driver\Debug
+
 #include <driver/mysql_connection.h> 
 #include <cppconn/driver.h> 
 #include <cppconn/exception.h> 

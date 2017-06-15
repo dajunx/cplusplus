@@ -306,5 +306,11 @@
     <ClCompile Include="virtual_usage.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
+    <ClCompile Include="cpp_virtual_fun_post_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="mysql_multi_thread_conn_test.cpp">
+      <Filter>normal_cplusplus\接口使用</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
