@@ -2,93 +2,57 @@
 #include <vector>
 //求两个已排序int vector的median
 
-double find_two_sorted_median(std::vector<int>& nums1, std::vector<int>& nums2)
-{
-  //先汇总2个vector，再找出中位数,不满足 log(m+n)时间复杂度
-  double ret = 0;
-  std::vector<int>::iterator it1 = nums1.begin(), it2 = nums2.begin();
-  std::vector<int> common_arry;
-  for (;it1 != nums1.end() && it2 != nums2.end();)
-  {
-    *it1 < *it2 
-      ? common_arry.push_back(*it1++)
-      : common_arry.push_back(*it2++), common_arry.push_back(*it1++);
-  }
-
-  for(;it1 != nums1.end();) {
-    common_arry.push_back(*it1++);
-  }
-
-  for(;it2 != nums2.end();) {
-    common_arry.push_back(*it2++);
-  }
-
-  int com_size = common_arry.size();
-  if (com_size%2 == 0) {
-    ret = static_cast<double>(common_arry.at(com_size/2 -1) + common_arry.at(com_size/2))/2;
-  } else {
-    ret = static_cast<double>(common_arry.at(com_size/2));
-  }
-
-  return ret;
-}
-
+//{1, 2, 3, 5, 8, 9},{5, 8, 9}
+//算法(走向)：1-2-3-5 8  9
+//                |/ \/ \
+//                5   8  9
+//题目总的思路是两个排序号的数组，再次排序在一起后，求中位数。
 double find_two_sorted_median1(std::vector<int>& nums1, std::vector<int>& nums2)
 {
   double ret = 0;
 
   int array_total_size = nums1.size() + nums2.size();
-  int left_pos = 0, right_pos = 0, passed_num_count = 0;
-  //int num1_pos = 0, num2_pos = 0;
-  //int left_num = 0, right_num = 0;
-  int tmp[2] = {0}, pos = 0;
+  int left_pos = 0;
+  bool even_number = false;
+  int tmp[2] = {0};
   std::vector<int>::iterator it1 = nums1.begin(), it2 = nums2.begin();
 
   //找出中间值
-  if (array_total_size%2 == 0) {
-    //偶
-    left_pos = array_total_size/2 - 1;
-    right_pos = 1;
-  } else {
-    //奇
-    left_pos = array_total_size/2;
-  }
-
-  bool com_left_arr = true;
-  while (1)
+  do 
   {
-    //走到了数组中间位置
-    if(left_pos == 0 && right_pos == 0) {
+    if (array_total_size == 1) {
+      nums1.size() == 1 ? ret = nums1.at(0) : ret = nums2.at(0);
       break;
+    } else if (array_total_size%2 == 0) {
+      //偶
+      left_pos = array_total_size/2 + 1;
+      even_number = true;
+    } else {
+      //奇
+      left_pos = array_total_size/2 + 2;
     }
 
-    if(it1 == nums1.end() && it2 == nums2.end()) {
-      ///
-      break;
-    } else if(it1 == nums1.end() && it2 != nums2.end()) {
-      pos == 0 ? left_pos-- : right_pos --;
-      tmp[pos] = tmp[pos] < *it2 ? *it2 : tmp[pos];
-      it2++;
-    } else if (it2 == nums2.end() && it1 != nums1.end()) {
-      pos == 0 ? left_pos-- : right_pos --;
-      tmp[pos] = tmp[pos] < *it1 ? *it1 : tmp[pos];
-      it1++;
-    } else if (*it1 <= *it2) {
-      pos == 0 ? left_pos-- : right_pos --;
-      tmp[pos] = tmp[pos] < *it2 ? *it2 : tmp[pos];
-      it1++;
-    } else if (*it1 > *it2) {
-      pos == 0 ? left_pos-- : right_pos --;
-      tmp[pos] = tmp[pos] < *it1 ? *it1 : tmp[pos];
-      it2++;
+    while (left_pos-- > 0) {
+      //走到了数组中间位置
+      if(it1 == nums1.end() && it2 == nums2.end()) {
+        break;
+      } else if(it1 == nums1.end() && it2 != nums2.end()) {
+        tmp[0] = tmp[1];
+        tmp[1] = *it2++;
+      } else if (it2 == nums2.end() && it1 != nums1.end()) {
+        tmp[0] = tmp[1];
+        tmp[1] = *it1++;
+      } else if (*it1 <= *it2) {
+        tmp[0] = tmp[1];
+        tmp[1] = *it1++;
+      } else if (*it1 > *it2) {
+        tmp[0] = tmp[1];
+        tmp[1] = *it2++;
+      }
     }
 
-    if(left_pos == 0) {
-      pos++;
-    }
-  }
-
-  tmp[1] == 0 ? ret = tmp[0] : ret = static_cast<double>(tmp[0] + tmp[1])/2;
+    even_number ? ret = static_cast<double>(tmp[0] + tmp[1])/2 : ret = tmp[0];
+  } while (false);
 
   return ret;
 }
@@ -96,8 +60,10 @@ double find_two_sorted_median1(std::vector<int>& nums1, std::vector<int>& nums2)
 int main()
 {
   //int a[] = {1, 2, 3, 5, 8, 9}, b[] = {5, 8, 9};
-  int a[] = {1, 2, 3}, b[] = {3};
-  std::vector<int> num1(a, a + sizeof(a)/sizeof(int)), num2(b, b+ sizeof(b)/sizeof(int));
+  //int a[] = {1, 2, 3}, b[] = {3};
+  //std::vector<int> num1(a, a + sizeof(a)/sizeof(int)), num2(b, b+ sizeof(b)/sizeof(int));
+  std::vector<int> num1, num2;
+  num2.push_back(1);
   double ret = find_two_sorted_median1(num1, num2);
 
   return 0;
