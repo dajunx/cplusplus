@@ -37,6 +37,18 @@
     <Filter Include="normal_cplusplus\接口使用">
       <UniqueIdentifier>{bb6a2f8f-df06-4750-9162-6fada84a495f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="normal_cplusplus\network\normal">
+      <UniqueIdentifier>{34765028-9e1a-4dd6-80ab-eaa608bd64a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\network\epoll">
+      <UniqueIdentifier>{75c7b749-efde-4aad-9c4a-33ff4b3e6e97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\network\poll">
+      <UniqueIdentifier>{3822382f-6745-435a-864a-453a1aca7176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\network\select">
+      <UniqueIdentifier>{9daf42e0-1223-48cc-83af-18b3832e1f73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ptime_detail_ymdhms.cpp">
@@ -311,6 +323,42 @@
     </ClCompile>
     <ClCompile Include="mysql_multi_thread_conn_test.cpp">
       <Filter>normal_cplusplus\接口使用</Filter>
+    </ClCompile>
+    <ClCompile Include="net_epoll_server.cpp">
+      <Filter>normal_cplusplus\network\epoll</Filter>
+    </ClCompile>
+    <ClCompile Include="net_epoll_client.cpp">
+      <Filter>normal_cplusplus\network\epoll</Filter>
+    </ClCompile>
+    <ClCompile Include="net_poll_client.cpp">
+      <Filter>normal_cplusplus\network\poll</Filter>
+    </ClCompile>
+    <ClCompile Include="net_poll_server.cpp">
+      <Filter>normal_cplusplus\network\poll</Filter>
+    </ClCompile>
+    <ClCompile Include="net_poll_keyboard.cpp">
+      <Filter>normal_cplusplus\network\poll</Filter>
+    </ClCompile>
+    <ClCompile Include="net_select_keyboard.cpp">
+      <Filter>normal_cplusplus\network\select</Filter>
+    </ClCompile>
+    <ClCompile Include="net_select_client.cpp">
+      <Filter>normal_cplusplus\network\select</Filter>
+    </ClCompile>
+    <ClCompile Include="net_select_web_server.cpp">
+      <Filter>normal_cplusplus\network\select</Filter>
+    </ClCompile>
+    <ClCompile Include="net_select_test.cpp">
+      <Filter>normal_cplusplus\network\select</Filter>
+    </ClCompile>
+    <ClCompile Include="net_select_server.cpp">
+      <Filter>normal_cplusplus\network\select</Filter>
+    </ClCompile>
+    <ClCompile Include="net_normal_client.cpp">
+      <Filter>normal_cplusplus\network\normal</Filter>
+    </ClCompile>
+    <ClCompile Include="net_normal_server.cpp">
+      <Filter>normal_cplusplus\network\normal</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
