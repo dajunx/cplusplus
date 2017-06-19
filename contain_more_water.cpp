@@ -1,19 +1,30 @@
 #include <iostream>
 #include <vector>
 #include <map>
+//11. Container With Most Water
+/*
+**Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the 
+**two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains 
+**the most water.
+**Note: You may not slant the container and n is at least 2.
+*/
 
+/*
+** 效率偏低，待优化
+** 思路：先从线段最低的开始a，找理他最远的线段x，记录a与x能形成的容积，去掉a线段，以此类推，遍历完height 即可找到最大容积
+*/
 int maxArea(std::vector<int>& height) {
   if (height.size() < 2) {
     return 0;
   }
 
-  std::map<int, int> map_arpe, map_height;
-  std::map<int, int>::iterator it_map;
+  std::multimap<int, int> map_arpe, map_height;
+  std::multimap<int, int>::iterator it_map;
   std::vector<int>::iterator it = height.begin();
   int height_size = height.size();
   int res_array[3] = {0};
 
-  for (int i = 0; it != height.end(); ++it, ++i)
+  for (int i = 1; it != height.end(); ++it, ++i)
   {
     map_arpe.insert(std::pair<int, int>(*it, i));
     map_height.insert(std::pair<int, int>(i, *it));
@@ -35,9 +46,7 @@ int maxArea(std::vector<int>& height) {
         : (map_height.rbegin())->first;
       res_array[2] = area_tmp;
     }
-    left_length > right_length
-      ? map_height.erase((map_height.begin())->first)
-      : map_height.erase((map_height.rbegin())->first);
+    map_height.erase(it_map->second);
   }
 
   return res_array[2];
@@ -45,7 +54,8 @@ int maxArea(std::vector<int>& height) {
 
 int main()
 {
-  int a[] = {3, 7, 5, 4};
+  //int a[] = {3, 7, 5, 4};
+  int a[] = {1,3,2,5,25,24,5};
   std::vector<int> height(a, a + sizeof(a)/sizeof(int));
   maxArea(height);
 
