@@ -428,6 +428,7 @@ void closeTimedoutClients(void) {
     listReleaseIterator(li);
 }
 
+// time event callback fun.
 int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
     int j, size, used, loops = server.cronloops++;
     REDIS_NOTUSED(eventLoop);
@@ -541,7 +542,7 @@ static void initServer() {
     server.clients = listCreate();
     server.objfreelist = listCreate();
     createSharedObjects();
-    server.el = aeCreateEventLoop();  //linjj 使用 ac  event_loop
+    server.el = aeCreateEventLoop();  //linjj ac/event_loop
     server.dict = malloc(sizeof(dict*)*server.dbnum);
     if (!server.dict || !server.clients || !server.el || !server.objfreelist)
         oom("server initialization"); /* Fatal OOM */
@@ -559,7 +560,7 @@ static void initServer() {
     server.bgsaveinprogress = 0;
     server.lastsave = time(NULL);
     server.dirty = 0;
-    aeCreateTimeEvent(server.el, 1000, serverCron, NULL, NULL); //linjj 使用 ac  time_event
+    aeCreateTimeEvent(server.el, 1000, serverCron, NULL, NULL); //linjj ac/time_event
 }
 
 /* I agree, this is a very rudimental way to load a configuration...
@@ -932,6 +933,7 @@ static void addReplySds(redisClient *c, sds s) {
     decrRefCount(o);
 }
 
+//file event callback
 static void acceptHandler(aeEventLoop *el, int fd, void *privdata, int mask) {
     int cport, cfd;
     char cip[128];

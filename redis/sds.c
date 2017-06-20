@@ -70,9 +70,10 @@ size_t sdslen(const sds s) {
     return sh->len;
 }
 
-sds sdsdup(const sds s) {
-    return sdsnewlen(s, sdslen(s));
-}
+// no use
+// sds sdsdup(const sds s) {
+//     return sdsnewlen(s, sdslen(s));
+// }
 
 void sdsfree(sds s) {
     if (s == NULL) return;
@@ -229,11 +230,12 @@ void sdstolower(sds s) {
     for (j = 0; j < len; j++) s[j] = tolower(s[j]);
 }
 
-void sdstoupper(sds s) {
-    int len = sdslen(s), j;
-
-    for (j = 0; j < len; j++) s[j] = toupper(s[j]);
-}
+// no use
+// void sdstoupper(sds s) {
+//     int len = sdslen(s), j;
+// 
+//     for (j = 0; j < len; j++) s[j] = toupper(s[j]);
+// }
 
 int sdscmp(sds s1, sds s2) {
     size_t l1, l2, minlen;
@@ -268,20 +270,19 @@ sds *sdssplitlen(char *s, int len, char *sep, int seplen, int *count) {
 
     sds *tokens = malloc(sizeof(sds)*slots);
 #ifdef SDS_ABORT_ON_OOM
-    if (tokens == NULL) sdsOomAbort();
+    if (tokens == NULL) 
+      sdsOomAbort();
 #endif
-    if (seplen < 1 || len < 0 || tokens == NULL) return NULL;
+
+    if (seplen < 1 || len < 0 || tokens == NULL) 
+      return NULL;
     for (j = 0; j < (len-(seplen-1)); j++) {
         /* make sure there is room for the next element and the final one */
         if (slots < elements+2) {
             slots *= 2;
             sds *newtokens = realloc(tokens,sizeof(sds)*slots);
             if (newtokens == NULL) {
-#ifdef SDS_ABORT_ON_OOM
-                sdsOomAbort();
-#else
-                goto cleanup;
-#endif
+              OomAbort();
             }
             tokens = newtokens;
         }
@@ -289,11 +290,7 @@ sds *sdssplitlen(char *s, int len, char *sep, int seplen, int *count) {
         if ((seplen == 1 && *(s+j) == sep[0]) || (memcmp(s+j,sep,seplen) == 0)) {
             tokens[elements] = sdsnewlen(s+start,j-start);
             if (tokens[elements] == NULL) {
-#ifdef SDS_ABORT_ON_OOM
-                sdsOomAbort();
-#else
-                goto cleanup;
-#endif
+              OomAbort();
             }
             elements++;
             start = j+seplen;
@@ -303,23 +300,22 @@ sds *sdssplitlen(char *s, int len, char *sep, int seplen, int *count) {
     /* Add the final element. We are sure there is room in the tokens array. */
     tokens[elements] = sdsnewlen(s+start,len-start);
     if (tokens[elements] == NULL) {
-#ifdef SDS_ABORT_ON_OOM
-                sdsOomAbort();
-#else
-                goto cleanup;
-#endif
+      OomAbort();
     }
     elements++;
     *count = elements;
     return tokens;
+}
 
-#ifndef SDS_ABORT_ON_OOM
-cleanup:
-    {
-        int i;
-        for (i = 0; i < elements; i++) sdsfree(tokens[i]);
-        free(tokens);
-        return NULL;
-    }
+void OomAbort()
+{
+#ifdef SDS_ABORT_ON_OOM
+    sdsOomAbort();
+#else
+  int i;
+  for (i = 0; i < elements; i++) 
+    sdsfree(tokens[i]);
+  free(tokens);
+  return NULL;
 #endif
 }

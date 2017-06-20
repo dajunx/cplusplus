@@ -88,14 +88,14 @@ int dictAdd(dict *ht, void *key, void *val);
 int dictReplace(dict *ht, void *key, void *val);
 int dictDelete(dict *ht, const void *key);
 int dictDeleteNoFree(dict *ht, const void *key);
-void dictRelease(dict *ht);
+void dictRelease(dict *ht); // no use
 dictEntry * dictFind(dict *ht, const void *key);
 int dictResize(dict *ht);
 dictIterator *dictGetIterator(dict *ht);
 dictEntry *dictNext(dictIterator *iter);
 void dictReleaseIterator(dictIterator *iter);
 dictEntry *dictGetRandomKey(dict *ht);
-void dictPrintStats(dict *ht);
+void dictPrintStats(dict *ht); // no use
 unsigned int dictGenHashFunction(const unsigned char *buf, int len);
 
 /* Hash table types */
