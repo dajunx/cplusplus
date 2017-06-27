@@ -25,7 +25,7 @@ int main()
     printf("\n ret = %d",ret);
 
   if(FD_ISSET(0,&rdfds))//如果有输入，从stdin中获取输入字符
-  {   
+  {
     printf("\n reading\n");
     fread(buf,9,1,stdin);
   }   

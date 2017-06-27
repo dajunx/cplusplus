@@ -12,7 +12,7 @@
 
 #define MAXLINE 10240
 
-void handle(int * clientSockFds, int maxFds, fd_set* pRset, fd_set* pAllset);
+void handle(int * clientSockFds, int maxFds, fd_set* pRset, fd_set* pAllset, char* quit);
 
 int  main(int argc, char **argv)
 {
@@ -65,6 +65,7 @@ int  main(int argc, char **argv)
   printf("echo server use select startup, listen on port %d\n", servPort);
   printf("max connection: %d\n", FD_SETSIZE);
 
+  char* quit = "quit";
   for ( ; ; )
   {
     rset = allset;
@@ -102,12 +103,12 @@ int  main(int argc, char **argv)
       /*     continue; */
     }
 
-    handle(clientSockFds, maxfd, &rset, &allset);
+    handle(clientSockFds, maxfd, &rset, &allset, quit);
   }
 }
 
 
-void handle(int * clientSockFds, int maxFds, fd_set* pRset, fd_set* pAllset) {
+void handle(int * clientSockFds, int maxFds, fd_set* pRset, fd_set* pAllset, char* quit) {
   int nread;
   int i;
   char buf[MAXLINE];
@@ -122,13 +123,20 @@ void handle(int * clientSockFds, int maxFds, fd_set* pRset, fd_set* pAllset) {
           clientSockFds[i] = -1;
           continue;
         }
-        if (nread == 0) {
+        if (nread == 0) { //kill 可以引发这个case
           printf("client close the connection\n");
           close(clientSockFds[i]);
           FD_CLR(clientSockFds[i], pAllset);
           clientSockFds[i] = -1;
           continue;
         }
+        if (strncmp(buf, quit, 4) == 0) { //socket传递过来的数据，除了输入的本身，还额外包含回车和换行2个字符
+          printf("client close the connection 1\n");
+          close(clientSockFds[i]);
+          FD_CLR(clientSockFds[i], pAllset);
+          clientSockFds[i] = -1; 
+          continue;
+        } 
         write(clientSockFds[i], buf, nread);//响应客户端  有可能失败，暂不处理
       }
     }

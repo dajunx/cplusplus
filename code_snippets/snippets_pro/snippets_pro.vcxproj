@@ -120,6 +120,9 @@
     <ClCompile Include="load_file_content_into_pchar.cpp" />
     <ClCompile Include="log4cplus_test.cpp" />
     <ClCompile Include="macro_FILE_warnning.cpp" />
+    <ClCompile Include="map_erase_element_effective.cpp" />
+    <ClCompile Include="md5.cpp" />
+    <ClCompile Include="md5test.cpp" />
     <ClCompile Include="msg_dispatch.cpp" />
     <ClCompile Include="mysql_connector_cplusplus_conn_select_test.cpp" />
     <ClCompile Include="mysql_connector_cplusplus_use_procedure.cpp" />
@@ -152,6 +155,7 @@
     <ClCompile Include="set_container_random.cpp" />
     <ClCompile Include="shared_ptr_cyclic_references.cpp" />
     <ClCompile Include="shared_ptr_use_count_in_multiuse_method.cpp" />
+    <ClCompile Include="SimpleFactoryPatternDemo.cpp" />
     <ClCompile Include="simple_file_read_and_write.cpp" />
     <ClCompile Include="simple_random_02.cpp" />
     <ClCompile Include="steady_clock_test.cpp" />
@@ -177,6 +181,9 @@
     <ClCompile Include="virtual_usage.cpp" />
     <ClCompile Include="visit_class_fun_and_normal_fun.cpp" />
     <ClCompile Include="wrap_usage.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="md5.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -49,6 +49,18 @@
     <Filter Include="normal_cplusplus\network\select">
       <UniqueIdentifier>{9daf42e0-1223-48cc-83af-18b3832e1f73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_example">
+      <UniqueIdentifier>{3ea8d029-6a0b-4a9a-b710-da6c09e63098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test_example\stl">
+      <UniqueIdentifier>{cd71e66d-69dc-4b1f-8d9c-8a67da067110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\hash_test">
+      <UniqueIdentifier>{a9950e08-aa8a-4b73-a217-f0c2dcef8ac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\hash_test\md5">
+      <UniqueIdentifier>{6d76ddc3-0528-4bcc-8f00-3175a5a3b69d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ptime_detail_ymdhms.cpp">
@@ -360,5 +372,22 @@
     <ClCompile Include="net_normal_server.cpp">
       <Filter>normal_cplusplus\network\normal</Filter>
     </ClCompile>
+    <ClCompile Include="map_erase_element_effective.cpp">
+      <Filter>test_example\stl</Filter>
+    </ClCompile>
+    <ClCompile Include="md5.cpp">
+      <Filter>normal_cplusplus\hash_test\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="md5test.cpp">
+      <Filter>normal_cplusplus\hash_test\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleFactoryPatternDemo.cpp">
+      <Filter>normal_cplusplus\设计模式</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="md5.h">
+      <Filter>normal_cplusplus\hash_test\md5</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
