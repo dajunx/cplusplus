@@ -21,14 +21,13 @@ class message_mgr : public boost::enable_shared_from_this<message_mgr>
 public:
   message_mgr(boost::shared_ptr<data_mgr>& ptr_data_mgr)
     : ptr_data_mgr_(ptr_data_mgr)
-  {
-    //ptr_data_mgr_ = boost::make_shared<data_mgr>();
-  }
+  { }
   ~message_mgr() {}
 
   void init()
   {
     //消息回调绑定
+    // 参数对于set是输入、对于get是输出
     fun_map_["get"] = boost::bind(&message_mgr::funget, shared_from_this(), boost::lambda::_1);
     fun_map_["set"] = boost::bind(&message_mgr::funset, shared_from_this(), boost::lambda::_1);
     fun_map_["save"] = boost::bind(&message_mgr::funsave, shared_from_this(), boost::lambda::_1);
@@ -62,10 +61,6 @@ public:
   void dispatch_msg(const std::string& msg, boost::shared_ptr<msg_parameter> ptr_parameter)
   {
     fun_map_[msg](ptr_parameter);
-  }
-
-  void registe_msg_mgr()
-  {
   }
 
   bool check_point_msg(const std::string& msg)

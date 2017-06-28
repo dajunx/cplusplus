@@ -2,7 +2,7 @@
 #include "common_fun.h"
 
 
-void server::receive_client_conn()
+void network_mgr::receive_client_conn()
 {
   boost::shared_ptr<tcp::socket> ptr_socket = boost::make_shared<tcp::socket>
                                               (io_service_);
@@ -10,18 +10,22 @@ void server::receive_client_conn()
   boost::system::error_code ecc;
 
   //main进程在此处阻塞，等待新的client连接
-  ecc = acceptor_.accept(*ptr_socket, ecc);
+  /*ecc = */acceptor_.accept(*ptr_socket, ecc);
+  if(ecc) {
+    //An error occurred.
+    return;
+  }
 
   //接受的client连接 post到io_service线程进行处理(数据交互 ...)
-  io_service_.post(boost::bind(&server::handle_accept, this, ecc, ptr_socket));
+  io_service_.post(boost::bind(&network_mgr::handle_read_data, this, ecc, ptr_socket));
 }
 
-void server::handle_accept(const boost::system::error_code& error,
+void network_mgr::handle_read_data(const boost::system::error_code& error,
                            socket_ptr ptr_socket)
 {
   if (!error) {
     ptr_socket->async_read_some(boost::asio::buffer(data_, max_length),
-                                boost::bind(&server::handle_read, this,
+                                boost::bind(&network_mgr::handle_write_data, this,
                                             boost::asio::placeholders::error,
                                             boost::asio::placeholders::bytes_transferred,
                                             ptr_socket));
@@ -30,7 +34,7 @@ void server::handle_accept(const boost::system::error_code& error,
   }
 }
 
-void server::handle_read(const boost::system::error_code& error,
+void network_mgr::handle_write_data(const boost::system::error_code& error,
                          size_t bytes_transferred,
                          socket_ptr ptr_socket)
 {
@@ -55,33 +59,10 @@ void server::handle_read(const boost::system::error_code& error,
 
     boost::asio::async_write(*ptr_socket,
                              boost::asio::buffer(data_, bytes_transferred),
-                             boost::bind(&server::handle_write, this,
+                             boost::bind(&network_mgr::handle_read_data, this,
                                          boost::asio::placeholders::error,
                                          ptr_socket));
   } else {
     std::cout << __FUNCTION__ << ", error value:" << error.message() << std::endl;
   }
-}
-
-void server::handle_write(const boost::system::error_code& error,
-                          socket_ptr ptr_socket)
-{
-  if (!error) {
-    ptr_socket->async_read_some(boost::asio::buffer(data_, max_length),
-                                boost::bind(&server::handle_read, this,
-                                            boost::asio::placeholders::error,
-                                            boost::asio::placeholders::bytes_transferred,
-                                            ptr_socket));
-  } else {
-    std::cout << __FUNCTION__ << ", error value:" << error.message() << std::endl;
-  }
-}
-
-void server::accept_client_conn_loop()
-{
-  ptr_dis_msg_->init();
-  do 
-  {
-    receive_client_conn();
-  } while (running_);
 }
