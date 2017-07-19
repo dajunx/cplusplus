@@ -52,12 +52,37 @@ int maxArea(std::vector<int>& height) {
   return res_array[2];
 }
 
+//高于自己且最远,双重for循环，效率太低
+int maxArea1(std::vector<int>& height) {
+  if (height.size() < 2) {
+    return 0;
+  }
+
+  int height_size = height.size();
+  int res_array[3] = {0};
+  for (int i=0; i < height_size; i++)
+  {
+    for (int j=0; j < height_size; j++)
+    {
+      if (height.at(i) <= height.at(j)
+          && abs(j-i) * height.at(i) >= res_array[2]) {
+        res_array[0] = i;
+        res_array[1] = j;
+        res_array[2] = abs(j-i) * height.at(i);
+      }
+    }
+  }
+
+  return res_array[2];
+}
+
 int main()
 {
   //int a[] = {3, 7, 5, 4};
   int a[] = {1,3,2,5,25,24,5};
   std::vector<int> height(a, a + sizeof(a)/sizeof(int));
-  maxArea(height);
+//   maxArea(height);
+//   maxArea1(height);
 
   int i = 0;
   return 0;

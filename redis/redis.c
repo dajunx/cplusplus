@@ -802,6 +802,7 @@ static void readQueryFromClient(aeEventLoop *el, int fd, void *privdata, int mas
     REDIS_NOTUSED(mask);
 
     nread = read(fd, buf, REDIS_QUERYBUF_LEN);
+    printf("fun:%s, line:%d \n", __FUNCTION__, __LINE__);
     if (nread == -1) {
         if (errno == EAGAIN) {
             nread = 0;
@@ -1270,6 +1271,7 @@ static void setGenericCommand(redisClient *c, int nx) {
 }
 
 static void setCommand(redisClient *c) {
+    printf("fun:%s, line:%d \n", __FUNCTION__, __LINE__);
     return setGenericCommand(c,0);
 }
 

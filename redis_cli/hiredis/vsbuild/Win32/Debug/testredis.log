@@ -1,0 +1,20 @@
+﻿Build started 2017/7/19 19:05:37.
+     1>Project "E:\vs2010\redis_cli\hiredis\vsbuild\testredis.vcxproj" on node 2 (build target(s)).
+     1>PrepareForBuild:
+         Creating directory "E:\vs2010\redis_cli\hiredis\vsbuild\output\Win32\Debug\".
+       InitializeBuildStatus:
+         Creating "Win32\Debug\testredis.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IF:\3rdlib\libevent /IF:\3rdlib\libevent\include /I"F:\3rdlib\libevent\WIN32-Code" /IF:\3rdlib\boost /IF:\3rdlib\hiredis /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Win32\Debug\\" /Fd"Win32\Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\redis_client.cpp ..\redis_wrapper.cpp ..\test_wrapper.cpp
+         test_wrapper.cpp
+     1>e:\vs2010\redis_cli\hiredis\redis_wrapper.hpp(4): fatal error C1083: Cannot open include file: 'boost/function.hpp': No such file or directory
+         redis_wrapper.cpp
+     1>e:\vs2010\redis_cli\hiredis\redis_wrapper.hpp(4): fatal error C1083: Cannot open include file: 'boost/function.hpp': No such file or directory
+         redis_client.cpp
+     1>e:\vs2010\redis_cli\hiredis\redis_client.hpp(4): fatal error C1083: Cannot open include file: 'boost/function.hpp': No such file or directory
+         Generating Code...
+     1>Done Building Project "E:\vs2010\redis_cli\hiredis\vsbuild\testredis.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.63

@@ -92,6 +92,8 @@
     <ClCompile Include="calculate_fun_duration_time.cpp" />
     <ClCompile Include="calculate_ptime_cost_time.cpp" />
     <ClCompile Include="cancle_steady_timer.cpp" />
+    <ClCompile Include="class_assignment_pk_initialization.cpp" />
+    <ClCompile Include="class_function_point.cpp" />
     <ClCompile Include="class_inline_class.cpp" />
     <ClCompile Include="complex_fun_point.cpp" />
     <ClCompile Include="cplusplus_class_template.cpp" />
@@ -105,6 +107,7 @@
     <ClCompile Include="filesystem_create_rm_parse_file.cpp" />
     <ClCompile Include="filesystem_path_test.cpp" />
     <ClCompile Include="filesystem_read_write_content_2_file.cpp" />
+    <ClCompile Include="filesystem_savefile_del_oldfile.cpp" />
     <ClCompile Include="function_bypass_parameter_usage.cpp" />
     <ClCompile Include="function_lib_test.cpp" />
     <ClCompile Include="functio_return_value_life_cycle.cpp" />

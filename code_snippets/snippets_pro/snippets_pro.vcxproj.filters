@@ -384,6 +384,15 @@
     <ClCompile Include="SimpleFactoryPatternDemo.cpp">
       <Filter>normal_cplusplus\设计模式</Filter>
     </ClCompile>
+    <ClCompile Include="filesystem_savefile_del_oldfile.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="class_function_point.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="class_assignment_pk_initialization.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="md5.h">

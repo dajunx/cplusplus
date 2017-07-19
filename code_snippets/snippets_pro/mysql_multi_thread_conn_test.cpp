@@ -94,6 +94,7 @@ void insert_data_2_mysql(int i)
   }
 }
 
+//TODO 对应的存储过程和结果不一致，具体使用修改
 void call_procedure(int i)
 {
   boost::this_thread::sleep(boost::posix_time::seconds(2));
@@ -101,6 +102,7 @@ void call_procedure(int i)
     sql::Driver *driver; 
     sql::Connection *con; 
     sql::PreparedStatement *pstmt;
+    sql::ResultSet * res;  //用于存储过程返回结果
 
     driver = get_driver_instance(); 
     con = driver->connect("192.168.221.136", "linjj", "19900801");
@@ -118,6 +120,23 @@ void call_procedure(int i)
 
     pstmt = con->prepareStatement(sql_text);
     pstmt->execute();
+
+    /*或者使用
+    std::string sql_text("call insert_test_data(?)");
+
+    pstmt = con->prepareStatement(sql_text);
+    pstmt->setInt(1, i);
+    */
+
+
+    //遍历存储过程的结果(包括存储过程中的select 返回或者 存储过程产生的错误[使用 show errors; ])
+    do {
+      res = pstmt->getResultSet();
+      while (res->next()) {
+        std::cout << "id: " << res->getInt("id")
+          << " name: " << res->getString("name") << std::endl;
+      }
+    } while (pstmt->getMoreResults());
 
     delete pstmt;
     delete con;

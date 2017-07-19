@@ -53,7 +53,7 @@ void listDelNode(list *list, listNode *node);
 listIter *listGetIterator(list *list, int direction);
 listNode *listNextElement(listIter *iter);
 void listReleaseIterator(listIter *iter);
-list *listDup(list *orig);
+list *listDup(list *orig);  // no use
 listNode *listSearchKey(list *list, void *key);
 listNode *listIndex(list *list, int index);
 
