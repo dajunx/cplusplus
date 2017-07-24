@@ -32,9 +32,106 @@ void  protobuf_AddDesc_lm_2ehelloworld_2eproto();
 void protobuf_AssignDesc_lm_2ehelloworld_2eproto();
 void protobuf_ShutdownFile_lm_2ehelloworld_2eproto();
 
+class userinfo;
 class helloworld;
 
 // ===================================================================
+
+class userinfo : public ::google::protobuf::Message {
+ public:
+  userinfo();
+  virtual ~userinfo();
+  
+  userinfo(const userinfo& from);
+  
+  inline userinfo& operator=(const userinfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+  
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+  
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const userinfo& default_instance();
+  
+  void Swap(userinfo* other);
+  
+  // implements Message ----------------------------------------------
+  
+  userinfo* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const userinfo& from);
+  void MergeFrom(const userinfo& from);
+  void Clear();
+  bool IsInitialized() const;
+  
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  
+  ::google::protobuf::Metadata GetMetadata() const;
+  
+  // nested types ----------------------------------------------------
+  
+  // accessors -------------------------------------------------------
+  
+  // required int32 uid = 1;
+  inline bool has_uid() const;
+  inline void clear_uid();
+  static const int kUidFieldNumber = 1;
+  inline ::google::protobuf::int32 uid() const;
+  inline void set_uid(::google::protobuf::int32 value);
+  
+  // required string name = 2;
+  inline bool has_name() const;
+  inline void clear_name();
+  static const int kNameFieldNumber = 2;
+  inline const ::std::string& name() const;
+  inline void set_name(const ::std::string& value);
+  inline void set_name(const char* value);
+  inline void set_name(const char* value, size_t size);
+  inline ::std::string* mutable_name();
+  inline ::std::string* release_name();
+  
+  // @@protoc_insertion_point(class_scope:lm.userinfo)
+ private:
+  inline void set_has_uid();
+  inline void clear_has_uid();
+  inline void set_has_name();
+  inline void clear_has_name();
+  
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+  
+  ::std::string* name_;
+  ::google::protobuf::int32 uid_;
+  
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  
+  friend void  protobuf_AddDesc_lm_2ehelloworld_2eproto();
+  friend void protobuf_AssignDesc_lm_2ehelloworld_2eproto();
+  friend void protobuf_ShutdownFile_lm_2ehelloworld_2eproto();
+  
+  void InitAsDefaultInstance();
+  static userinfo* default_instance_;
+};
+// -------------------------------------------------------------------
 
 class helloworld : public ::google::protobuf::Message {
  public:
@@ -108,10 +205,18 @@ class helloworld : public ::google::protobuf::Message {
   inline ::std::string* mutable_str();
   inline ::std::string* release_str();
   
-  // optional int32 opt = 3;
+  // optional .lm.userinfo ui = 3;
+  inline bool has_ui() const;
+  inline void clear_ui();
+  static const int kUiFieldNumber = 3;
+  inline const ::lm::userinfo& ui() const;
+  inline ::lm::userinfo* mutable_ui();
+  inline ::lm::userinfo* release_ui();
+  
+  // optional int32 opt = 4;
   inline bool has_opt() const;
   inline void clear_opt();
-  static const int kOptFieldNumber = 3;
+  static const int kOptFieldNumber = 4;
   inline ::google::protobuf::int32 opt() const;
   inline void set_opt(::google::protobuf::int32 value);
   
@@ -121,6 +226,8 @@ class helloworld : public ::google::protobuf::Message {
   inline void clear_has_id();
   inline void set_has_str();
   inline void clear_has_str();
+  inline void set_has_ui();
+  inline void clear_has_ui();
   inline void set_has_opt();
   inline void clear_has_opt();
   
@@ -129,9 +236,10 @@ class helloworld : public ::google::protobuf::Message {
   ::std::string* str_;
   ::google::protobuf::int32 id_;
   ::google::protobuf::int32 opt_;
+  ::lm::userinfo* ui_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
   
   friend void  protobuf_AddDesc_lm_2ehelloworld_2eproto();
   friend void protobuf_AssignDesc_lm_2ehelloworld_2eproto();
@@ -144,6 +252,90 @@ class helloworld : public ::google::protobuf::Message {
 
 
 // ===================================================================
+
+// userinfo
+
+// required int32 uid = 1;
+inline bool userinfo::has_uid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void userinfo::set_has_uid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void userinfo::clear_has_uid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void userinfo::clear_uid() {
+  uid_ = 0;
+  clear_has_uid();
+}
+inline ::google::protobuf::int32 userinfo::uid() const {
+  return uid_;
+}
+inline void userinfo::set_uid(::google::protobuf::int32 value) {
+  set_has_uid();
+  uid_ = value;
+}
+
+// required string name = 2;
+inline bool userinfo::has_name() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void userinfo::set_has_name() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void userinfo::clear_has_name() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void userinfo::clear_name() {
+  if (name_ != &::google::protobuf::internal::kEmptyString) {
+    name_->clear();
+  }
+  clear_has_name();
+}
+inline const ::std::string& userinfo::name() const {
+  return *name_;
+}
+inline void userinfo::set_name(const ::std::string& value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void userinfo::set_name(const char* value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+}
+inline void userinfo::set_name(const char* value, size_t size) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  name_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* userinfo::mutable_name() {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    name_ = new ::std::string;
+  }
+  return name_;
+}
+inline ::std::string* userinfo::release_name() {
+  clear_has_name();
+  if (name_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = name_;
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// -------------------------------------------------------------------
 
 // helloworld
 
@@ -227,15 +419,44 @@ inline ::std::string* helloworld::release_str() {
   }
 }
 
-// optional int32 opt = 3;
-inline bool helloworld::has_opt() const {
+// optional .lm.userinfo ui = 3;
+inline bool helloworld::has_ui() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void helloworld::set_has_opt() {
+inline void helloworld::set_has_ui() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void helloworld::clear_has_opt() {
+inline void helloworld::clear_has_ui() {
   _has_bits_[0] &= ~0x00000004u;
+}
+inline void helloworld::clear_ui() {
+  if (ui_ != NULL) ui_->::lm::userinfo::Clear();
+  clear_has_ui();
+}
+inline const ::lm::userinfo& helloworld::ui() const {
+  return ui_ != NULL ? *ui_ : *default_instance_->ui_;
+}
+inline ::lm::userinfo* helloworld::mutable_ui() {
+  set_has_ui();
+  if (ui_ == NULL) ui_ = new ::lm::userinfo;
+  return ui_;
+}
+inline ::lm::userinfo* helloworld::release_ui() {
+  clear_has_ui();
+  ::lm::userinfo* temp = ui_;
+  ui_ = NULL;
+  return temp;
+}
+
+// optional int32 opt = 4;
+inline bool helloworld::has_opt() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void helloworld::set_has_opt() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void helloworld::clear_has_opt() {
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void helloworld::clear_opt() {
   opt_ = 0;
