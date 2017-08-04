@@ -396,6 +396,9 @@
     <ClCompile Include="class_temp_object.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
+    <ClCompile Include="replace_all_non_chinese_chs.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="md5.h">
