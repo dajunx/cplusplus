@@ -1,8 +1,15 @@
+//算法题：Valid Parentheses
+/*
+Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+*/
+
 #include <iostream>
 #include <map>
 #include <list>
 using namespace std;
 
+//思路1：括号字符差值等于1或者2，所以从左向右遍历给予的所有字符，插入list中，两两匹对
 bool isValid(string s)
 {
   bool ret = false;
