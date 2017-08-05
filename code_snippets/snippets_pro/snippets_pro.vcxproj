@@ -102,6 +102,7 @@
     <ClCompile Include="cplusplus_random_base_from_time.cpp" />
     <ClCompile Include="cplusplus_random_example.cpp" />
     <ClCompile Include="cplusplus_time_test.cpp" />
+    <ClCompile Include="cpp_constructor_copying_cycle.cpp" />
     <ClCompile Include="cpp_virtual_fun_post_test.cpp" />
     <ClCompile Include="delegate_test.cpp" />
     <ClCompile Include="filesystem_copy_file_test.cpp" />
