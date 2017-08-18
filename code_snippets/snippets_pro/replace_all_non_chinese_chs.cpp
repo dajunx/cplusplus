@@ -32,6 +32,24 @@ void write(std::wstring& ret)
   file.close();
 }
 
+void fun2()
+{
+  std::ifstream fin("C:\\Users\\Administrator\\Desktop\\hole_.log"); 
+  std::fstream out("C:\\Users\\Administrator\\Desktop\\hole_to.log", std::fstream::in | std::fstream::out | std::fstream::app);
+  std::string s;
+  std::wstring ws;
+  boost::wregex reg1(L"[^\u4e00-\u9fa5]+", boost::regex::icase|boost::regex::perl);
+  while(getline(fin,s))
+  {    
+    ws = boost::locale::conv::utf_to_utf<wchar_t>(s);
+    ws = boost::regex_replace(ws, reg1, "$1");
+    out << boost::locale::conv::utf_to_utf<char>(ws) << std::endl;
+  }
+
+  fin.close();
+  out.close();
+}
+
 void fun1()
 {
   std::wstring s1 = L"Boost Libraries";

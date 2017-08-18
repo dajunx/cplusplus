@@ -105,5 +105,10 @@ int main()
   }
   std::cout<<std::endl;
 
+
+  BOOST_FOREACH(employee const & ee, es) {
+    std::cout<<"id:"<<ee.id<<", name:"<<ee.name<<", age:"<<ee.age<<std::endl;
+  }
+
   return 0;
 }
