@@ -402,6 +402,9 @@
     <ClCompile Include="cpp_constructor_copying_cycle.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
+    <ClCompile Include="multi_index_add_up_view.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="md5.h">

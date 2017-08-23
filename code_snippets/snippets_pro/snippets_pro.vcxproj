@@ -129,6 +129,7 @@
     <ClCompile Include="md5.cpp" />
     <ClCompile Include="md5test.cpp" />
     <ClCompile Include="msg_dispatch.cpp" />
+    <ClCompile Include="multi_index_add_up_view.cpp" />
     <ClCompile Include="mysql_connector_cplusplus_conn_select_test.cpp" />
     <ClCompile Include="mysql_connector_cplusplus_use_procedure.cpp" />
     <ClCompile Include="mysql_multi_thread_conn_test.cpp" />
