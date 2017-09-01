@@ -83,7 +83,7 @@ vector<int> twoSum1(vector<int>& nums, int target)
         不相等则插入map中，用于校验下一组元素是否和上一组元素可以组合满足条件
 time cost:13ms.
 */
-vector<int> twoSum(vector<int>& nums, int target)
+vector<int> twoSum2(vector<int>& nums, int target)
 {
   unordered_map<int, int> unmap_other;
   unordered_map<int, int>::iterator un_it;
@@ -115,11 +115,11 @@ vector<int> twoSum(vector<int>& nums, int target)
       vec_ret.push_back(j);
       break;
     } else {
-//       unmap_other.insert(std::make_pair<int, int>(target - nums.at(i), i));
-//       unmap_other.insert(std::make_pair<int, int>(target - nums.at(j), j));
+      unmap_other.insert(std::make_pair<int, int>(target - nums.at(i), i));
+      unmap_other.insert(std::make_pair<int, int>(target - nums.at(j), j));
       //leetcode 编译提示 make_pair不存在，使用 {} 方式向unordered_map插入元素
-      unmap_other.insert({target - nums.at(i), i});
-      unmap_other.insert({target - nums.at(j), j});
+//       unmap_other.insert({target - nums.at(i), i});
+//       unmap_other.insert({target - nums.at(j), j});
       i += 2;
       j = i + 1;
       if(j >= vec_size) j = i; // 已经到达数组末端
@@ -127,6 +127,22 @@ vector<int> twoSum(vector<int>& nums, int target)
   }
 
   return vec_ret;
+}
+
+/* LeetCode 速度最快的算法！！！
+  和我的 twoSum思想类似，不过更简练易懂，效率也高
+*/
+vector<int> twoSum(vector<int>& nums, int target)
+{
+  unordered_map<int, int> hash;
+  unordered_map<int, int>::iterator it;
+  for(int i = 0; i < nums.size(); i++)
+  {
+    it = hash.find(target - nums[i]);
+    if(it != hash.end())
+      return vector<int>(it->second, i);
+    else hash[nums[i]] = i;
+  }
 }
 
 int main()
