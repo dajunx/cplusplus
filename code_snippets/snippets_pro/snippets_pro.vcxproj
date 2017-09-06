@@ -97,6 +97,7 @@
     <ClCompile Include="class_inline_class.cpp" />
     <ClCompile Include="class_temp_object.cpp" />
     <ClCompile Include="complex_fun_point.cpp" />
+    <ClCompile Include="coroutine_test.cpp" />
     <ClCompile Include="cplusplus_class_template.cpp" />
     <ClCompile Include="cplusplus_friend_fun_class.cpp" />
     <ClCompile Include="cplusplus_random_base_from_time.cpp" />

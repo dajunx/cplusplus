@@ -405,6 +405,9 @@
     <ClCompile Include="multi_index_add_up_view.cpp">
       <Filter>boost\boost</Filter>
     </ClCompile>
+    <ClCompile Include="coroutine_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="md5.h">
