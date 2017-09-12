@@ -12,6 +12,7 @@ A solution set is:
 #include <iostream>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <set>
 #include <algorithm>
 #include <sstream>
@@ -31,13 +32,13 @@ public:
 };
 
 //a + b + c = 0?
-//特暴力原始方式 (n2时间复杂度)
-vector<vector<int>> threeSum(vector<int>& nums) 
+//特暴力原始方式
+vector<vector<int> > threeSum1(vector<int>& nums) 
 {
-  vector<vector<int>> vec_ret;
+  vector<vector<int> > vec_ret;
   vector<int>::iterator it;
-  std::multimap<int, int> mul_map_content;
-  std::multimap<int, int>::iterator it_mul_map1,it_mul_map2, it_mul_find;
+  std::unordered_multimap<int, int> mul_map_content;
+  std::unordered_multimap<int, int>::iterator it_mul_map1,it_mul_map2, it_mul_find;
   int pos = 0;
   for (it = nums.begin(); it != nums.end(); ++it)
   {
@@ -58,36 +59,151 @@ vector<vector<int>> threeSum(vector<int>& nums)
       value_tmp = it_mul_map1->first + it_mul_map2->first;
       it_mul_find = mul_map_content.find(0 - value_tmp);
       if (it_mul_find != mul_map_content.end() 
-        && it_mul_find->second != it_mul_map1->second
-        && it_mul_find->second != it_mul_map2->second) {
-          sub_vec.push_back(it_mul_map1->first);
-          sub_vec.push_back(it_mul_map2->first);
-          sub_vec.push_back(it_mul_find->first);
-          std::sort(sub_vec.begin(), sub_vec.end());
-          tmp<<sub_vec[0];
-          tmp<<sub_vec[1];
-          tmp<<sub_vec[2];
-          if (mul_set_compare.find(tmp.str()) == mul_set_compare.end()) {
-            mul_set_compare.insert(mul_set_compare.end(), tmp.str());
-            vec_ret.push_back(sub_vec); //添加数据
-          }
-          tmp.str("");
-          sub_vec.clear();
-
-          std::cout<<"data:["<<it_mul_map1->first
-            <<", "<<it_mul_map2->first
-            <<"]"
-            <<" value:"<<mul_map_content.find(0 - value_tmp)->first<<std::endl;
-          std::cout<<"pos :["<<it_mul_map1->second
-            <<", "<<it_mul_map2->second
-            <<"]"
-            <<" value:"<<mul_map_content.find(0 - value_tmp)->second<<std::endl;
-          std::cout<<std::endl;
+          && it_mul_find->second != it_mul_map1->second
+          && it_mul_find->second != it_mul_map2->second) {
+        sub_vec.push_back(it_mul_map1->first);
+        sub_vec.push_back(it_mul_map2->first);
+        sub_vec.push_back(it_mul_find->first);
+        std::sort(sub_vec.begin(), sub_vec.end());
+        tmp<<sub_vec[0];
+        tmp<<sub_vec[1];
+        tmp<<sub_vec[2];
+        if (mul_set_compare.find(tmp.str()) == mul_set_compare.end()) {
+          mul_set_compare.insert(mul_set_compare.end(), tmp.str());
+          vec_ret.push_back(sub_vec); //添加数据
+        }
+        tmp.str("");
+        sub_vec.clear();
       }
     }
   }
 
   return vec_ret;
+}
+
+/*
+算法大概：
+1、首先把输入数组分成大于0和小于0两堆并分别排序;( map<abs(item), item> )
+2、从左侧小于0的堆中从左往右依次取出两个元素，与大于0的堆中元素进行对比；
+3、反之亦然，从大于0的堆中取两个元素与小于0的堆中元素进行对比；
+*/
+vector<vector<int> > threeSum(vector<int>& nums)
+{
+  vector<vector<int> > vv_ret;
+  vector<int>::iterator it_v;
+  int threeZero = 0;
+  std::multimap<int, int> mul_left,mul_right;
+  std::multimap<int, int>::iterator it_left1, it_left2, it_right1, it_right2;
+
+  vector<int> sub_vec;
+  //拆分待检测数组为2个正营，实现 a+b=c策略
+  for (it_v = nums.begin(); it_v != nums.end(); ++it_v)
+  {
+    if (*it_v > 0) {
+      mul_right.insert(std::pair<int, int>(*it_v, *it_v));
+    } else if(*it_v < 0){
+      mul_left.insert(std::pair<int, int>(-*it_v, *it_v));
+    } else {
+      mul_right.insert(std::pair<int, int>(*it_v, *it_v));
+      threeZero++;
+    }
+  }
+
+  if(threeZero >= 3) {
+    sub_vec.push_back(0);
+    sub_vec.push_back(0);
+    sub_vec.push_back(0);
+    vv_ret.push_back(sub_vec);
+    sub_vec.clear();
+  }
+
+  std::multiset<std::string, comparer> mul_set_compare;
+  std::stringstream tmp;
+  //负数取2个，正数取一个
+  it_right2 = mul_right.begin();
+  for (it_left1 = mul_left.begin(); it_left1 != mul_left.end() && it_right2 != mul_right.end(); ++it_left1)
+  {
+    bool b_left_two_change = true;
+    it_right1 = it_right2;
+    it_left2 = it_left1;
+
+    for (it_left2++; it_left2 != mul_left.end();)
+    {
+      int ab_value = it_left1->first + it_left2->first;
+
+      if(ab_value < it_right1->first) { // a + b < c，提高b值
+        //std::cout<<"step < left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
+        b_left_two_change = false;
+        ++it_left2;        
+      } else if(ab_value > it_right1->first) {// a + b > c,提高c的值
+        //std::cout<<"step > left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
+        it_right1++;
+        if (it_right1 == mul_right.end()) {break;} //c已经到底了
+        if(b_left_two_change) {it_right2 = it_right1;} //保存内循环中 c相对于a+b最小值
+      } else { // a + b = c
+        //std::cout<<"step = left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
+        std::sort(sub_vec.begin(), sub_vec.end());
+        sub_vec.push_back(it_left1->second);
+        sub_vec.push_back(it_left2->second);
+        sub_vec.push_back(it_right1->second);
+        tmp<<sub_vec[0];
+        tmp<<sub_vec[1];
+        tmp<<sub_vec[2];   
+        if (mul_set_compare.find(tmp.str()) == mul_set_compare.end()) { //排重
+          mul_set_compare.insert(mul_set_compare.end(), tmp.str());
+          vv_ret.push_back(sub_vec); //添加数据
+        }
+        sub_vec.clear();
+        tmp.str("");
+        b_left_two_change = false;
+        ++it_left2;
+      }
+    }
+  }
+
+  tmp.str("");
+  //正数取2个，负数取一个
+  it_left2 = mul_left.begin();
+  for (it_right1 = mul_right.begin(); it_right1 != mul_right.end() && it_left2 != mul_left.end(); ++it_right1)
+  {
+    bool b_right_two_change = true;
+    it_left1 = it_left2;
+    it_right2 = it_right1;
+
+    for (it_right2++; it_right2 != mul_right.end();)
+    {
+      int ab_value = it_right1->first + it_right2->first;
+
+      if(ab_value < it_left1->first) { // a + b < c，提高b值
+        //std::cout<<"step < right1: "<<it_right1->first<<", right2: "<<it_right2->first<<", left: "<<it_left1->first<<std::endl;
+        b_right_two_change = false;
+        ++it_right2;        
+      } else if(ab_value > it_left1->first) {// a + b > c,提高c的值
+        //std::cout<<"step > right1: "<<it_right1->first<<", right2: "<<it_right2->first<<", left: "<<it_left1->first<<std::endl;
+        it_left1++;
+        if (it_left1 == mul_left.end()) {break;} //c已经到尽头了
+        if(b_right_two_change) {it_left2 = it_left1;} //保存内循环中 c相对于a+b最小值
+      } else { // a + b = c
+        //std::cout<<"step = right1: "<<it_right1->first<<", right2: "<<it_right2->first<<", left: "<<it_left1->first<<std::endl;
+        sub_vec.push_back(it_right1->second);
+        sub_vec.push_back(it_right2->second);
+        sub_vec.push_back(it_left1->second);
+        tmp<<sub_vec[0];
+        tmp<<sub_vec[1];
+        tmp<<sub_vec[2];
+        if (mul_set_compare.find(tmp.str()) == mul_set_compare.end()) { //排重
+          mul_set_compare.insert(mul_set_compare.end(), tmp.str());
+          vv_ret.push_back(sub_vec); //添加数据
+        }
+        sub_vec.clear();
+        tmp.str("");
+        b_right_two_change = false;
+        ++it_right2;
+      }
+    }
+  }
+
+  return vv_ret;
 }
 
 //multiset std::string find ???是否有效果
@@ -102,19 +218,24 @@ void three_compare()
   i = 2;
 }
 
-void multimap_view(std::vector<int>& vec_input)
+void show_vv_items(vector<vector<int> >& vv)
 {
-  std::multimap<int, int> mul_map;
-  std::multimap<int, int>::iterator it_mul_map;
-  std::vector<int>::iterator it_vec;
-  for (it_vec = vec_input.begin(); it_vec != vec_input.end();++it_vec)
-  {
-    mul_map.insert(std::pair<int, int>(*it_vec,0));
-  }
+  vector<vector<int> >::iterator it_vv = vv.begin();
+  vector<int>::iterator it_v;
+  std::stringstream out_print_str;
 
-  for (it_mul_map = mul_map.begin();it_mul_map != mul_map.end();++it_mul_map)
+  for (;it_vv != vv.end();++it_vv)
   {
-    std::cout<<"data: "<<it_mul_map->first<<std::endl;
+    it_v = (*it_vv).begin();
+    out_print_str<<"data: [";
+    for (;it_v != (*it_vv).end(); ++it_v)
+    {
+      out_print_str<<*it_v<<",";
+    }
+    std::string str = out_print_str.str();
+    str.erase(str.end()-1);
+    std::cout<<str<<"]"<<std::endl;
+    out_print_str.str("");
   }
 }
 
@@ -123,9 +244,21 @@ int main()
   three_compare();
 
   //int a[] = {-1, 0, 1, 2, -1, -4};
-  int a[] = {-1,0,1,2,-1,-4};
+  //int a[] = {-1,0,1,2,-1,-4};
+  //int a[] = {-4,-3,-2,-2,-2,-1,0,1,2,3,5,9};
+  int a[] = {0,0,0};
+  //int a[] = {0,0};
+  //int a[] = {-1,0,1,0};
+  //int a[] = {-4,-2,1,-5,-4,-4,4,-2,0,4,0,-2,3,1,-5,0};
   vector<int> vec_input(a, a + sizeof(a)/sizeof(int));
-  threeSum(vec_input);
+  vector<vector<int> > vv;
+  vv = threeSum(vec_input);
+  show_vv_items(vv);
+  
+  vv.clear();
+  std::cout<<"---------------------------------------"<<std::endl;
+  vv = threeSum1(vec_input);
+  show_vv_items(vv);
 
   return 0;
 }
