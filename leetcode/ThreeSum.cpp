@@ -59,21 +59,21 @@ vector<vector<int> > threeSum1(vector<int>& nums)
       value_tmp = it_mul_map1->first + it_mul_map2->first;
       it_mul_find = mul_map_content.find(0 - value_tmp);
       if (it_mul_find != mul_map_content.end() 
-          && it_mul_find->second != it_mul_map1->second
-          && it_mul_find->second != it_mul_map2->second) {
-        sub_vec.push_back(it_mul_map1->first);
-        sub_vec.push_back(it_mul_map2->first);
-        sub_vec.push_back(it_mul_find->first);
-        std::sort(sub_vec.begin(), sub_vec.end());
-        tmp<<sub_vec[0];
-        tmp<<sub_vec[1];
-        tmp<<sub_vec[2];
-        if (mul_set_compare.find(tmp.str()) == mul_set_compare.end()) {
-          mul_set_compare.insert(mul_set_compare.end(), tmp.str());
-          vec_ret.push_back(sub_vec); //添加数据
-        }
-        tmp.str("");
-        sub_vec.clear();
+        && it_mul_find->second != it_mul_map1->second
+        && it_mul_find->second != it_mul_map2->second) {
+          sub_vec.push_back(it_mul_map1->first);
+          sub_vec.push_back(it_mul_map2->first);
+          sub_vec.push_back(it_mul_find->first);
+          std::sort(sub_vec.begin(), sub_vec.end());
+          tmp<<sub_vec[0];
+          tmp<<sub_vec[1];
+          tmp<<sub_vec[2];
+          if (mul_set_compare.find(tmp.str()) == mul_set_compare.end()) {
+            mul_set_compare.insert(mul_set_compare.end(), tmp.str());
+            vec_ret.push_back(sub_vec); //添加数据
+          }
+          tmp.str("");
+          sub_vec.clear();
       }
     }
   }
@@ -90,26 +90,22 @@ vector<vector<int> > threeSum1(vector<int>& nums)
 vector<vector<int> > threeSum(vector<int>& nums)
 {
   vector<vector<int> > vv_ret;
-  vector<int>::iterator it_v;
-  int threeZero = 0;
   std::multimap<int, int> mul_left,mul_right;
   std::multimap<int, int>::iterator it_left1, it_left2, it_right1, it_right2;
 
   vector<int> sub_vec;
-  //拆分待检测数组为2个正营，实现 a+b=c策略
-  for (it_v = nums.begin(); it_v != nums.end(); ++it_v)
+  //拆分待检测数组为2个阵营，实现 a+b=c策略
+  for (vector<int>::iterator it_v = nums.begin(); it_v != nums.end(); ++it_v)
   {
-    if (*it_v > 0) {
+    if (*it_v >= 0) {
       mul_right.insert(std::pair<int, int>(*it_v, *it_v));
-    } else if(*it_v < 0){
+    } else{
       mul_left.insert(std::pair<int, int>(-*it_v, *it_v));
-    } else {
-      mul_right.insert(std::pair<int, int>(*it_v, *it_v));
-      threeZero++;
     }
   }
 
-  if(threeZero >= 3) {
+  // 0 + 0 + 0 = 0 特case
+  if (mul_right.count(0) >= 3) {
     sub_vec.push_back(0);
     sub_vec.push_back(0);
     sub_vec.push_back(0);
@@ -119,88 +115,50 @@ vector<vector<int> > threeSum(vector<int>& nums)
 
   std::multiset<std::string, comparer> mul_set_compare;
   std::stringstream tmp;
-  //负数取2个，正数取一个
-  it_right2 = mul_right.begin();
-  for (it_left1 = mul_left.begin(); it_left1 != mul_left.end() && it_right2 != mul_right.end(); ++it_left1)
+  int i = 2;
+  while (i--)
   {
-    bool b_left_two_change = true;
-    it_right1 = it_right2;
-    it_left2 = it_left1;
-
-    for (it_left2++; it_left2 != mul_left.end();)
+    it_right2 = mul_right.begin();
+    for (it_left1 = mul_left.begin(); it_left1 != mul_left.end() && it_right2 != mul_right.end(); ++it_left1)
     {
-      int ab_value = it_left1->first + it_left2->first;
+      bool b_left_two_change = true;
+      it_right1 = it_right2;
+      it_left2 = it_left1;
 
-      if(ab_value < it_right1->first) { // a + b < c，提高b值
-        //std::cout<<"step < left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
-        b_left_two_change = false;
-        ++it_left2;        
-      } else if(ab_value > it_right1->first) {// a + b > c,提高c的值
-        //std::cout<<"step > left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
-        it_right1++;
-        if (it_right1 == mul_right.end()) {break;} //c已经到底了
-        if(b_left_two_change) {it_right2 = it_right1;} //保存内循环中 c相对于a+b最小值
-      } else { // a + b = c
-        //std::cout<<"step = left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
-        std::sort(sub_vec.begin(), sub_vec.end());
-        sub_vec.push_back(it_left1->second);
-        sub_vec.push_back(it_left2->second);
-        sub_vec.push_back(it_right1->second);
-        tmp<<sub_vec[0];
-        tmp<<sub_vec[1];
-        tmp<<sub_vec[2];   
-        if (mul_set_compare.find(tmp.str()) == mul_set_compare.end()) { //排重
-          mul_set_compare.insert(mul_set_compare.end(), tmp.str());
-          vv_ret.push_back(sub_vec); //添加数据
+      for (it_left2++; it_left2 != mul_left.end() && it_right1 != mul_right.end();)
+      {
+        int ab_value = it_left1->first + it_left2->first;
+
+        if(ab_value < it_right1->first) { // a + b < c，提高b值
+          //std::cout<<"step < left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
+          b_left_two_change = false;
+          ++it_left2;        
+        } else if(ab_value > it_right1->first) {// a + b > c,提高c的值
+          //std::cout<<"step > left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
+          it_right1++;
+          if(b_left_two_change) {it_right2 = it_right1;} //核心，保存内循环中 c相对于a+b最小值
+        } else { // a + b = c
+          //std::cout<<"step = left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
+          //std::sort(sub_vec.begin(), sub_vec.end());
+          sub_vec.push_back(it_left1->second);
+          sub_vec.push_back(it_left2->second);
+          sub_vec.push_back(it_right1->second);
+          tmp<<sub_vec[0];
+          tmp<<sub_vec[1];
+          tmp<<sub_vec[2];
+          if (mul_set_compare.find(tmp.str()) == mul_set_compare.end()) { //排重
+            mul_set_compare.insert(mul_set_compare.end(), tmp.str());
+            vv_ret.push_back(sub_vec); //添加数据
+          }
+          sub_vec.clear();
+          tmp.str("");
+          b_left_two_change = false;
+          ++it_left2;
         }
-        sub_vec.clear();
-        tmp.str("");
-        b_left_two_change = false;
-        ++it_left2;
       }
     }
-  }
-
-  tmp.str("");
-  //正数取2个，负数取一个
-  it_left2 = mul_left.begin();
-  for (it_right1 = mul_right.begin(); it_right1 != mul_right.end() && it_left2 != mul_left.end(); ++it_right1)
-  {
-    bool b_right_two_change = true;
-    it_left1 = it_left2;
-    it_right2 = it_right1;
-
-    for (it_right2++; it_right2 != mul_right.end();)
-    {
-      int ab_value = it_right1->first + it_right2->first;
-
-      if(ab_value < it_left1->first) { // a + b < c，提高b值
-        //std::cout<<"step < right1: "<<it_right1->first<<", right2: "<<it_right2->first<<", left: "<<it_left1->first<<std::endl;
-        b_right_two_change = false;
-        ++it_right2;        
-      } else if(ab_value > it_left1->first) {// a + b > c,提高c的值
-        //std::cout<<"step > right1: "<<it_right1->first<<", right2: "<<it_right2->first<<", left: "<<it_left1->first<<std::endl;
-        it_left1++;
-        if (it_left1 == mul_left.end()) {break;} //c已经到尽头了
-        if(b_right_two_change) {it_left2 = it_left1;} //保存内循环中 c相对于a+b最小值
-      } else { // a + b = c
-        //std::cout<<"step = right1: "<<it_right1->first<<", right2: "<<it_right2->first<<", left: "<<it_left1->first<<std::endl;
-        sub_vec.push_back(it_right1->second);
-        sub_vec.push_back(it_right2->second);
-        sub_vec.push_back(it_left1->second);
-        tmp<<sub_vec[0];
-        tmp<<sub_vec[1];
-        tmp<<sub_vec[2];
-        if (mul_set_compare.find(tmp.str()) == mul_set_compare.end()) { //排重
-          mul_set_compare.insert(mul_set_compare.end(), tmp.str());
-          vv_ret.push_back(sub_vec); //添加数据
-        }
-        sub_vec.clear();
-        tmp.str("");
-        b_right_two_change = false;
-        ++it_right2;
-      }
-    }
+    //tmp.str("");
+    std::swap(mul_left, mul_right);// 规则从a+a' = c 切换为 c + c' = a
   }
 
   return vv_ret;
@@ -246,15 +204,15 @@ int main()
   //int a[] = {-1, 0, 1, 2, -1, -4};
   //int a[] = {-1,0,1,2,-1,-4};
   //int a[] = {-4,-3,-2,-2,-2,-1,0,1,2,3,5,9};
-  int a[] = {0,0,0};
+  //int a[] = {0,0,0};
   //int a[] = {0,0};
   //int a[] = {-1,0,1,0};
-  //int a[] = {-4,-2,1,-5,-4,-4,4,-2,0,4,0,-2,3,1,-5,0};
+  int a[] = {-4,-2,1,-5,-4,-4,4,-2,0,4,0,-2,3,1,-5,0};
   vector<int> vec_input(a, a + sizeof(a)/sizeof(int));
   vector<vector<int> > vv;
   vv = threeSum(vec_input);
   show_vv_items(vv);
-  
+
   vv.clear();
   std::cout<<"---------------------------------------"<<std::endl;
   vv = threeSum1(vec_input);
