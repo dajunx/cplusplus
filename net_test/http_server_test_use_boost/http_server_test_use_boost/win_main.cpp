@@ -13,6 +13,9 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>
+#include <boost/asio.hpp>
 #include "server.hpp"
 
 #if defined(_WIN32)
@@ -49,10 +52,17 @@ int main(int argc, char* argv[])
 //       return 1;
 //     }
 
+    boost::filesystem::path p(__FILE__);
+    boost::asio::io_service io_service;
+    boost::asio::ip::tcp::socket socket(io_service);
+    boost::asio::ip::tcp::endpoint remote_ep = socket.remote_endpoint();
+    boost::asio::ip::address remote_ad = remote_ep.address();
+    std::string str_ip = remote_ad.to_string();
+
     // Initialise server.
     //http::server::server s(argv[1], argv[2], argv[3]);
     // ∑√Œ  http://172.20.24.105:9999/ReadMe.txt
-    http::server::server s("172.20.24.105", "9999", "E:\\vs2010\\http_server_test_use_boost\\http_server_test_use_boost"); //≤‚ ‘£¨ÃÓ–¥πÃ∂®ip + port + £ø
+    http::server::server s(str_ip, "9999", p.parent_path().string()); //≤‚ ‘£¨ÃÓ–¥πÃ∂®ip + port + file_path
 
     // Set console control handler to allow server to be stopped.
     console_ctrl_function = boost::bind(&http::server::server::stop, &s);
