@@ -300,9 +300,6 @@
     <ClCompile Include="new_operator_another_method.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
-    <ClCompile Include="string_algo_snippet.cpp">
-      <Filter>normal_cplusplus\cplusplus</Filter>
-    </ClCompile>
     <ClCompile Include="function_bypass_parameter_usage.cpp">
       <Filter>boost\boost</Filter>
     </ClCompile>
@@ -406,6 +403,9 @@
       <Filter>boost\boost</Filter>
     </ClCompile>
     <ClCompile Include="coroutine_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="string_algo_snippet.cpp">
       <Filter>boost\boost</Filter>
     </ClCompile>
   </ItemGroup>
