@@ -7,6 +7,7 @@ void service::init_net(boost::asio::io_service& io_service, short port, boost::s
 
 void service::accept_connecter_loop()
 {
+  LOG(INFO) << "begin accept network connect." << std::endl;
   do
   {
     net_mgr->receive_client_conn();

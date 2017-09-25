@@ -26,6 +26,7 @@ public:
 
   void init()
   {
+    LOG(INFO) << "init msg_dispatch callback functions" << std::endl;
     //消息回调绑定
     // 参数对于set是输入、对于get是输出
     fun_map_["get"] = boost::bind(&message_mgr::funget, shared_from_this(), boost::lambda::_1);
@@ -37,14 +38,14 @@ public:
   void funset(boost::shared_ptr<msg_parameter> ptr_parameter)
   {
     if (ptr_parameter && ptr_data_mgr_->add_data(ptr_parameter->key_, ptr_parameter->value_)) {
-      std::cout<<"fun :"<<__FUNCTION__<<", OK"<<std::endl;
+      LOG(INFO) << "fun :" << __FUNCTION__ << ", OK" <<std::endl;
     }
   }
 
   void funget(boost::shared_ptr<msg_parameter> ptr_parameter)
   {
     if (ptr_parameter && ptr_data_mgr_->get_data(ptr_parameter->key_, ptr_parameter->value_)) {
-      std::cout<<"fun :"<<__FUNCTION__<<", OK"<<std::endl;
+      LOG(INFO) << "fun :" << __FUNCTION__ << ", OK" <<std::endl;
     }
   }
 
@@ -55,7 +56,7 @@ public:
 
   void funquit(boost::shared_ptr<msg_parameter> ptr_parameter)
   {
-    std::cout<<"fun :"<<__FUNCTION__<<std::endl;
+    LOG(INFO) <<"fun :"<<__FUNCTION__<<std::endl;
   }
 
   void dispatch_msg(const std::string& msg, boost::shared_ptr<msg_parameter> ptr_parameter)

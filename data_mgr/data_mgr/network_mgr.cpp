@@ -30,7 +30,7 @@ void network_mgr::handle_read_data(const boost::system::error_code& error,
                                             boost::asio::placeholders::bytes_transferred,
                                             ptr_socket));
   } else {
-    std::cout << __FUNCTION__ << ", error value:" << error.message() << std::endl;
+    LOG(ERROR) << __FUNCTION__ << ", error value:" << error.message() << std::endl;
   }
 }
 
@@ -40,7 +40,7 @@ void network_mgr::handle_write_data(const boost::system::error_code& error,
 {
   if (!error) {
     data_[bytes_transferred] = '\0';
-    std::cout << __FUNCTION__ << ", data:" << data_ << std::endl;
+    LOG(INFO) << __FUNCTION__ << ", data:" << data_ << std::endl;
 
     std::vector<std::string> vec_data;
     vec_data.resize(3);
@@ -63,6 +63,6 @@ void network_mgr::handle_write_data(const boost::system::error_code& error,
                                          boost::asio::placeholders::error,
                                          ptr_socket));
   } else {
-    std::cout << __FUNCTION__ << ", error value:" << error.message() << std::endl;
+    LOG(ERROR) << __FUNCTION__ << ", error value:" << error.message() << std::endl;
   }
 }
