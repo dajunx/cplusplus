@@ -157,6 +157,7 @@
     <ClCompile Include="property_tree_write_read_json.cpp" />
     <ClCompile Include="ptime_detail_ymdhms.cpp" />
     <ClCompile Include="random_shuffle_test.cpp" />
+    <ClCompile Include="rapidjson_test.cpp" />
     <ClCompile Include="replace_all_non_chinese_chs.cpp" />
     <ClCompile Include="scarce_usage.cpp" />
     <ClCompile Include="select_module_keyboard.cpp" />

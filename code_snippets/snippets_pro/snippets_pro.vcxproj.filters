@@ -61,6 +61,9 @@
     <Filter Include="normal_cplusplus\hash_test\md5">
       <UniqueIdentifier>{6d76ddc3-0528-4bcc-8f00-3175a5a3b69d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="others">
+      <UniqueIdentifier>{5916e5d1-7f0a-40ab-8b63-17c3428a5f69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ptime_detail_ymdhms.cpp">
@@ -407,6 +410,9 @@
     </ClCompile>
     <ClCompile Include="string_algo_snippet.cpp">
       <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="rapidjson_test.cpp">
+      <Filter>others</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
