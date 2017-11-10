@@ -34,9 +34,11 @@ void protobuf_AssignDesc_lm_2ehelloworld_2eproto() {
       "lm.helloworld.proto");
   GOOGLE_CHECK(file != NULL);
   userinfo_descriptor_ = file->message_type(0);
-  static const int userinfo_offsets_[2] = {
+  static const int userinfo_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(userinfo, uid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(userinfo, pwd_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(userinfo, name_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(userinfo, some_),
   };
   userinfo_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -50,11 +52,12 @@ void protobuf_AssignDesc_lm_2ehelloworld_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(userinfo));
   helloworld_descriptor_ = file->message_type(1);
-  static const int helloworld_offsets_[4] = {
+  static const int helloworld_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(helloworld, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(helloworld, str_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(helloworld, ui_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(helloworld, opt_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(helloworld, uinfo_),
   };
   helloworld_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -101,10 +104,11 @@ void protobuf_AddDesc_lm_2ehelloworld_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\023lm.helloworld.proto\022\002lm\"%\n\010userinfo\022\013\n"
-    "\003uid\030\001 \002(\005\022\014\n\004name\030\002 \002(\t\"L\n\nhelloworld\022\n"
-    "\n\002id\030\001 \002(\005\022\013\n\003str\030\002 \002(\t\022\030\n\002ui\030\003 \001(\0132\014.lm"
-    ".userinfo\022\013\n\003opt\030\004 \001(\005", 142);
+    "\n\023lm.helloworld.proto\022\002lm\"@\n\010userinfo\022\013\n"
+    "\003uid\030\001 \002(\005\022\013\n\003pwd\030\002 \002(\005\022\014\n\004name\030\003 \002(\t\022\014\n"
+    "\004some\030\004 \002(\014\"i\n\nhelloworld\022\n\n\002id\030\001 \002(\005\022\013\n"
+    "\003str\030\002 \002(\t\022\030\n\002ui\030\003 \001(\0132\014.lm.userinfo\022\013\n\003"
+    "opt\030\004 \001(\005\022\033\n\005uinfo\030\005 \001(\0132\014.lm.userinfo", 198);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "lm.helloworld.proto", &protobuf_RegisterTypes);
   userinfo::default_instance_ = new userinfo();
@@ -126,7 +130,9 @@ struct StaticDescriptorInitializer_lm_2ehelloworld_2eproto {
 
 #ifndef _MSC_VER
 const int userinfo::kUidFieldNumber;
+const int userinfo::kPwdFieldNumber;
 const int userinfo::kNameFieldNumber;
+const int userinfo::kSomeFieldNumber;
 #endif  // !_MSC_VER
 
 userinfo::userinfo()
@@ -146,7 +152,9 @@ userinfo::userinfo(const userinfo& from)
 void userinfo::SharedCtor() {
   _cached_size_ = 0;
   uid_ = 0;
+  pwd_ = 0;
   name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  some_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -157,6 +165,9 @@ userinfo::~userinfo() {
 void userinfo::SharedDtor() {
   if (name_ != &::google::protobuf::internal::kEmptyString) {
     delete name_;
+  }
+  if (some_ != &::google::protobuf::internal::kEmptyString) {
+    delete some_;
   }
   if (this != default_instance_) {
   }
@@ -185,9 +196,15 @@ userinfo* userinfo::New() const {
 void userinfo::Clear() {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     uid_ = 0;
+    pwd_ = 0;
     if (has_name()) {
       if (name_ != &::google::protobuf::internal::kEmptyString) {
         name_->clear();
+      }
+    }
+    if (has_some()) {
+      if (some_ != &::google::protobuf::internal::kEmptyString) {
+        some_->clear();
       }
     }
   }
@@ -212,12 +229,28 @@ bool userinfo::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(18)) goto parse_name;
+        if (input->ExpectTag(16)) goto parse_pwd;
         break;
       }
       
-      // required string name = 2;
+      // required int32 pwd = 2;
       case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_pwd:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &pwd_)));
+          set_has_pwd();
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(26)) goto parse_name;
+        break;
+      }
+      
+      // required string name = 3;
+      case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_name:
@@ -226,6 +259,20 @@ bool userinfo::MergePartialFromCodedStream(
           ::google::protobuf::internal::WireFormat::VerifyUTF8String(
             this->name().data(), this->name().length(),
             ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(34)) goto parse_some;
+        break;
+      }
+      
+      // required bytes some = 4;
+      case 4: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_some:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_some()));
         } else {
           goto handle_uninterpreted;
         }
@@ -256,13 +303,24 @@ void userinfo::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->uid(), output);
   }
   
-  // required string name = 2;
+  // required int32 pwd = 2;
+  if (has_pwd()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->pwd(), output);
+  }
+  
+  // required string name = 3;
   if (has_name()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      2, this->name(), output);
+      3, this->name(), output);
+  }
+  
+  // required bytes some = 4;
+  if (has_some()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytes(
+      4, this->some(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -278,14 +336,26 @@ void userinfo::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->uid(), target);
   }
   
-  // required string name = 2;
+  // required int32 pwd = 2;
+  if (has_pwd()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->pwd(), target);
+  }
+  
+  // required string name = 3;
   if (has_name()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        2, this->name(), target);
+        3, this->name(), target);
+  }
+  
+  // required bytes some = 4;
+  if (has_some()) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        4, this->some(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -306,11 +376,25 @@ int userinfo::ByteSize() const {
           this->uid());
     }
     
-    // required string name = 2;
+    // required int32 pwd = 2;
+    if (has_pwd()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->pwd());
+    }
+    
+    // required string name = 3;
     if (has_name()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->name());
+    }
+    
+    // required bytes some = 4;
+    if (has_some()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->some());
     }
     
   }
@@ -343,8 +427,14 @@ void userinfo::MergeFrom(const userinfo& from) {
     if (from.has_uid()) {
       set_uid(from.uid());
     }
+    if (from.has_pwd()) {
+      set_pwd(from.pwd());
+    }
     if (from.has_name()) {
       set_name(from.name());
+    }
+    if (from.has_some()) {
+      set_some(from.some());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -363,7 +453,7 @@ void userinfo::CopyFrom(const userinfo& from) {
 }
 
 bool userinfo::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
   
   return true;
 }
@@ -371,7 +461,9 @@ bool userinfo::IsInitialized() const {
 void userinfo::Swap(userinfo* other) {
   if (other != this) {
     std::swap(uid_, other->uid_);
+    std::swap(pwd_, other->pwd_);
     std::swap(name_, other->name_);
+    std::swap(some_, other->some_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -394,6 +486,7 @@ const int helloworld::kIdFieldNumber;
 const int helloworld::kStrFieldNumber;
 const int helloworld::kUiFieldNumber;
 const int helloworld::kOptFieldNumber;
+const int helloworld::kUinfoFieldNumber;
 #endif  // !_MSC_VER
 
 helloworld::helloworld()
@@ -403,6 +496,7 @@ helloworld::helloworld()
 
 void helloworld::InitAsDefaultInstance() {
   ui_ = const_cast< ::lm::userinfo*>(&::lm::userinfo::default_instance());
+  uinfo_ = const_cast< ::lm::userinfo*>(&::lm::userinfo::default_instance());
 }
 
 helloworld::helloworld(const helloworld& from)
@@ -417,6 +511,7 @@ void helloworld::SharedCtor() {
   str_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ui_ = NULL;
   opt_ = 0;
+  uinfo_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -430,6 +525,7 @@ void helloworld::SharedDtor() {
   }
   if (this != default_instance_) {
     delete ui_;
+    delete uinfo_;
   }
 }
 
@@ -465,6 +561,9 @@ void helloworld::Clear() {
       if (ui_ != NULL) ui_->::lm::userinfo::Clear();
     }
     opt_ = 0;
+    if (has_uinfo()) {
+      if (uinfo_ != NULL) uinfo_->::lm::userinfo::Clear();
+    }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -534,6 +633,20 @@ bool helloworld::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(42)) goto parse_uinfo;
+        break;
+      }
+      
+      // optional .lm.userinfo uinfo = 5;
+      case 5: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_uinfo:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_uinfo()));
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -581,6 +694,12 @@ void helloworld::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->opt(), output);
   }
   
+  // optional .lm.userinfo uinfo = 5;
+  if (has_uinfo()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, this->uinfo(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -614,6 +733,13 @@ void helloworld::SerializeWithCachedSizes(
   // optional int32 opt = 4;
   if (has_opt()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->opt(), target);
+  }
+  
+  // optional .lm.userinfo uinfo = 5;
+  if (has_uinfo()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, this->uinfo(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -655,6 +781,13 @@ int helloworld::ByteSize() const {
           this->opt());
     }
     
+    // optional .lm.userinfo uinfo = 5;
+    if (has_uinfo()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->uinfo());
+    }
+    
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -694,6 +827,9 @@ void helloworld::MergeFrom(const helloworld& from) {
     if (from.has_opt()) {
       set_opt(from.opt());
     }
+    if (from.has_uinfo()) {
+      mutable_uinfo()->::lm::userinfo::MergeFrom(from.uinfo());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -716,6 +852,9 @@ bool helloworld::IsInitialized() const {
   if (has_ui()) {
     if (!this->ui().IsInitialized()) return false;
   }
+  if (has_uinfo()) {
+    if (!this->uinfo().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -725,6 +864,7 @@ void helloworld::Swap(helloworld* other) {
     std::swap(str_, other->str_);
     std::swap(ui_, other->ui_);
     std::swap(opt_, other->opt_);
+    std::swap(uinfo_, other->uinfo_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

@@ -98,10 +98,17 @@ class userinfo : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 uid() const;
   inline void set_uid(::google::protobuf::int32 value);
   
-  // required string name = 2;
+  // required int32 pwd = 2;
+  inline bool has_pwd() const;
+  inline void clear_pwd();
+  static const int kPwdFieldNumber = 2;
+  inline ::google::protobuf::int32 pwd() const;
+  inline void set_pwd(::google::protobuf::int32 value);
+  
+  // required string name = 3;
   inline bool has_name() const;
   inline void clear_name();
-  static const int kNameFieldNumber = 2;
+  static const int kNameFieldNumber = 3;
   inline const ::std::string& name() const;
   inline void set_name(const ::std::string& value);
   inline void set_name(const char* value);
@@ -109,20 +116,37 @@ class userinfo : public ::google::protobuf::Message {
   inline ::std::string* mutable_name();
   inline ::std::string* release_name();
   
+  // required bytes some = 4;
+  inline bool has_some() const;
+  inline void clear_some();
+  static const int kSomeFieldNumber = 4;
+  inline const ::std::string& some() const;
+  inline void set_some(const ::std::string& value);
+  inline void set_some(const char* value);
+  inline void set_some(const void* value, size_t size);
+  inline ::std::string* mutable_some();
+  inline ::std::string* release_some();
+  
   // @@protoc_insertion_point(class_scope:lm.userinfo)
  private:
   inline void set_has_uid();
   inline void clear_has_uid();
+  inline void set_has_pwd();
+  inline void clear_has_pwd();
   inline void set_has_name();
   inline void clear_has_name();
+  inline void set_has_some();
+  inline void clear_has_some();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
-  ::std::string* name_;
   ::google::protobuf::int32 uid_;
+  ::google::protobuf::int32 pwd_;
+  ::std::string* name_;
+  ::std::string* some_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(2 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
   
   friend void  protobuf_AddDesc_lm_2ehelloworld_2eproto();
   friend void protobuf_AssignDesc_lm_2ehelloworld_2eproto();
@@ -220,6 +244,14 @@ class helloworld : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 opt() const;
   inline void set_opt(::google::protobuf::int32 value);
   
+  // optional .lm.userinfo uinfo = 5;
+  inline bool has_uinfo() const;
+  inline void clear_uinfo();
+  static const int kUinfoFieldNumber = 5;
+  inline const ::lm::userinfo& uinfo() const;
+  inline ::lm::userinfo* mutable_uinfo();
+  inline ::lm::userinfo* release_uinfo();
+  
   // @@protoc_insertion_point(class_scope:lm.helloworld)
  private:
   inline void set_has_id();
@@ -230,6 +262,8 @@ class helloworld : public ::google::protobuf::Message {
   inline void clear_has_ui();
   inline void set_has_opt();
   inline void clear_has_opt();
+  inline void set_has_uinfo();
+  inline void clear_has_uinfo();
   
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   
@@ -237,9 +271,10 @@ class helloworld : public ::google::protobuf::Message {
   ::google::protobuf::int32 id_;
   ::google::protobuf::int32 opt_;
   ::lm::userinfo* ui_;
+  ::lm::userinfo* uinfo_;
   
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
   
   friend void  protobuf_AddDesc_lm_2ehelloworld_2eproto();
   friend void protobuf_AssignDesc_lm_2ehelloworld_2eproto();
@@ -277,15 +312,37 @@ inline void userinfo::set_uid(::google::protobuf::int32 value) {
   uid_ = value;
 }
 
-// required string name = 2;
-inline bool userinfo::has_name() const {
+// required int32 pwd = 2;
+inline bool userinfo::has_pwd() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void userinfo::set_has_name() {
+inline void userinfo::set_has_pwd() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void userinfo::clear_has_name() {
+inline void userinfo::clear_has_pwd() {
   _has_bits_[0] &= ~0x00000002u;
+}
+inline void userinfo::clear_pwd() {
+  pwd_ = 0;
+  clear_has_pwd();
+}
+inline ::google::protobuf::int32 userinfo::pwd() const {
+  return pwd_;
+}
+inline void userinfo::set_pwd(::google::protobuf::int32 value) {
+  set_has_pwd();
+  pwd_ = value;
+}
+
+// required string name = 3;
+inline bool userinfo::has_name() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void userinfo::set_has_name() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void userinfo::clear_has_name() {
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void userinfo::clear_name() {
   if (name_ != &::google::protobuf::internal::kEmptyString) {
@@ -331,6 +388,64 @@ inline ::std::string* userinfo::release_name() {
   } else {
     ::std::string* temp = name_;
     name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+
+// required bytes some = 4;
+inline bool userinfo::has_some() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void userinfo::set_has_some() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void userinfo::clear_has_some() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void userinfo::clear_some() {
+  if (some_ != &::google::protobuf::internal::kEmptyString) {
+    some_->clear();
+  }
+  clear_has_some();
+}
+inline const ::std::string& userinfo::some() const {
+  return *some_;
+}
+inline void userinfo::set_some(const ::std::string& value) {
+  set_has_some();
+  if (some_ == &::google::protobuf::internal::kEmptyString) {
+    some_ = new ::std::string;
+  }
+  some_->assign(value);
+}
+inline void userinfo::set_some(const char* value) {
+  set_has_some();
+  if (some_ == &::google::protobuf::internal::kEmptyString) {
+    some_ = new ::std::string;
+  }
+  some_->assign(value);
+}
+inline void userinfo::set_some(const void* value, size_t size) {
+  set_has_some();
+  if (some_ == &::google::protobuf::internal::kEmptyString) {
+    some_ = new ::std::string;
+  }
+  some_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* userinfo::mutable_some() {
+  set_has_some();
+  if (some_ == &::google::protobuf::internal::kEmptyString) {
+    some_ = new ::std::string;
+  }
+  return some_;
+}
+inline ::std::string* userinfo::release_some() {
+  clear_has_some();
+  if (some_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = some_;
+    some_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
@@ -468,6 +583,35 @@ inline ::google::protobuf::int32 helloworld::opt() const {
 inline void helloworld::set_opt(::google::protobuf::int32 value) {
   set_has_opt();
   opt_ = value;
+}
+
+// optional .lm.userinfo uinfo = 5;
+inline bool helloworld::has_uinfo() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void helloworld::set_has_uinfo() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void helloworld::clear_has_uinfo() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void helloworld::clear_uinfo() {
+  if (uinfo_ != NULL) uinfo_->::lm::userinfo::Clear();
+  clear_has_uinfo();
+}
+inline const ::lm::userinfo& helloworld::uinfo() const {
+  return uinfo_ != NULL ? *uinfo_ : *default_instance_->uinfo_;
+}
+inline ::lm::userinfo* helloworld::mutable_uinfo() {
+  set_has_uinfo();
+  if (uinfo_ == NULL) uinfo_ = new ::lm::userinfo;
+  return uinfo_;
+}
+inline ::lm::userinfo* helloworld::release_uinfo() {
+  clear_has_uinfo();
+  ::lm::userinfo* temp = uinfo_;
+  uinfo_ = NULL;
+  return temp;
 }
 
 
