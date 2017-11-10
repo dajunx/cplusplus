@@ -420,6 +420,9 @@
     <ClCompile Include="win_calculate_costs_time.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
+    <ClCompile Include="c_style_io_test.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="md5.h">

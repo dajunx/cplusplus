@@ -105,6 +105,7 @@
     <ClCompile Include="cplusplus_time_test.cpp" />
     <ClCompile Include="cpp_constructor_copying_cycle.cpp" />
     <ClCompile Include="cpp_virtual_fun_post_test.cpp" />
+    <ClCompile Include="c_style_io_test.cpp" />
     <ClCompile Include="delegate_test.cpp" />
     <ClCompile Include="filesystem_copy_file_test.cpp" />
     <ClCompile Include="filesystem_create_rm_parse_file.cpp" />
