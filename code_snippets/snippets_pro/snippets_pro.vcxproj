@@ -178,6 +178,7 @@
     <ClCompile Include="thread_mutex.cpp" />
     <ClCompile Include="trie_example1.cpp" />
     <ClCompile Include="trie_example2.cpp" />
+    <ClCompile Include="tuple_test.cpp" />
     <ClCompile Include="typedef_combine_template_err.cpp" />
     <ClCompile Include="typedef_typename_usage.cpp" />
     <ClCompile Include="type_conversion_operator_fun.cpp" />

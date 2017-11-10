@@ -414,6 +414,9 @@
     <ClCompile Include="rapidjson_test.cpp">
       <Filter>others</Filter>
     </ClCompile>
+    <ClCompile Include="tuple_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="md5.h">
