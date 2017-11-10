@@ -417,6 +417,9 @@
     <ClCompile Include="tuple_test.cpp">
       <Filter>boost\boost</Filter>
     </ClCompile>
+    <ClCompile Include="win_calculate_costs_time.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="md5.h">

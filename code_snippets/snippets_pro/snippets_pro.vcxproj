@@ -190,6 +190,7 @@
     <ClCompile Include="vector_test.cpp" />
     <ClCompile Include="virtual_usage.cpp" />
     <ClCompile Include="visit_class_fun_and_normal_fun.cpp" />
+    <ClCompile Include="win_calculate_costs_time.cpp" />
     <ClCompile Include="wrap_usage.cpp" />
   </ItemGroup>
   <ItemGroup>

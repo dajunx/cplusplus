@@ -1,3 +1,6 @@
+
+//在windows端 精确计算 时间间隔
+
 #include <iostream>
 #include <windows.h>
 using namespace std;
