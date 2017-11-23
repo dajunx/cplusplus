@@ -193,6 +193,12 @@
     <ClCompile Include="hash_test\md5test.cpp" />
     <ClCompile Include="others\map_erase_element_effective.cpp" />
     <ClCompile Include="others\rapidjson_test.cpp" />
+    <ClCompile Include="thread\prod_condvar.c" />
+    <ClCompile Include="thread\prod_no_condvar.c" />
+    <ClCompile Include="thread\simple_thread.c" />
+    <ClCompile Include="thread\thread_incr.c" />
+    <ClCompile Include="thread\thread_incr_mutex.c" />
+    <ClCompile Include="thread\thread_multijoin.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash_test\md5.h" />

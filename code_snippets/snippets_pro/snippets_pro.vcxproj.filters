@@ -58,6 +58,9 @@
     <Filter Include="normal_cplusplus\design">
       <UniqueIdentifier>{a3e9896f-37d7-4860-865a-b3cd3bd22ff3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="normal_cplusplus\thread_linux">
+      <UniqueIdentifier>{7db27350-e5a8-497c-a0ad-0a110d69a0f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="others\map_erase_element_effective.cpp">
@@ -416,6 +419,24 @@
     </ClCompile>
     <ClCompile Include="others\rapidjson_test.cpp">
       <Filter>others</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\simple_thread.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\prod_condvar.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\prod_no_condvar.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\thread_incr.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\thread_incr_mutex.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\thread_multijoin.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
