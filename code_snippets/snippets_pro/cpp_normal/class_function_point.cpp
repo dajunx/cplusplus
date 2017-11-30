@@ -38,6 +38,11 @@ public:
   ff f1;
 };
 
+void fun1()
+{
+  std::cout<<"fun1"<<std::endl;
+}
+
 int main()
 {
   test1 t1;
@@ -49,6 +54,10 @@ int main()
   void (test2::ff::*p1)() = NULL;
   p1 = t2;
   (t2.f1.*p1)();
+
+  void (*p2)() = NULL;
+  p2 = &fun1;
+  (*p2)();
 
   return 0;
 }

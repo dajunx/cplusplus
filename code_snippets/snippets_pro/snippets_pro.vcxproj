@@ -123,6 +123,7 @@
     <ClCompile Include="boost_normal\steady_clock_test.cpp" />
     <ClCompile Include="boost_normal\steady_timer_test.cpp" />
     <ClCompile Include="boost_normal\string_algo_snippet.cpp" />
+    <ClCompile Include="boost_normal\string_split_test.cpp" />
     <ClCompile Include="boost_normal\tuple_test.cpp" />
     <ClCompile Include="boost_normal\unified_com_client_M_test_stopfun_count.cpp" />
     <ClCompile Include="boost_normal\use_io_service_wrap.cpp" />
@@ -193,9 +194,13 @@
     <ClCompile Include="hash_test\md5test.cpp" />
     <ClCompile Include="others\map_erase_element_effective.cpp" />
     <ClCompile Include="others\rapidjson_test.cpp" />
+    <ClCompile Include="thread\ChangeUnThreadSafeFun.c" />
+    <ClCompile Include="thread\inputdata_and_localdata_threasafe.c" />
+    <ClCompile Include="thread\postFun2Thread.c" />
     <ClCompile Include="thread\prod_condvar.c" />
     <ClCompile Include="thread\prod_no_condvar.c" />
     <ClCompile Include="thread\simple_thread.c" />
+    <ClCompile Include="thread\thread_1w_multiR.c" />
     <ClCompile Include="thread\thread_incr.c" />
     <ClCompile Include="thread\thread_incr_mutex.c" />
     <ClCompile Include="thread\thread_multijoin.c" />
