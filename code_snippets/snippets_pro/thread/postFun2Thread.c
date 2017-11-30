@@ -12,6 +12,7 @@ static std::deque<FUN> MsgDeq; //共享消息队列
 std::vector<int> vec_thread_datas;
 static bool post_event_finished = false;
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
 class c_mutex{
 public:
@@ -19,6 +20,31 @@ public:
   ~c_mutex(){pthread_mutex_unlock(&mutex);}
 };
 // loop线程
+void* fun2(void* arg)
+{
+  std::deque<FUN>::iterator it;
+  int input_cb_data = 0;
+  while(true)
+  {
+    pthread_mutex_lock(&mutex);
+    // 条件变量使用例子，
+    // 条件变量的使用目的也是避免消费者平凡去尝试加锁查看是否又新数据到来
+    while(MsgDeq.empty()) {
+      pthread_cond_wait(&cond, &mutex);
+    }
+
+    it = MsgDeq.begin();
+    (*(*it))(input_cb_data++);
+    MsgDeq.pop_front();
+    pthread_mutex_unlock(&mutex);
+
+    if (post_event_finished == true && true == MsgDeq.empty()) {
+      break;
+    }
+  }
+  return (void*)0;
+}
+
 void* fun1(void* arg)
 {
   std::deque<FUN>::iterator it;
@@ -51,15 +77,15 @@ int main()
   void* res;
   int s;
 
-  s = pthread_create(&t1, NULL, fun1, NULL);
-  //s = pthread_create(&t2, NULL, fun1, NULL);
+  s = pthread_create(&t1, NULL, fun2, NULL);
+  //s = pthread_create(&t2, NULL, fun2, NULL);
 
   // 在主线程投递请求
   for(int i=0;i<1000000;i++)
   {
     c_mutex t;
+    pthread_cond_signal(&cond);
     post();
-    //usleep(1);
   }
   post_event_finished = true;
 
