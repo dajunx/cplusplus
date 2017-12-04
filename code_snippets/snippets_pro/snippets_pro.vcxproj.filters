@@ -61,6 +61,9 @@
     <Filter Include="normal_cplusplus\thread_linux">
       <UniqueIdentifier>{7db27350-e5a8-497c-a0ad-0a110d69a0f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="normal_cplusplus\thread_win">
+      <UniqueIdentifier>{a4458db0-9c42-4e67-82db-2819655b4cb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="others\map_erase_element_effective.cpp">
@@ -452,6 +455,21 @@
     </ClCompile>
     <ClCompile Include="thread\prod_condvar.c">
       <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\thread_call_classFun.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_win\simple_thread_create_close.cpp">
+      <Filter>normal_cplusplus\thread_win</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_win\Inter_operate_shareddata.cpp">
+      <Filter>normal_cplusplus\thread_win</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_win\thread_Section.cpp">
+      <Filter>normal_cplusplus\thread_win</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_win\thread_Event.cpp">
+      <Filter>normal_cplusplus\thread_win</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
