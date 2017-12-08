@@ -83,97 +83,92 @@ vector<vector<int> > threeSum1(vector<int>& nums)
 
 /*
 算法大概：
-1、首先把输入数组分成大于0和小于0两堆并分别排序;( map<abs(item), item> )
-2、从左侧小于0的堆中从左往右依次取出两个元素，与大于0的堆中元素进行对比；
-3、反之亦然，从大于0的堆中取两个元素与小于0的堆中元素进行对比；
+  约定： 小于0的堆中取出的两个值分别为 a、b且 a<=b；大于等于0的堆中取出的值为c;
+        数据结构：multimap<abs(item), item>;
+(1)、首先把输入数组分成大于等于0和小于0两堆并分别排序;
+(2)、从左侧小于0的堆中从绝对值小到大依次取出两个元素a和b，与大于等于0的堆中元素从绝对值小到大取出的c进行对比（小于？等于？大于）;
+(3)、若结果是小于，则找大于等于0的堆中更大的值，再次进行(2)操作;
+(4)、若结果是相等，则找到算法需要的一个组合，记录下来；提升b和c的值，再次重复（2）操作;
+(5)、若结果是大于，则提升c的值，重复（2）操作;
+
+(6)、当大于等于0的堆已近对比完成知乎，交互两边的值，重复上述步骤;
+2017-12-07 自己写的代码看不懂了 -.-!
 */
 vector<vector<int> > threeSum(vector<int>& nums)
 {
   vector<vector<int> > vv_ret;
-  std::multimap<int, int> mul_left,mul_right;
-  std::multimap<int, int>::iterator it_left1, it_left2, it_right1, it_right2;
+  std::multimap<int, int> mul_less,mul_greater_or_equal;
 
-  vector<int> sub_vec;
-  //拆分待检测数组为2个阵营，实现 a+b=c策略
-  for (vector<int>::iterator it_v = nums.begin(); it_v != nums.end(); ++it_v)
+  //拆分待检测数组为2个阵营，实现 a+b=c策略;
+  for (vector<int>::iterator it = nums.begin(); it != nums.end(); ++it)
   {
-    if (*it_v >= 0) {
-      mul_right.insert(std::pair<int, int>(*it_v, *it_v));
+    if (*it >= 0) {
+      mul_greater_or_equal.insert(std::pair<int, int>(*it, *it));
     } else{
-      mul_left.insert(std::pair<int, int>(-*it_v, *it_v));
+      mul_less.insert(std::pair<int, int>(-*it, *it));
     }
   }
 
+  vector<int> vv_sub_ret;
   // 0 + 0 + 0 = 0 特case
-  if (mul_right.count(0) >= 3) {
-    sub_vec.push_back(0);
-    sub_vec.push_back(0);
-    sub_vec.push_back(0);
-    vv_ret.push_back(sub_vec);
-    sub_vec.clear();
+  if (mul_greater_or_equal.count(0) >= 3) {
+    vv_sub_ret.push_back(0);
+    vv_sub_ret.push_back(0);
+    vv_sub_ret.push_back(0);
+    vv_ret.push_back(vv_sub_ret);
+    vv_sub_ret.clear();
   }
 
   std::multiset<std::string, comparer> mul_set_compare;
+  // 所有迭代器只递增;
+  std::multimap<int, int>::iterator it_left_a, it_left_b, it_right_c, it_right_init_item;
   std::stringstream tmp;
   int i = 2;
   while (i--)
   {
-    it_right2 = mul_right.begin();
-    for (it_left1 = mul_left.begin(); it_left1 != mul_left.end() && it_right2 != mul_right.end(); ++it_left1)
+    it_left_a = mul_less.begin();
+    it_right_init_item = mul_greater_or_equal.begin();    
+    for (; it_left_a != mul_less.end() && it_right_init_item != mul_greater_or_equal.end(); ++it_left_a)
     {
-      bool b_left_two_change = true;
-      it_right1 = it_right2;
-      it_left2 = it_left1;
+      bool b_right_first_go_before = true;
+      it_right_c = it_right_init_item;
+      it_left_b = it_left_a;
+      it_left_b++;
 
-      for (it_left2++; it_left2 != mul_left.end() && it_right1 != mul_right.end();)
+      for (;it_left_b != mul_less.end() && it_right_c != mul_greater_or_equal.end();)
       {
-        int ab_value = it_left1->first + it_left2->first;
+        int ab_total_value = it_left_a->first + it_left_b->first;
 
-        if(ab_value < it_right1->first) { // a + b < c，提高b值
-          //std::cout<<"step < left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
-          b_left_two_change = false;
-          ++it_left2;        
-        } else if(ab_value > it_right1->first) {// a + b > c,提高c的值
-          //std::cout<<"step > left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
-          it_right1++;
-          if(b_left_two_change) {it_right2 = it_right1;} //核心，保存内循环中 c相对于a+b最小值
+        if(ab_total_value < it_right_c->first) { // a + b < c，提高b的值
+          b_right_first_go_before = false;
+          it_left_b++;
+        } else if(ab_total_value > it_right_c->first) {// a + b > c,提高c的值
+          it_right_c++;
+          // 排除c集合中不可能的值
+          if(b_right_first_go_before) {it_right_init_item = it_right_c;}
         } else { // a + b = c
-          //std::cout<<"step = left1: "<<it_left1->first<<", left2: "<<it_left2->first<<", right: "<<it_right1->first<<std::endl;
-          //std::sort(sub_vec.begin(), sub_vec.end());
-          sub_vec.push_back(it_left1->second);
-          sub_vec.push_back(it_left2->second);
-          sub_vec.push_back(it_right1->second);
-          tmp<<sub_vec[0];
-          tmp<<sub_vec[1];
-          tmp<<sub_vec[2];
+          //排重和插入满足 a+b=c 组合值
+          vv_sub_ret.push_back(it_left_a->second);
+          vv_sub_ret.push_back(it_left_b->second);
+          vv_sub_ret.push_back(it_right_c->second);
+          tmp<<vv_sub_ret[0]<<vv_sub_ret[1]<<vv_sub_ret[2];
           if (mul_set_compare.find(tmp.str()) == mul_set_compare.end()) { //排重
             mul_set_compare.insert(mul_set_compare.end(), tmp.str());
-            vv_ret.push_back(sub_vec); //添加数据
+            vv_ret.push_back(vv_sub_ret); //添加数据
           }
-          sub_vec.clear();
+
+          vv_sub_ret.clear();
           tmp.str("");
-          b_left_two_change = false;
-          ++it_left2;
+          b_right_first_go_before = false;
+          it_left_b++;
+          it_right_c++;
         }
       }
     }
-    //tmp.str("");
-    std::swap(mul_left, mul_right);// 规则从a+a' = c 切换为 c + c' = a
+    std::swap(mul_less, mul_greater_or_equal);// 规则从a+a' = c 切换为 c + c' = a
   }
 
   return vv_ret;
-}
-
-//multiset std::string find ???是否有效果
-void three_compare()
-{
-  int i = 0;
-  std::map<std::string, int, comparer> mm;
-  mm.insert(std::pair<std::string, int>("lini", 1));
-  if(mm.find("ljjj") != mm.end()) {
-    i = 1;
-  }
-  i = 2;
 }
 
 void show_vv_items(vector<vector<int> >& vv)
@@ -199,8 +194,6 @@ void show_vv_items(vector<vector<int> >& vv)
 
 int main()
 {
-  three_compare();
-
   //int a[] = {-1, 0, 1, 2, -1, -4};
   //int a[] = {-1,0,1,2,-1,-4};
   //int a[] = {-4,-3,-2,-2,-2,-1,0,1,2,3,5,9};
