@@ -471,6 +471,15 @@
     <ClCompile Include="thread_win\thread_Event.cpp">
       <Filter>normal_cplusplus\thread_win</Filter>
     </ClCompile>
+    <ClCompile Include="thread_win\thread_semaphore.cpp">
+      <Filter>normal_cplusplus\thread_win</Filter>
+    </ClCompile>
+    <ClCompile Include="boost_normal\array_test.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_normal\twoFileContentsMerge.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash_test\md5.h">

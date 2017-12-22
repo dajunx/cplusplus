@@ -84,6 +84,7 @@
     <ClCompile Include="boost_network\async_tcp_service1.cpp" />
     <ClCompile Include="boost_network\ipv6_test.cpp" />
     <ClCompile Include="boost_network\sync_tcp_client.cpp" />
+    <ClCompile Include="boost_normal\array_test.cpp" />
     <ClCompile Include="boost_normal\atomic_test.cpp" />
     <ClCompile Include="boost_normal\a_web_weak_ptr_header.cpp" />
     <ClCompile Include="boost_normal\bind_life_cycle_example.cpp" />
@@ -177,6 +178,7 @@
     <ClCompile Include="cpp_normal\template_bind_example.cpp" />
     <ClCompile Include="cpp_normal\trie_example1.cpp" />
     <ClCompile Include="cpp_normal\trie_example2.cpp" />
+    <ClCompile Include="cpp_normal\twoFileContentsMerge.cpp" />
     <ClCompile Include="cpp_normal\type_conversion_operator_fun.cpp" />
     <ClCompile Include="cpp_normal\va_start_va_end_va_list_example.cpp" />
     <ClCompile Include="cpp_normal\virtual_usage.cpp" />
@@ -209,6 +211,7 @@
     <ClCompile Include="thread_win\simple_thread_create_close.cpp" />
     <ClCompile Include="thread_win\thread_Event.cpp" />
     <ClCompile Include="thread_win\thread_Section.cpp" />
+    <ClCompile Include="thread_win\thread_semaphore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash_test\md5.h" />
