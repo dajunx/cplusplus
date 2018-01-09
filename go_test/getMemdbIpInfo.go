@@ -9,36 +9,30 @@ import (
 
 func getIpAndIndex(doc *goquery.Document, nodeInfo string) {
 	doc.Find(nodeInfo).Each(func(i int, s *goquery.Selection) {
-		//band := s.Find("td").Text()
-		band := s.Text()
-		if i == 1 {
-			//fmt.Print(band)
-			content, err := s.Attr("ondblclick")
-			if err != true {
-				fmt.Print("get ip err")
-			}
-			allIps := strings.Split(content, "'")
-			ips := strings.Split(allIps[1], "/")
-			//fmt.Printf(" ip1:%s, ip2:%s", ips[0], ips[1]) //memdb主ip地址
+		tdAttr, exists := s.Attr("ondblclick")
+		if exists && strings.Contains(tdAttr, "Copy") {
+			allIps := strings.Split(tdAttr, "'")
+			ips := strings.Split(allIps[1], "/") //拆分出ip1和ip2
 			fmt.Printf("%s ", ips[0])
 		}
 
-		if i == 24 {
-			document1 := strings.Contains(band, "目录1")
-			document2 := strings.Contains(band, "目录2")
-			if document1 {
+		tdAttr, exists = s.Attr("align")
+		if exists && strings.Contains(tdAttr, "center") {
+			directoryText := s.Text()
+			if strings.Contains(directoryText, "目录1") {
 				fmt.Printf("1\n") //memdb 目录序号
-			}
-			if document2 {
+			} else if strings.Contains(directoryText, "目录2") {
 				fmt.Printf("2\n") //memdb 目录序号
+			} else {
+				fmt.Printf("err!\n")
 			}
 		}
 	})
 }
 
-func getAllSidNum(Url string) []string {
+func getAllSidNum(Url *string) []string {
 	var ret []string
-	doc, err := goquery.NewDocument(Url)
+	doc, err := goquery.NewDocument(*Url)
 	if err != nil {
 		fmt.Print("err")
 	}
@@ -54,12 +48,11 @@ func getAllSidNum(Url string) []string {
 
 func main() {
 	var Url string = "http://www.xxxxx.com" //target url
-	sids := getAllSidNum(Url)
+	sids := getAllSidNum(&Url)
 	fmt.Println(sids)
 	//遍历所有频道
 	for _, v := range sids {
 		url := Url + "?sid=" + v //拼凑单个语音组网页
-		//fmt.Println(url)
 		doc, err := goquery.NewDocument(url)
 		if err != nil {
 			fmt.Print("err")
