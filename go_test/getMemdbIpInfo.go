@@ -42,10 +42,10 @@ func getAllSidNum(Url string) []string {
 	if err != nil {
 		fmt.Print("err")
 	}
+
 	doc.Find("body a").Each(func(i int, s *goquery.Selection) {
-		// 8~19 为语音组序号，硬编码
-		if i >= 8 && i <= 19 {
-			//fmt.Println(s.Text())
+		attrName, exists := s.Attr("href")
+		if exists && strings.Contains(attrName, "memdb.php?cid") {
 			ret = append(ret, s.Text())
 		}
 	})
