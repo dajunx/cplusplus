@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	// Á¬½Ómysql
+	// è¿žæŽ¥mysql
 	db, err := sql.Open("mysql", "root:@/test")
 	if err != nil {
 		fmt.Println("connect mysql err.")
