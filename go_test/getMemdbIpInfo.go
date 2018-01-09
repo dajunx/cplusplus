@@ -53,7 +53,7 @@ func getAllSidNum(Url string) []string {
 }
 
 func main() {
-	var Url string = "http://serverreport.ishow.cn/dbapi/stateinfo/audio_memdb_state.php"
+	var Url string = "http://www.xxxxx.com" //target url
 	sids := getAllSidNum(Url)
 	fmt.Println(sids)
 	//遍历所有频道
