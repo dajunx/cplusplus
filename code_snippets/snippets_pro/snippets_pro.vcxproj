@@ -160,6 +160,7 @@
     <ClCompile Include="cpp_normal\cpp_constructor_copying_cycle.cpp" />
     <ClCompile Include="cpp_normal\c_style_io_test.cpp" />
     <ClCompile Include="cpp_normal\delegate_test.cpp" />
+    <ClCompile Include="cpp_normal\fflush_test.cpp" />
     <ClCompile Include="cpp_normal\functor_fun.cpp" />
     <ClCompile Include="cpp_normal\get_operator_fun_address.cpp" />
     <ClCompile Include="cpp_normal\i_plusplus_i_operator.cpp" />

@@ -480,6 +480,9 @@
     <ClCompile Include="cpp_normal\twoFileContentsMerge.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
+    <ClCompile Include="cpp_normal\fflush_test.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash_test\md5.h">
