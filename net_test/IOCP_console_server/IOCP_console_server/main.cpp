@@ -3,27 +3,23 @@
 
 CIOCPModel io;
 
-DWORD WINAPI startNet(LPVOID lpParameter)
-{
+DWORD WINAPI startNet(LPVOID lpParameter) {
   io.InitServer();
 
   return 0L;
 }
 
-DWORD WINAPI stopNet(LPVOID lpParameter)
-{
-  while(true)
-  {
+DWORD WINAPI stopNet(LPVOID lpParameter) {
+  while (true) {
     Sleep(1000);
-    //io.Stop();
+    // io.Stop();
   }
   io.UnloadSocketLib();
 
   return 0L;
 }
 
-int main()
-{
+int main() {
   io.LoadSocketLib();
 
   HANDLE thread[2];
