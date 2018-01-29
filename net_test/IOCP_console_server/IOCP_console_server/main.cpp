@@ -4,6 +4,7 @@
 CIOCPModel io;
 
 DWORD WINAPI startNet(LPVOID lpParameter) {
+  io.SetPort(8888);
   io.InitServer();
 
   return 0L;

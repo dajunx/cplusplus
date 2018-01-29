@@ -158,7 +158,6 @@ public:
   void SetPort(const int &port) { nPort = port; }
 
 protected:
-  // 初始化IOCP
   bool InitIOCP();
 
   // 初始化Socket
@@ -208,7 +207,7 @@ protected:
 private:
   HANDLE hShutdownEvent; // 用来通知线程系统退出的事件，为了能够更好的退出线程
   HANDLE hIOCompletionPort;       // 完成端口的句柄
-  HANDLE *phWorkerThreads;        // 工作者线程的句柄指针
+  HANDLE *phWorkerThreads;        // 工作者线程组的句柄指针
   int nThreads;                   // 生成的线程数量
   std::string strIP;              // 服务器端的IP地址
   int nPort;                      // 服务器端的监听端口

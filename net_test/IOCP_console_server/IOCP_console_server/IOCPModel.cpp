@@ -146,26 +146,30 @@ bool CIOCPModel::InitServer() {
   // 建立系统退出的事件通知
   hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-  // 初始化IOCP
-  if (false == InitIOCP()) {
-    printf("初始化IOCP失败！\n");
-    return false;
-  } else {
-    printf("\nIOCP初始化完毕\n.");
-  }
+  bool ret = false;
+  do 
+  {
+    if (false == InitIOCP()) {
+      printf("初始化IOCP失败！\n");
+      break;
+    } else {
+      printf("\nIOCP初始化完毕\n.");
+    }
 
-  // 初始化Socket
-  if (false == InitListenSocket()) {
-    printf("Listen Socket初始化失败！\n");
-    this->DeInitialize();
-    return false;
-  } else {
-    printf("Listen Socket初始化完毕.\n");
-  }
+    // 初始化Socket
+    if (false == InitListenSocket()) {
+      printf("Listen Socket初始化失败！\n");
+      this->DeInitialize();
+      break;
+    } else {
+      printf("Listen Socket初始化完毕.\n");
+    }
 
-  printf("系统准备就绪，等候连接....\n");
+    printf("系统准备就绪，等候连接....\n");
+    ret = true;
+  } while (false);
 
-  return true;
+  return ret;
 }
 
 //	开始发送系统退出消息，退出完成端口和线程资源
@@ -192,7 +196,6 @@ void CIOCPModel::Stop() {
   }
 }
 
-// 初始化完成端口
 bool CIOCPModel::InitIOCP() {
   // 建立第一个完成端口
   hIOCompletionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
@@ -218,11 +221,10 @@ bool CIOCPModel::InitIOCP() {
         0, 0, WorkerThread, static_cast<void *>(pThreadParams), 0, &nThreadID);
   }
 
-  printf(" 建立 _WorkerThread %d 个.\n", nThreads);
+  printf(" 建立了%d个 WorkerThread .\n", nThreads);
   return true;
 }
 
-// 初始化Socket
 bool CIOCPModel::InitListenSocket() {
   // AcceptEx 和 GetAcceptExSockaddrs 的GUID，用于导出函数指针
   GUID GuidAcceptEx = WSAID_ACCEPTEX;
