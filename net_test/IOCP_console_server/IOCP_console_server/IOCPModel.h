@@ -21,7 +21,6 @@
 // 默认IP地址
 #define DEFAULT_IP ("127.0.0.1")
 
-//////////////////////////////////////////////////////////////////
 // 在完成端口上投递的I/O操作的类型
 typedef enum _OPERATION_TYPE {
   ACCEPT_POSTED, // 标志投递的Accept操作
@@ -31,21 +30,15 @@ typedef enum _OPERATION_TYPE {
 
 } OPERATION_TYPE;
 
-//====================================================================================
-//
-//				单IO数据结构体定义(用于每一个重叠操作的参数)
-//
-//====================================================================================
-
+//单IO数据结构体定义(用于每一个重叠操作的参数)
 typedef struct _PER_IO_CONTEXT {
-  OVERLAPPED
-      m_Overlapped; // 每一个重叠网络操作的重叠结构(针对每一个Socket的每一个操作，都要有一个)
+  // 每一个重叠网络操作的重叠结构(针对每一个Socket的每一个操作，都要有一个)
+  OVERLAPPED m_Overlapped;
   SOCKET m_sockAccept; // 这个网络操作所使用的Socket
   WSABUF m_wsaBuf; // WSA类型的缓冲区，用于给重叠操作传参数的
   char m_szBuffer[MAX_BUFFER_LEN]; // 这个是WSABUF里具体存字符的缓冲区
   OPERATION_TYPE m_OpType; // 标识网络操作的类型(对应上面的枚举)
 
-  // 初始化
   _PER_IO_CONTEXT() {
     ZeroMemory(&m_Overlapped, sizeof(m_Overlapped));
     ZeroMemory(m_szBuffer, MAX_BUFFER_LEN);
@@ -63,23 +56,15 @@ typedef struct _PER_IO_CONTEXT {
   }
   // 重置缓冲区内容
   void ResetBuffer() { ZeroMemory(m_szBuffer, MAX_BUFFER_LEN); }
-
 } PER_IO_CONTEXT, *PPER_IO_CONTEXT;
 
-//====================================================================================
-//
-//				单句柄数据结构体定义(用于每一个完成端口，也就是每一个Socket的参数)
-//
-//====================================================================================
-
+//单句柄数据结构体定义(用于每一个完成端口，也就是每一个Socket的参数)
 typedef struct _PER_SOCKET_CONTEXT {
   SOCKET m_Socket;          // 每一个客户端连接的Socket
   SOCKADDR_IN m_ClientAddr; // 客户端的地址
-  std::vector<_PER_IO_CONTEXT *>
-      m_arrayIoContext; // 客户端网络操作的上下文数据，
-                        // 也就是说对于每一个客户端Socket，是可以在上面同时投递多个IO请求的
+  // 客户端网络操作的上下文数据，也就是说对于每一个客户端Socket，是可以在上面同时投递多个IO请求的
+  std::vector<_PER_IO_CONTEXT *> m_arrayIoContext;
 
-  // 初始化
   _PER_SOCKET_CONTEXT() {
     m_Socket = INVALID_SOCKET;
     memset(&m_ClientAddr, 0, sizeof(m_ClientAddr));
@@ -101,9 +86,7 @@ typedef struct _PER_SOCKET_CONTEXT {
   // 获取一个新的IoContext
   _PER_IO_CONTEXT *GetNewIoContext() {
     _PER_IO_CONTEXT *p = new _PER_IO_CONTEXT;
-
     m_arrayIoContext.push_back(p);
-
     return p;
   }
 
@@ -146,7 +129,17 @@ public:
   void Stop();
 
   // 加载Socket库
-  bool LoadSocketLib();
+  inline bool LoadSocketLib() {
+    WSADATA wsaData;
+    int nResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    // 错误
+    if (NO_ERROR != nResult) {
+      printf("初始化WinSock 2.2失败！\n");
+      return false;
+    }
+
+    return true;
+  }
 
   // 卸载Socket库，彻底完事
   void UnloadSocketLib() { WSACleanup(); }
@@ -158,13 +151,13 @@ public:
   void SetPort(const int &port) { nPort = port; }
 
 protected:
-  bool InitIOCP();
+  bool InitWorkerThread();
 
   // 初始化Socket
   bool InitListenSocket();
 
   // 最后释放资源
-  void DeInitialize();
+  void ReleaseAllRes();
 
   // 投递Accept请求
   bool PostAccept(PER_IO_CONTEXT *pAcceptIoContext);
@@ -197,7 +190,7 @@ protected:
   static DWORD WINAPI WorkerThread(LPVOID lpParam);
 
   // 获得本机的处理器数量
-  int GetNoOfProcessors();
+  int GetNumberOfProcessors();
 
   // 判断客户端Socket是否已经断开
   bool IsSocketAlive(SOCKET s);
@@ -205,7 +198,7 @@ protected:
   void ShowMessage(const std::string szFormat, ...) const;
 
 private:
-  HANDLE hShutdownEvent; // 用来通知线程系统退出的事件，为了能够更好的退出线程
+  HANDLE hServerStopEvent; // 用来通知线程系统退出的事件，为了能够更好的退出线程
   HANDLE hIOCompletionPort;       // 完成端口的句柄
   HANDLE *phWorkerThreads;        // 工作者线程组的句柄指针
   int nThreads;                   // 生成的线程数量
