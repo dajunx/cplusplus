@@ -156,6 +156,8 @@ protected:
   // 初始化Socket
   bool InitListenSocket();
 
+  bool GetAccpetExPoints(SOCKET& m_Socket);
+
   // 最后释放资源
   void ReleaseAllRes();
 
@@ -199,7 +201,7 @@ protected:
 
 private:
   HANDLE hServerStopEvent; // 用来通知线程系统退出的事件，为了能够更好的退出线程
-  HANDLE hIOCompletionPort;       // 完成端口的句柄
+  HANDLE hCompletionPort;         // 完成端口的句柄
   HANDLE *phWorkerThreads;        // 工作者线程组的句柄指针
   int nThreads;                   // 生成的线程数量
   std::string strIP;              // 服务器端的IP地址

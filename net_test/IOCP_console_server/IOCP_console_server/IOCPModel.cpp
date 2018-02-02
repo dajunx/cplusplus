@@ -7,10 +7,7 @@
 // 传递给Worker线程的退出信号
 #define EXIT_CODE NULL
 
-// 释放指针和句柄资源的宏
-
-// 释放指针宏
-#define RELEASE(x)                                                             \
+#define RELEASE_POINT(x)                                                       \
   {                                                                            \
     if (x != NULL) {                                                           \
       delete x;                                                                \
@@ -18,7 +15,6 @@
     }                                                                          \
   }
 
-// 释放句柄宏
 #define RELEASE_HANDLE(x)                                                      \
   {                                                                            \
     if (x != NULL && x != INVALID_HANDLE_VALUE) {                              \
@@ -27,7 +23,6 @@
     }                                                                          \
   }
 
-// 释放Socket宏
 #define RELEASE_SOCKET(x)                                                      \
   {                                                                            \
     if (x != INVALID_SOCKET) {                                                 \
@@ -37,7 +32,7 @@
   }
 
 CIOCPModel::CIOCPModel(void)
-    : nThreads(0), hServerStopEvent(NULL), hIOCompletionPort(NULL),
+    : nThreads(0), hServerStopEvent(NULL), hCompletionPort(NULL),
       phWorkerThreads(NULL), strIP(DEFAULT_IP), nPort(DEFAULT_PORT),
       lpfnAcceptEx(NULL), pListenContext(NULL) {}
 
@@ -59,7 +54,7 @@ DWORD WINAPI CIOCPModel::WorkerThread(LPVOID lpParam) {
   while (WAIT_OBJECT_0 !=
          WaitForSingleObject(pIOCPModel->hServerStopEvent, 0)) {
     BOOL bReturn = GetQueuedCompletionStatus(
-        pIOCPModel->hIOCompletionPort, &dwBytesTransfered,
+        pIOCPModel->hCompletionPort, &dwBytesTransfered,
         (PULONG_PTR)&pSocketContext, &pOverlapped, INFINITE);
 
     // 如果收到的是退出标志，则直接退出
@@ -95,11 +90,11 @@ DWORD WINAPI CIOCPModel::WorkerThread(LPVOID lpParam) {
 
     switch (pIoContext->m_OpType) {
     case ACCEPT_POSTED: {
-      // 为了增加代码可读性，这里用专门的_DoAccept函数进行处理连入请求
+      // 处理连入请求
       pIOCPModel->DoAccpet(pSocketContext, pIoContext);
     } break;
     case RECV_POSTED: {
-      // 为了增加代码可读性，这里用专门的_DoRecv函数进行处理接收请求
+      // 处理接收请求
       pIOCPModel->DoRecv(pSocketContext, pIoContext);
     } break;
 
@@ -118,7 +113,7 @@ DWORD WINAPI CIOCPModel::WorkerThread(LPVOID lpParam) {
   std::cout << "工作者线程" << nThreadNo << " 号退出.\n" << std::endl;
 
   // 释放线程参数
-  RELEASE(lpParam);
+  RELEASE_POINT(lpParam);
   return 0;
 }
 
@@ -132,18 +127,14 @@ bool CIOCPModel::InitServer() {
 
   bool ret = false;
   do {
-    hIOCompletionPort =
-        CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+    hCompletionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 
-    if (NULL == hIOCompletionPort) {
+    if (NULL == hCompletionPort) {
       printf("建立完成端口失败！错误代码: %d!\n", WSAGetLastError());
       break;
     }
 
-    if (false == InitWorkerThread()) {
-      printf("初始化IOCP工作线程失败！\n");
-      break;
-    }
+    InitWorkerThread(); // 函数实现没有返回false case
 
     // 初始化Socket
     if (false == InitListenSocket()) {
@@ -168,7 +159,7 @@ void CIOCPModel::Stop() {
 
     for (int i = 0; i < nThreads; i++) {
       // 通知所有的完成端口操作退出
-      PostQueuedCompletionStatus(hIOCompletionPort, 0, (DWORD)EXIT_CODE, NULL);
+      PostQueuedCompletionStatus(hCompletionPort, 0, (DWORD)EXIT_CODE, NULL);
     }
 
     // 等待所有的客户端资源退出
@@ -184,14 +175,12 @@ void CIOCPModel::Stop() {
   }
 }
 
+// 根据机器处理器数量建立对应数目线程
 bool CIOCPModel::InitWorkerThread() {
-  // 根据本机中的处理器数量，建立对应的线程数
   nThreads = WORKER_THREADS_PER_PROCESSOR * GetNumberOfProcessors();
 
-  // 为工作者线程初始化句柄
   phWorkerThreads = new HANDLE[nThreads];
 
-  // 根据计算出来的数量建立工作者线程
   DWORD nThreadID;
   for (int i = 0; i < nThreads; i++) {
     THREADPARAMS_WORKER *pThreadParams = new THREADPARAMS_WORKER;
@@ -201,15 +190,11 @@ bool CIOCPModel::InitWorkerThread() {
         0, 0, WorkerThread, static_cast<void *>(pThreadParams), 0, &nThreadID);
   }
 
-  printf(" 建立了%d个 WorkerThread .\n", nThreads);
+  printf("建立了%d个 WorkerThread .\n", nThreads);
   return true;
 }
 
 bool CIOCPModel::InitListenSocket() {
-  // AcceptEx 和 GetAcceptExSockaddrs 的GUID，用于导出函数指针
-  GUID GuidAcceptEx = WSAID_ACCEPTEX;
-  GUID GuidGetAcceptExSockAddrs = WSAID_GETACCEPTEXSOCKADDRS;
-
   // 服务器地址信息，用于绑定Socket
   struct sockaddr_in ServerAddress;
 
@@ -222,43 +207,56 @@ bool CIOCPModel::InitListenSocket() {
   if (INVALID_SOCKET == pListenContext->m_Socket) {
     printf("初始化Socket失败，错误代码: %d.\n", WSAGetLastError());
     return false;
-  } else {
-    printf("WSASocket() 完成.\n");
   }
 
   // 将Listen Socket绑定至完成端口中
   if (NULL == AssociateWithIOCP(pListenContext)) {
     RELEASE_SOCKET(pListenContext->m_Socket);
     return false;
-  } else {
-    printf("Listen Socket绑定完成端口 完成.\n");
   }
 
   // 填充地址信息
   ZeroMemory((char *)&ServerAddress, sizeof(ServerAddress));
   ServerAddress.sin_family = AF_INET;
-  // 这里可以绑定任何可用的IP地址，或者绑定一个指定的IP地址
-  // ServerAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+  // ServerAddress.sin_addr.s_addr = htonl(INADDR_ANY); // 绑定任何IP
   ServerAddress.sin_addr.s_addr = inet_addr(strIP.c_str());
   ServerAddress.sin_port = htons(nPort);
 
-  // 绑定地址和端口
   if (SOCKET_ERROR == bind(pListenContext->m_Socket,
                            (struct sockaddr *)&ServerAddress,
                            sizeof(ServerAddress))) {
-    printf("bind()函数执行错误.\n");
+    printf("bind()函数执行错误. err_code:%d\n", WSAGetLastError());
     return false;
-  } else {
-    printf("bind() 完成.\n");
   }
 
-  // 开始进行监听
   if (SOCKET_ERROR == listen(pListenContext->m_Socket, SOMAXCONN)) {
-    printf("Listen()函数执行出现错误.\n");
+    printf("Listen()函数执行出现错误, err_code:%d\n", WSAGetLastError());
     return false;
-  } else {
-    printf("Listen() 完成.\n");
   }
+
+  // 获取 AcceptEx、GetAcceptExSockaddrs 函数指针
+  if (false == GetAccpetExPoints(pListenContext->m_Socket)) {
+    return false;
+  }
+
+  // 为AcceptEx 准备参数，然后投递AcceptEx I/O请求
+  for (int i = 0; i < MAX_POST_ACCEPT; i++) {
+    PER_IO_CONTEXT *pAcceptIoContext = pListenContext->GetNewIoContext();
+
+    if (false == this->PostAccept(pAcceptIoContext)) {
+      pListenContext->RemoveContext(pAcceptIoContext);
+      return false;
+    }
+  }
+
+  printf("投递 %d 个AcceptEx请求完毕\n", MAX_POST_ACCEPT);
+  return true;
+}
+
+bool CIOCPModel::GetAccpetExPoints(SOCKET &m_Socket) {
+  // AcceptEx 和 GetAcceptExSockaddrs 的GUID，用于导出函数指针
+  GUID GuidAcceptEx = WSAID_ACCEPTEX;
+  GUID GuidGetAcceptExSockAddrs = WSAID_GETACCEPTEXSOCKADDRS;
 
   // 使用AcceptEx函数，因为这个是属于WinSock2规范之外的微软另外提供的扩展函数
   // 所以需要额外获取一下函数的指针，获取AcceptEx函数指针(目的：为了效率，避免对象重复构造析构)
@@ -285,17 +283,6 @@ bool CIOCPModel::InitListenSocket() {
     return false;
   }
 
-  // 为AcceptEx 准备参数，然后投递AcceptEx I/O请求
-  for (int i = 0; i < MAX_POST_ACCEPT; i++) {
-    PER_IO_CONTEXT *pAcceptIoContext = pListenContext->GetNewIoContext();
-
-    if (false == this->PostAccept(pAcceptIoContext)) {
-      pListenContext->RemoveContext(pAcceptIoContext);
-      return false;
-    }
-  }
-
-  printf("投递 %d 个AcceptEx请求完毕\n", MAX_POST_ACCEPT);
   return true;
 }
 
@@ -312,13 +299,13 @@ void CIOCPModel::ReleaseAllRes() {
     RELEASE_HANDLE(phWorkerThreads[i]);
   }
 
-  RELEASE(phWorkerThreads);
+  RELEASE_POINT(phWorkerThreads);
 
   // 关闭IOCP句柄
-  RELEASE_HANDLE(hIOCompletionPort);
+  RELEASE_HANDLE(hCompletionPort);
 
   // 关闭监听Socket
-  RELEASE(pListenContext);
+  RELEASE_POINT(pListenContext);
   printf("释放资源完毕.\n");
 }
 
@@ -340,7 +327,7 @@ bool CIOCPModel::PostAccept(PER_IO_CONTEXT *pAcceptIoContext) {
     return false;
   }
 
-  // 投递AcceptEx
+  // 投递 AcceptEx
   if (FALSE == lpfnAcceptEx(pListenContext->m_Socket,
                             pAcceptIoContext->m_sockAccept, p_wbuf->buf,
                             p_wbuf->len - ((sizeof(SOCKADDR_IN) + 16) * 2),
@@ -355,16 +342,16 @@ bool CIOCPModel::PostAccept(PER_IO_CONTEXT *pAcceptIoContext) {
   return true;
 }
 
-// 客户端连入时候的响应流程
-// 其中，传入的是ListenSocket的Context，我们需要复制一份出来给新连入的Socket用
-// 原来的Context还是要在上面继续投递下一个Accept请求
+// 客户端连入的响应流程
+// 其中，我们需要新建一份PER_SOCKET_CONTEXT给新连入的Socket用
+// 传入的的PER_IO_CONTEXT还需要继续投递用来响应下一个Accept请求
 bool CIOCPModel::DoAccpet(PER_SOCKET_CONTEXT *pSocketContext,
                           PER_IO_CONTEXT *pIoContext) {
   SOCKADDR_IN *ClientAddr = NULL;
   SOCKADDR_IN *LocalAddr = NULL;
   int remoteLen = sizeof(SOCKADDR_IN), localLen = sizeof(SOCKADDR_IN);
 
-  // 1. 取得客户端和本地端的地址信息以及 客户端发来的第一组数据
+  // 1. 取得客户端和本地端的地址信息 以及 客户端发来的第一组数据
   this->lpfnGetAcceptExSockAddrs(
       pIoContext->m_wsaBuf.buf,
       pIoContext->m_wsaBuf.len - ((sizeof(SOCKADDR_IN) + 16) * 2),
@@ -372,41 +359,41 @@ bool CIOCPModel::DoAccpet(PER_SOCKET_CONTEXT *pSocketContext,
       (LPSOCKADDR *)&LocalAddr, &localLen, (LPSOCKADDR *)&ClientAddr,
       &remoteLen);
 
-  printf("客户端 %s:%d 连入.\n", inet_ntoa(ClientAddr->sin_addr),
-         ntohs(ClientAddr->sin_port));
-  printf("客户额 %s:%d 信息：%s.\n", inet_ntoa(ClientAddr->sin_addr),
+  printf("客户端 %s:%d 连入，第一份信息:%s.\n", inet_ntoa(ClientAddr->sin_addr),
          ntohs(ClientAddr->sin_port), pIoContext->m_wsaBuf.buf);
 
-  // 2.这里需要注意，这里传入的这个是ListenSocket上的Context，这个Context我们还需要用于监听下一个连接
-  // 所以我还得要将ListenSocket上的Context复制出来一份为新连入的Socket新建一个SocketContext
+  // 2.这里需要注意，本函数传入的是ListenSocket上的PER_IO_CONTEXT，只需要拷贝其socket即可，
+  // 新建一个PER_SOCKET_CONTEXT用以接受客户端数据交互
   PER_SOCKET_CONTEXT *pNewSocketContext = new PER_SOCKET_CONTEXT;
   pNewSocketContext->m_Socket = pIoContext->m_sockAccept;
+  // ??? 如下的 ClientAddr 可去掉么？作用是？
   memcpy(&(pNewSocketContext->m_ClientAddr), ClientAddr, sizeof(SOCKADDR_IN));
 
-  // 参数设置完毕，将这个Socket和完成端口绑定(这也是一个关键步骤)
+  // 3.参数设置完毕，将这个Socket和完成端口绑定(这也是一个关键步骤)
   if (false == this->AssociateWithIOCP(pNewSocketContext)) {
-    RELEASE(pNewSocketContext);
+    RELEASE_POINT(pNewSocketContext);
     return false;
   }
 
-  // 3. 继续，建立其下的IoContext，用于在这个Socket上投递第一个Recv数据请求
+  // 4.继续，建立其下的IoContext，用于在这个Socket上投递第一个Recv数据请求
   PER_IO_CONTEXT *pNewIoContext = pNewSocketContext->GetNewIoContext();
   pNewIoContext->m_OpType = RECV_POSTED;
   pNewIoContext->m_sockAccept = pNewSocketContext->m_Socket;
-  // 如果Buffer需要保留，就自己拷贝一份出来
-  // memcpy( pNewIoContext->m_szBuffer,pIoContext->m_szBuffer,MAX_BUFFER_LEN );
 
-  // 绑定完毕之后，就可以开始在这个Socket上投递完成请求了
+  // 如果Buffer需要保留，就自己拷贝一份出来
+  // memcpy( pNewIoContext->m_szBuffer, pIoContext->m_szBuffer, MAX_BUFFER_LEN
+  // );
+
+  // 5.绑定完毕之后，就可以开始在这个Socket上投递完成请求了
   if (false == this->PostRecv(pNewIoContext)) {
     pNewSocketContext->RemoveContext(pNewIoContext);
     return false;
   }
 
-  // 4.如果投递成功，那么就把这个有效的客户端信息，加入到ContextList中去(需要统一管理，方便释放资源)
+  // 6.如果投递成功，那么就把这个有效的客户端信息，加入到ContextList中去(需要统一管理，方便释放资源)
   this->AddToContextList(pNewSocketContext);
 
-  // 5.
-  // 使用完毕之后，把ListenSocket的那个IoContext重置，然后准备投递新的AcceptEx
+  // 7.使用完毕之后，把ListenSocket的那个PER_IO_CONTEXT重置，然后响应新的AcceptEx
   pIoContext->ResetBuffer();
   return this->PostAccept(pIoContext);
 }
@@ -429,7 +416,7 @@ bool CIOCPModel::PostRecv(PER_IO_CONTEXT *pIoContext) {
 
   // 如果返回值错误，并且错误的代码并非是Pending的话，那就说明这个重叠请求失败了
   if ((SOCKET_ERROR == nBytesRecv) && (WSA_IO_PENDING != WSAGetLastError())) {
-    printf("投递第一个WSARecv失败！\n");
+    printf("投递第一个WSARecv失败,err_code:%d！\n", WSAGetLastError());
     return false;
   }
   return true;
@@ -443,7 +430,7 @@ bool CIOCPModel::DoRecv(PER_SOCKET_CONTEXT *pSocketContext,
   printf("收到  %s:%d 信息：%s\n", inet_ntoa(ClientAddr->sin_addr),
          ntohs(ClientAddr->sin_port), pIoContext->m_wsaBuf.buf);
 
-  // 然后开始投递下一个WSARecv请求
+  // 投递下一个WSARecv请求
   return PostRecv(pIoContext);
 }
 
@@ -451,7 +438,7 @@ bool CIOCPModel::DoRecv(PER_SOCKET_CONTEXT *pSocketContext,
 bool CIOCPModel::AssociateWithIOCP(PER_SOCKET_CONTEXT *pContext) {
   // 将用于和客户端通信的SOCKET绑定到完成端口中
   if (NULL == CreateIoCompletionPort((HANDLE)pContext->m_Socket,
-                                     hIOCompletionPort, (DWORD)pContext, 0)) {
+                                     hCompletionPort, (DWORD)pContext, 0)) {
     printf(("绑定socket到IOCP失败.err_code：%d\n"), GetLastError());
     return false;
   }
@@ -475,7 +462,7 @@ void CIOCPModel::RemoveContext(PER_SOCKET_CONTEXT *pSocketContext) {
   std::vector<PER_SOCKET_CONTEXT *>::iterator it = vecClientContext.begin();
   for (; it != vecClientContext.end(); ++it) {
     if (pSocketContext == *it) {
-      RELEASE(pSocketContext);
+      RELEASE_POINT(pSocketContext);
       vecClientContext.erase(it);
       break;
     }
