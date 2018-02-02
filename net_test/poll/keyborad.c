@@ -1,13 +1,13 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h> /*ÎÄ¼ş¿ØÖÆ*/
+#include <fcntl.h> /*æ–‡ä»¶æ§åˆ¶*/
 #include <sys/select.h>
-#include <sys/time.h> /*Ê±¼ä·½ÃæµÄº¯Êı*/
-#include <errno.h> /*ÓĞ¹Ø´íÎó·½ÃæµÄºê*/
+#include <sys/time.h> /*æ—¶é—´æ–¹é¢çš„å‡½æ•°*/
+#include <errno.h> /*æœ‰å…³é”™è¯¯æ–¹é¢çš„å®*/
 #include<sys/poll.h> //poll()
 #include<fcntl.h>
 #include<string.h> //memset()
@@ -15,7 +15,7 @@
 int main(void)
 {
     int fd,key_value,ret;
-    struct pollfd event; //´´½¨Ò»¸östruct pollfd½á¹¹Ìå±äÁ¿£¬´æ·ÅÎÄ¼şÃèÊö·û¡¢ÒªµÈ´ı·¢ÉúµÄÊÂ¼ş
+    struct pollfd event; //åˆ›å»ºä¸€ä¸ªstruct pollfdç»“æ„ä½“å˜é‡ï¼Œå­˜æ”¾æ–‡ä»¶æè¿°ç¬¦ã€è¦ç­‰å¾…å‘ç”Ÿçš„äº‹ä»¶
     /* fd=open("/dev/key",O_RDWR); */
     fd=open("/opt/peterlin/test/net_test/poll/kk",O_RDWR);
     if(fd<0){
@@ -23,14 +23,14 @@ int main(void)
         exit(1);
     }
     printf("open /dev/key sucessfully!\n");
-    while(1){ //poll½áÊøºóstruct pollfd½á¹¹Ìå±äÁ¿µÄÄÚÈİ±»È«²¿ÇåÁã£¬ĞèÒªÔÙ´ÎÉèÖÃ
-        memset(&event,0,sizeof(event)); //memstº¯Êı¶Ô¶ÔÏóµÄÄÚÈİÉèÖÃÎªÍ¬Ò»Öµ
-        event.fd=fd; //´æ·Å´ò¿ªµÄÎÄ¼şÃèÊö·û
-        /* event.events=POLLIN; //´æ·ÅÒªµÈ´ı·¢ÉúµÄÊÂ¼ş */
-        event.events=POLLIN; //´æ·ÅÒªµÈ´ı·¢ÉúµÄÊÂ¼ş
-        ret=poll((struct pollfd *)&event,1,5000); //¼à²âevent£¬Ò»¸ö¶ÔÏó£¬µÈ´ı5000ºÁÃëºó³¬Ê±,-1ÎªÎŞÏŞµÈ´ı
+    while(1){ //pollç»“æŸåstruct pollfdç»“æ„ä½“å˜é‡çš„å†…å®¹è¢«å…¨éƒ¨æ¸…é›¶ï¼Œéœ€è¦å†æ¬¡è®¾ç½®
+        memset(&event,0,sizeof(event)); //memstå‡½æ•°å¯¹å¯¹è±¡çš„å†…å®¹è®¾ç½®ä¸ºåŒä¸€å€¼
+        event.fd=fd; //å­˜æ”¾æ‰“å¼€çš„æ–‡ä»¶æè¿°ç¬¦
+        /* event.events=POLLIN; //å­˜æ”¾è¦ç­‰å¾…å‘ç”Ÿçš„äº‹ä»¶ */
+        event.events=POLLIN; //å­˜æ”¾è¦ç­‰å¾…å‘ç”Ÿçš„äº‹ä»¶
+        ret=poll((struct pollfd *)&event,1,5000); //ç›‘æµ‹eventï¼Œä¸€ä¸ªå¯¹è±¡ï¼Œç­‰å¾…5000æ¯«ç§’åè¶…æ—¶,-1ä¸ºæ— é™ç­‰å¾…
 
-        //ÅĞ¶ÏpollµÄ·µ»ØÖµ£¬¸ºÊıÊÇ³ö´í£¬0ÊÇÉè¶¨µÄÊ±¼ä³¬Ê±£¬ÕûÊı±íÊ¾µÈ´ıµÄÊ±¼ä·¢Éú
+        //åˆ¤æ–­pollçš„è¿”å›å€¼ï¼Œè´Ÿæ•°æ˜¯å‡ºé”™ï¼Œ0æ˜¯è®¾å®šçš„æ—¶é—´è¶…æ—¶ï¼Œæ•´æ•°è¡¨ç¤ºç­‰å¾…çš„æ—¶é—´å‘ç”Ÿ
         if(ret<0){
             printf("poll error!\n");
             exit(1);
@@ -39,7 +39,7 @@ int main(void)
             printf("Time out!\n");
             continue;
         }
-        if(event.revents&POLLERR){ //reventsÊÇÓÉÄÚºË¼ÇÂ¼µÄÊµ¼Ê·¢ÉúµÄÊÂ¼ş£¬eventsÊÇ½ø³ÌµÈ´ıµÄÊÂ¼ş
+        if(event.revents&POLLERR){ //reventsæ˜¯ç”±å†…æ ¸è®°å½•çš„å®é™…å‘ç”Ÿçš„äº‹ä»¶ï¼Œeventsæ˜¯è¿›ç¨‹ç­‰å¾…çš„äº‹ä»¶
             printf("Device error!\n");
             exit(1);
         }

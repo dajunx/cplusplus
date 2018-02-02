@@ -1,4 +1,4 @@
-#include  <unistd.h>
+ï»¿#include  <unistd.h>
 #include  <sys/types.h>       /* basic system data types */
 #include  <sys/socket.h>      /* basic socket definitions */
 #include  <netinet/in.h>      /* sockaddr_in{} and other Internet defns */
@@ -73,7 +73,7 @@ void handle(int connfd)
         }
 
         if (FD_ISSET(connfd, &rset)) {
-            //½ÓÊÕµ½·şÎñÆ÷ÏìÓ¦
+            //æ¥æ”¶åˆ°æœåŠ¡å™¨å“åº”
             nread = read(connfd, recvline, MAXLINE);
             if (nread == 0) {
                 printf("server close the connection\n");
@@ -90,7 +90,7 @@ void handle(int connfd)
         }
 
         if (FD_ISSET(fileno(fp), &rset)) {
-            //±ê×¼ÊäÈë¿É¶Á
+            //æ ‡å‡†è¾“å…¥å¯è¯»
             if (fgets(sendline, MAXLINE, fp) == NULL) {
                 //eof exit
                 break;

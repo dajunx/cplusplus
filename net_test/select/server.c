@@ -1,4 +1,4 @@
-#include  <unistd.h>
+ï»¿#include  <unistd.h>
 #include  <sys/types.h>       /* basic system data types */
 #include  <sys/socket.h>      /* basic socket definitions */
 #include  <netinet/in.h>      /* sockaddr_in{} and other Internet defns */
@@ -114,7 +114,7 @@ void handle(int * clientSockFds, int maxFds, fd_set* pRset, fd_set* pAllset) {
     for (i = 0; i< maxFds; i++) {
         if (clientSockFds[i] != -1) {
             if (FD_ISSET(clientSockFds[i], pRset)) {
-                nread = read(clientSockFds[i], buf, MAXLINE);//¶ÁÈ¡¿Í»§¶ËsocketÁ÷
+                nread = read(clientSockFds[i], buf, MAXLINE);//è¯»å–å®¢æˆ·ç«¯socketæµ
                 if (nread < 0) {
                     perror("read error");
                     close(clientSockFds[i]);
@@ -129,7 +129,7 @@ void handle(int * clientSockFds, int maxFds, fd_set* pRset, fd_set* pAllset) {
                     clientSockFds[i] = -1;
                     continue;
                 }
-                write(clientSockFds[i], buf, nread);//ÏìÓ¦¿Í»§¶Ë  ÓÐ¿ÉÄÜÊ§°Ü£¬ÔÝ²»´¦Àí
+                write(clientSockFds[i], buf, nread);//å“åº”å®¢æˆ·ç«¯  æœ‰å¯èƒ½å¤±è´¥ï¼Œæš‚ä¸å¤„ç†
             }
         }
     }

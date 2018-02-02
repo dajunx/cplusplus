@@ -1,4 +1,4 @@
-#include  <unistd.h>
+ï»¿#include  <unistd.h>
 #include  <sys/types.h>       /* basic system data types */
 #include  <sys/socket.h>      /* basic socket definitions */
 #include  <netinet/in.h>      /* sockaddr_in{} and other Internet defns */
@@ -115,7 +115,7 @@ void handle(struct pollfd* clients, int maxClient, int nready)
         if (connfd == -1)
             continue;
         if (clients[i].revents & (POLLIN | POLLERR)) {
-            nread = read(connfd, buf, MAXLINE);//¶ÁÈ¡¿Í»§¶ËsocketÁ÷
+            nread = read(connfd, buf, MAXLINE);//è¯»å–å®¢æˆ·ç«¯socketæµ
             if (nread < 0) {
                 perror("read error");
                 close(connfd);
@@ -130,9 +130,9 @@ void handle(struct pollfd* clients, int maxClient, int nready)
             }
             printf("read data '%s'", buf); // peterlin
 
-            //write(connfd, buf, nread);//ÏìÓ¦¿Í»§¶Ë
-            write(connfd, "server res", nread);//ÏìÓ¦¿Í»§¶Ë
-            if (--nready <= 0)//Ã»ÓĞÁ¬½ÓĞèÒª´¦Àí£¬ÍË³öÑ­»·
+            //write(connfd, buf, nread);//å“åº”å®¢æˆ·ç«¯
+            write(connfd, "server res", nread);//å“åº”å®¢æˆ·ç«¯
+            if (--nready <= 0)//æ²¡æœ‰è¿æ¥éœ€è¦å¤„ç†ï¼Œé€€å‡ºå¾ªç¯
                 break;
         }
     }

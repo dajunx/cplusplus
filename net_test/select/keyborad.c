@@ -1,4 +1,4 @@
-#include<sys/time.h>
+ï»¿#include<sys/time.h>
 #include<sys/types.h>
 #include<unistd.h>
 #include<string.h>
@@ -12,7 +12,7 @@ int main()
     struct timeval tv;
     int ret;
     FD_ZERO(&rdfds);
-    FD_SET(0,&rdfds);   //ÎÄ¼şÃèÊö·û0±íÊ¾stdin¼üÅÌÊäÈë
+    FD_SET(0,&rdfds);   //æ–‡ä»¶æè¿°ç¬¦0è¡¨ç¤ºstdiné”®ç›˜è¾“å…¥
     tv.tv_sec = 3;
     tv.tv_usec = 0;
     ret = select(1,&rdfds,NULL,NULL,&tv);
@@ -23,7 +23,7 @@ int main()
     else
         printf("\n ret = %d",ret);
 
-    if(FD_ISSET(1,&rdfds))  //Èç¹ûÓĞÊäÈë£¬´ÓstdinÖĞ»ñÈ¡ÊäÈë×Ö·û
+    if(FD_ISSET(1,&rdfds))  //å¦‚æœæœ‰è¾“å…¥ï¼Œä»stdinä¸­è·å–è¾“å…¥å­—ç¬¦
     {
         printf("\n reading");
         fread(buf,9,1,stdin);
@@ -33,4 +33,4 @@ int main()
     printf("\n %d \n",strlen(buf));
     return 0;
 }
-//Ö´ĞĞ½á¹ûret = 1.
+//æ‰§è¡Œç»“æœret = 1.
