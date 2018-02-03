@@ -177,6 +177,7 @@
     <ClCompile Include="cpp_normal\simple_file_read_and_write.cpp" />
     <ClCompile Include="cpp_normal\simple_random_02.cpp" />
     <ClCompile Include="cpp_normal\template_bind_example.cpp" />
+    <ClCompile Include="cpp_normal\template_err_case1.cpp" />
     <ClCompile Include="cpp_normal\trie_example1.cpp" />
     <ClCompile Include="cpp_normal\trie_example2.cpp" />
     <ClCompile Include="cpp_normal\twoFileContentsMerge.cpp" />
