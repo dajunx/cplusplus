@@ -1,24 +1,14 @@
-//ÉÙ¼ûµÄÄ£°åÊ¹ÓÃ·½·¨
+ï»¿//å°‘è§çš„æ¨¡æ¿ä½¿ç”¨æ–¹æ³•
 #include <iostream>
-class VV
-{
+class VV {
 public:
-  static int getI()
-  {
-    return 100;
-  }
+  static int getI() { return 100; }
 };
-class V
-{
+class V {
 public:
-  template<class K>
-  void PrintK()
-  {
-    cout<<K::getI()<<endl;
-  }
+  template <class K> void PrintK() { cout << K::getI() << endl; }
 };
-void m()
-{
+void m() {
   V v;
   v.template PrintK<VV>();
 }

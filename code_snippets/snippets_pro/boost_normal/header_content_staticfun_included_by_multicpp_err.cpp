@@ -1,49 +1,47 @@
-//Í·ÎÄ¼şstatic·½·¨ ±»¶à¸öcpp°üº¬ Êı¾İ¹²ÏíÎÊÌâ
+ï»¿//å¤´æ–‡ä»¶staticæ–¹æ³• è¢«å¤šä¸ªcppåŒ…å« æ•°æ®å…±äº«é—®é¢˜
 /*
-µ±hÍ·ÎÄ¼şÖĞº¬ÓĞstatic·½·¨£¬ÔÚÍ·ÎÄ¼ş±»¶à¸öcppÎÄ¼ş°üº¬ÇÒ´Ë·½·¨ÓĞÊı¾İ¹²ÏíµÄÊ±ºò £¬»áÓĞÎÊÌâ´æÔÚ£¬
-1¡¢Èôstatic·½·¨²»ÔÚÀàÖĞ£¬Ôò ¶à¸öcppÎÄ¼ş²»¹²Ïí static·½·¨ÄÚÈİ¡£·´Ö® staticÔÚÀàÖĞ£¬Ôò¹²Ïí¡£
-2¡¢·Çstatic·½·¨ ²»ÄÜ·ÅÔÚÍ·ÎÄ¼şÖĞ£¬·ñÔòÁ´½Ó³ö´í(error LNK2005: "void __cdecl fun3(void)" 
-(?fun3@@YAXXZ) already defined in test.obj¡¢fatal error LNK1169: one or more multiply defined symbols found)£¬
-¿ÉĞĞµÄĞŞ¸Ä·½Ê½ÊÇ·Çstatic·½·¨ÉùÃ÷·ÅÔÚÍ·ÎÄ¼ş£¬¶¨Òå·ÅÔÚÒ»¸öcppÎÄ¼şÖĞ¡£
+å½“hå¤´æ–‡ä»¶ä¸­å«æœ‰staticæ–¹æ³•ï¼Œåœ¨å¤´æ–‡ä»¶è¢«å¤šä¸ªcppæ–‡ä»¶åŒ…å«ä¸”æ­¤æ–¹æ³•æœ‰æ•°æ®å…±äº«çš„æ—¶å€™
+ï¼Œä¼šæœ‰é—®é¢˜å­˜åœ¨ï¼Œ 1ã€è‹¥staticæ–¹æ³•ä¸åœ¨ç±»ä¸­ï¼Œåˆ™ å¤šä¸ªcppæ–‡ä»¶ä¸å…±äº«
+staticæ–¹æ³•å†…å®¹ã€‚åä¹‹ staticåœ¨ç±»ä¸­ï¼Œåˆ™å…±äº«ã€‚ 2ã€éstaticæ–¹æ³•
+ä¸èƒ½æ”¾åœ¨å¤´æ–‡ä»¶ä¸­ï¼Œå¦åˆ™é“¾æ¥å‡ºé”™(error LNK2005: "void __cdecl fun3(void)"
+(?fun3@@YAXXZ) already defined in test.objã€fatal error LNK1169: one or more
+multiply defined symbols found)ï¼Œ
+å¯è¡Œçš„ä¿®æ”¹æ–¹å¼æ˜¯éstaticæ–¹æ³•å£°æ˜æ”¾åœ¨å¤´æ–‡ä»¶ï¼Œå®šä¹‰æ”¾åœ¨ä¸€ä¸ªcppæ–‡ä»¶ä¸­ã€‚
 */
+#include "common.h"
 #include <boost/thread/thread.hpp>
 #include <vector>
-#include "common.h"
 std::map<int, int> map_int;
 test2 t2;
 boost::mutex mutex_main;
 
-void fun1()
-{
+void fun1() {
   int index = 0;
-  for (int i=0;i< 1000; ++i) {
+  for (int i = 0; i < 1000; ++i) {
     boost::mutex::scoped_lock l(mutex_main);
     index = t2.show();
-    map_int.insert(std::make_pair<int,int>(index, index));
-  }  
-}
-
-void fun2()
-{
-  int index = 0;
-  for (int i=0;i< 1000; ++i) {
-    boost::mutex::scoped_lock l(mutex_main);
-    index = test2::get_request_id();
-    map_int.insert(std::make_pair<int,int>(index, index));
+    map_int.insert(std::make_pair<int, int>(index, index));
   }
 }
 
-void check()
-{
-  for (int i=0;i< 2000; ++i) {
-    if(i != map_int[i]) {
-      std::cout<<"err,index: "<<i<<", value: "<<map_int[i]<<std::endl;
+void fun2() {
+  int index = 0;
+  for (int i = 0; i < 1000; ++i) {
+    boost::mutex::scoped_lock l(mutex_main);
+    index = test2::get_request_id();
+    map_int.insert(std::make_pair<int, int>(index, index));
+  }
+}
+
+void check() {
+  for (int i = 0; i < 2000; ++i) {
+    if (i != map_int[i]) {
+      std::cout << "err,index: " << i << ", value: " << map_int[i] << std::endl;
     }
   }
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
   boost::thread th1(fun1);
   boost::thread th2(fun2);
   th1.detach();
@@ -58,21 +56,19 @@ int main(int argc, char* argv[])
 //  common.h:
 #include <boost/thread/mutex.hpp>
 
-class test2
-{
+class test2 {
 public:
   test2();
   ~test2();
   int show();
 
-  static int get_request_id()
-  {
+  static int get_request_id() {
     int ret;
     static boost::mutex mutex_request_id_seq_;
     static volatile int request_id_seq_;
     {
       boost::mutex::scoped_lock l(mutex_request_id_seq_);
-      request_id_seq_ ++;
+      request_id_seq_++;
       if (request_id_seq_ == 0) {
         request_id_seq_++;
       }
@@ -88,17 +84,8 @@ public:
 
 #include "common1.h"
 
-test2::test2()
-{
+test2::test2() {}
 
-}
+test2::~test2() {}
 
-test2::~test2()
-{
-
-}
-
-int test2::show()
-{
-  return get_request_id();
-}
+int test2::show() { return get_request_id(); }

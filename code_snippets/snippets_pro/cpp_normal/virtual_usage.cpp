@@ -1,37 +1,33 @@
-//c++ ¶¯Ì¬°ó¶¨ ¾²Ì¬°ó¶¨
+ï»¿// c++ åŠ¨æ€ç»‘å®š é™æ€ç»‘å®š
 /*
-pD->DoSomething(); pB->DoSomething(); ÊÇ¾²Ì¬°ó¶¨£¬µ÷ÓÃ¸÷×ÔÀàµÄ³ÉÔ±º¯Êı¡£
-¶øpD->vfun(); pB->vfun(); ÊÇ¶¯Ì¬°ó¶¨µÄ£¬¶¼µ÷ÓÃ DÀàµÄvfunº¯Êı¡£
+pD->DoSomething(); pB->DoSomething(); æ˜¯é™æ€ç»‘å®šï¼Œè°ƒç”¨å„è‡ªç±»çš„æˆå‘˜å‡½æ•°ã€‚
+è€ŒpD->vfun(); pB->vfun(); æ˜¯åŠ¨æ€ç»‘å®šçš„ï¼Œéƒ½è°ƒç”¨ Dç±»çš„vfunå‡½æ•°ã€‚
 */
 // url: http://blog.csdn.net/chgaowei/article/details/6427731
 
 #include <iostream>
 
-class B
-{
+class B {
 public:
-  void DoSomething() {};
-  virtual void vfun() {};
+  void DoSomething(){};
+  virtual void vfun(){};
 };
 
-class C : public B
-{
+class C : public B {
 public:
-  void DoSomething() {};
-  virtual void vfun() {};
+  void DoSomething(){};
+  virtual void vfun(){};
 };
 
-class D : public B
-{
+class D : public B {
 public:
-  void DoSomething() {};
-  virtual void vfun() {};
+  void DoSomething(){};
+  virtual void vfun(){};
 };
 
-int main()
-{
-  D* pD = new D();
-  B* pB = pD;
+int main() {
+  D *pD = new D();
+  B *pB = pD;
 
   pD->DoSomething();
   pB->DoSomething();

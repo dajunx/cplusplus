@@ -1,25 +1,25 @@
-#include  <unistd.h>
-#include  <sys/types.h>       /* basic system data types */
-#include  <sys/socket.h>      /* basic socket definitions */
-#include  <netinet/in.h>      /* sockaddr_in{} and other Internet defns */
-#include  <arpa/inet.h>       /* inet(3) functions */
-#include <sys/select.h>       /* select function*/
+ï»¿#include <unistd.h>
+#include <arpa/inet.h>  /* inet(3) functions */
+#include <netinet/in.h> /* sockaddr_in{} and other Internet defns */
+#include <sys/select.h> /* select function*/
+#include <sys/socket.h> /* basic socket definitions */
+#include <sys/types.h>  /* basic system data types */
 
-#include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAXLINE 10240
 
-void handle(int * clientSockFds, int maxFds, fd_set* pRset, fd_set* pAllset, char* quit);
+void handle(int *clientSockFds, int maxFds, fd_set *pRset, fd_set *pAllset,
+            char *quit);
 
-int  main(int argc, char **argv)
-{
-  int  servPort = 6888;
+int main(int argc, char **argv) {
+  int servPort = 6888;
   int listenq = 1024;
 
-  int  listenfd, connfd;
+  int listenfd, connfd;
   struct sockaddr_in cliaddr, servaddr;
   socklen_t socklen = sizeof(struct sockaddr_in);
   int nready, nread;
@@ -44,8 +44,7 @@ int  main(int argc, char **argv)
   servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
   servaddr.sin_port = htons(servPort);
 
-
-  if(bind(listenfd, (struct sockaddr*)&servaddr, socklen) == -1) {
+  if (bind(listenfd, (struct sockaddr *)&servaddr, socklen) == -1) {
     perror("bind error");
     exit(-1);
   }
@@ -56,7 +55,7 @@ int  main(int argc, char **argv)
   }
 
   int i = 0;
-  for (i = 0; i< FD_SETSIZE; i++)
+  for (i = 0; i < FD_SETSIZE; i++)
     clientSockFds[i] = -1;
   FD_ZERO(&allset);
   FD_SET(listenfd, &allset);
@@ -65,9 +64,8 @@ int  main(int argc, char **argv)
   printf("echo server use select startup, listen on port %d\n", servPort);
   printf("max connection: %d\n", FD_SETSIZE);
 
-  char* quit = "quit";
-  for ( ; ; )
-  {
+  char *quit = "quit";
+  for (;;) {
     rset = allset;
     nready = select(maxfd + 1, &rset, NULL, NULL, NULL);
     if (nready < 0) {
@@ -75,16 +73,17 @@ int  main(int argc, char **argv)
       continue;
     }
     if (FD_ISSET(listenfd, &rset)) {
-      connfd = accept(listenfd, (struct sockaddr*) &cliaddr, &socklen);
+      connfd = accept(listenfd, (struct sockaddr *)&cliaddr, &socklen);
       if (connfd < 0) {
         perror("accept error");
         continue;
       }
 
-      sprintf(buf, "accept form %s:%d\n", inet_ntoa(cliaddr.sin_addr), cliaddr.sin_port);
+      sprintf(buf, "accept form %s:%d\n", inet_ntoa(cliaddr.sin_addr),
+              cliaddr.sin_port);
       printf(buf, "");
 
-      for (i = 0; i< FD_SETSIZE; i++) {
+      for (i = 0; i < FD_SETSIZE; i++) {
         if (clientSockFds[i] == -1) {
           clientSockFds[i] = connfd;
           break;
@@ -107,15 +106,15 @@ int  main(int argc, char **argv)
   }
 }
 
-
-void handle(int * clientSockFds, int maxFds, fd_set* pRset, fd_set* pAllset, char* quit) {
+void handle(int *clientSockFds, int maxFds, fd_set *pRset, fd_set *pAllset,
+            char *quit) {
   int nread;
   int i;
   char buf[MAXLINE];
-  for (i = 0; i< maxFds; i++) {
+  for (i = 0; i < maxFds; i++) {
     if (clientSockFds[i] != -1) {
       if (FD_ISSET(clientSockFds[i], pRset)) {
-        nread = read(clientSockFds[i], buf, MAXLINE);//¶ÁÈ¡¿Í»§¶ËsocketÁ÷
+        nread = read(clientSockFds[i], buf, MAXLINE); //è¯»å–å®¢æˆ·ç«¯socketæµ
         if (nread < 0) {
           perror("read error");
           close(clientSockFds[i]);
@@ -123,23 +122,23 @@ void handle(int * clientSockFds, int maxFds, fd_set* pRset, fd_set* pAllset, cha
           clientSockFds[i] = -1;
           continue;
         }
-        if (nread == 0) { //kill ¿ÉÒÔÒý·¢Õâ¸öcase
+        if (nread == 0) { // kill å¯ä»¥å¼•å‘è¿™ä¸ªcase
           printf("client close the connection\n");
           close(clientSockFds[i]);
           FD_CLR(clientSockFds[i], pAllset);
           clientSockFds[i] = -1;
           continue;
         }
-        if (strncmp(buf, quit, 4) == 0) { //socket´«µÝ¹ýÀ´µÄÊý¾Ý£¬³ýÁËÊäÈëµÄ±¾Éí£¬»¹¶îÍâ°üº¬»Ø³µºÍ»»ÐÐ2¸ö×Ö·û
+        if (strncmp(buf, quit, 4) ==
+            0) { // socketä¼ é€’è¿‡æ¥çš„æ•°æ®ï¼Œé™¤äº†è¾“å…¥çš„æœ¬èº«ï¼Œè¿˜é¢å¤–åŒ…å«å›žè½¦å’Œæ¢è¡Œ2ä¸ªå­—ç¬¦
           printf("client close the connection 1\n");
           close(clientSockFds[i]);
           FD_CLR(clientSockFds[i], pAllset);
-          clientSockFds[i] = -1; 
+          clientSockFds[i] = -1;
           continue;
-        } 
-        write(clientSockFds[i], buf, nread);//ÏìÓ¦¿Í»§¶Ë  ÓÐ¿ÉÄÜÊ§°Ü£¬ÔÝ²»´¦Àí
+        }
+        write(clientSockFds[i], buf, nread); //å“åº”å®¢æˆ·ç«¯  æœ‰å¯èƒ½å¤±è´¥ï¼Œæš‚ä¸å¤„ç†
       }
     }
   }
-
 }

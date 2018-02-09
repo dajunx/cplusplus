@@ -1,51 +1,49 @@
-/*
-  Ä£ÄâÒµÎñ·şÎñ¶àÏß³ÌÄ£ĞÍ£º
-    Ö÷Ïß³Ì²úÉúÊı¾İ£¬¹©×ÓÏß³ÌÊ¹ÓÃ
+ï»¿/*
+  æ¨¡æ‹Ÿä¸šåŠ¡æœåŠ¡å¤šçº¿ç¨‹æ¨¡å‹ï¼š
+    ä¸»çº¿ç¨‹äº§ç”Ÿæ•°æ®ï¼Œä¾›å­çº¿ç¨‹ä½¿ç”¨
 */
-#include <stdio.h>
 #include <pthread.h>
+#include <stdio.h>
 #include <time.h>
 
-typedef struct DATA{
+typedef struct DATA {
   int index;
   int data;
-}DATA_;
+} DATA_;
 
-void* fun1(void* arg)
-{
-  DATA_* data = (DATA_*)arg;
-  for(;;){
+void *fun1(void *arg) {
+  DATA_ *data = (DATA_ *)arg;
+  for (;;) {
     printf("fun1 recive data[%d]: %d\n", data->index, data->data);
     sleep(1);
-  }   
+  }
 
   printf("fun1 print data finished\n");
   return 1;
 }
 
-int main()
-{
-  pthread_t t1, t2, t3; 
-  void* res;
+int main() {
+  pthread_t t1, t2, t3;
+  void *res;
   int s;
-  DATA_ data[3] = {{0,0}, {1,0}, {2,0}};
+  DATA_ data[3] = {{0, 0}, {1, 0}, {2, 0}};
 
   s = pthread_create(&t1, NULL, fun1, &data[0]);
   s = pthread_create(&t2, NULL, fun1, &data[1]);
-  //s = pthread_create(&t3, NULL, fun1, &data);
+  // s = pthread_create(&t3, NULL, fun1, &data);
 
-  // Ã¿ÃëÖÓĞŞ¸ÄdataÊı¾İ£¬¹©×ÓÏß³Ì¶ÁÈ¡Ê¹ÓÃ
-  // Ä£Äâ·şÎñÆ÷ÊÕµ½¿Í»§¶ËÇëÇóºóµÄ·Ö·¢µ½¹¤×÷Ïß³Ì´¦Àí
-  for(int i=0;i < 6; i++){
-    if(i/2 == 0) {
+  // æ¯ç§’é’Ÿä¿®æ”¹dataæ•°æ®ï¼Œä¾›å­çº¿ç¨‹è¯»å–ä½¿ç”¨
+  // æ¨¡æ‹ŸæœåŠ¡å™¨æ”¶åˆ°å®¢æˆ·ç«¯è¯·æ±‚åçš„åˆ†å‘åˆ°å·¥ä½œçº¿ç¨‹å¤„ç†
+  for (int i = 0; i < 6; i++) {
+    if (i / 2 == 0) {
       data[1].data++;
     } else {
       data[0].data++;
-    }   
+    }
     sleep(1);
-  }   
+  }
 
-  // ½áÊøÏß³Ì
+  // ç»“æŸçº¿ç¨‹
   s = pthread_cancel(t1);
   s = pthread_cancel(t2);
 

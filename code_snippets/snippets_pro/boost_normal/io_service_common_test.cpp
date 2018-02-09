@@ -1,33 +1,29 @@
-//asio io_service ¿˝◊”
+Ôªø// asio io_service ‰æãÂ≠ê
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/chrono/chrono.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/ref.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
 #include <iostream>
 #include <vector>
-#include <boost/thread/thread.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/chrono/chrono.hpp>
-#include <boost/asio.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/ref.hpp>
 
 using namespace boost;
 typedef boost::shared_ptr<boost::asio::io_service> io_service_ptr;
 typedef boost::shared_ptr<boost::asio::io_service::work> io_work_ptr;
 
-void fun1()
-{
-  int i = 0;
-}
+void fun1() { int i = 0; }
 
-int main()
-{
+int main() {
   io_service_ptr ptr_io_service = boost::make_shared<boost::asio::io_service>();
-  io_work_ptr ptr_io_work = boost::make_shared<boost::asio::io_service::work>
-    (boost::ref(*ptr_io_service));
+  io_work_ptr ptr_io_work = boost::make_shared<boost::asio::io_service::work>(
+      boost::ref(*ptr_io_service));
 
-  //boost::thread th(work_fun, ptr_io_service);
+  // boost::thread th(work_fun, ptr_io_service);
   boost::thread th(boost::bind(&boost::asio::io_service::run, ptr_io_service));
   th.detach();
 

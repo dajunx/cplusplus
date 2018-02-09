@@ -1,16 +1,14 @@
-//Õ¨≤Ω∑Ω Ω tcp client
+Ôªø//ÂêåÊ≠•ÊñπÂºè tcp client
+#include <boost/asio.hpp>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <string>
-#include <boost/asio.hpp>
 using boost::asio::ip::tcp;
 #define max_length 1024
 
-int main(int argc, char* argv[])
-{
-  try
-  {
+int main(int argc, char *argv[]) {
+  try {
     boost::asio::io_service io_service;
     tcp::resolver resolver(io_service);
 
@@ -28,8 +26,7 @@ int main(int argc, char* argv[])
 
     bool b_send_data = true;
     std::string str_end("quit");
-    do 
-    {
+    do {
       using namespace std; // For strlen.
       std::cout << "Enter message: ";
       char request[max_length];
@@ -38,8 +35,8 @@ int main(int argc, char* argv[])
       boost::asio::write(s, boost::asio::buffer(request, request_length));
 
       char reply[max_length];
-      size_t reply_length = boost::asio::read(s,
-        boost::asio::buffer(reply, request_length));
+      size_t reply_length =
+          boost::asio::read(s, boost::asio::buffer(reply, request_length));
       std::cout << "Reply is: ";
       std::cout.write(reply, reply_length);
       std::cout << "\n";
@@ -47,9 +44,7 @@ int main(int argc, char* argv[])
       b_send_data = (str_end.compare(request) != 0);
     } while (b_send_data);
 
-  }
-  catch (std::exception& e)
-  {
+  } catch (std::exception &e) {
     std::cerr << "Exception: " << e.what() << "\n";
   }
 

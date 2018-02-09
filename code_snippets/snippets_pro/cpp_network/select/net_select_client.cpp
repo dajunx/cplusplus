@@ -1,24 +1,23 @@
-#include  <unistd.h>
-#include  <sys/types.h>       /* basic system data types */
-#include  <sys/socket.h>      /* basic socket definitions */
-#include  <netinet/in.h>      /* sockaddr_in{} and other Internet defns */
-#include  <arpa/inet.h>       /* inet(3) functions */
-#include <sys/select.h>       /* select function*/
+ï»¿#include <unistd.h>
+#include <arpa/inet.h>  /* inet(3) functions */
+#include <netinet/in.h> /* sockaddr_in{} and other Internet defns */
+#include <sys/select.h> /* select function*/
+#include <sys/socket.h> /* basic socket definitions */
+#include <sys/types.h>  /* basic system data types */
 
-#include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAXLINE 10240
-#define max(a,b)    ((a) > (b) ? (a) : (b))
-//typedef struct sockaddr  SA;
+#define max(a, b) ((a) > (b) ? (a) : (b))
+// typedef struct sockaddr  SA;
 
 void handle(int sockfd);
 
-int main(int argc, char **argv)
-{
-  char * servInetAddr = "127.0.0.1";
+int main(int argc, char **argv) {
+  char *servInetAddr = "127.0.0.1";
   int servPort = 6888;
   char buf[MAXLINE];
   int connfd;
@@ -43,21 +42,19 @@ int main(int argc, char **argv)
   servaddr.sin_port = htons(servPort);
   inet_pton(AF_INET, servInetAddr, &servaddr.sin_addr);
 
-  if (connect(connfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0) {
+  if (connect(connfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
     perror("connect error");
     return -1;
   }
   printf("welcome to selectechoclient\n");
-  handle(connfd);     /* do it all */
+  handle(connfd); /* do it all */
   close(connfd);
   printf("exit\n");
   exit(0);
 }
 
-
-void handle(int connfd)
-{
-  FILE* fp = stdin;
+void handle(int connfd) {
+  FILE *fp = stdin;
   char sendline[MAXLINE], recvline[MAXLINE];
   fd_set rset;
   FD_ZERO(&rset);
@@ -73,32 +70,28 @@ void handle(int connfd)
     }
 
     if (FD_ISSET(connfd, &rset)) {
-      //½ÓÊÕµ½·þÎñÆ÷ÏìÓ¦
+      //æŽ¥æ”¶åˆ°æœåŠ¡å™¨å“åº”
       nread = read(connfd, recvline, MAXLINE);
       if (nread == 0) {
         printf("server close the connection\n");
         break;
-      }
-      else if (nread == -1) {
+      } else if (nread == -1) {
         perror("read error");
         break;
-      }
-      else {
-        //server response
+      } else {
+        // server response
         write(STDOUT_FILENO, recvline, nread);
       }
     }
 
     if (FD_ISSET(fileno(fp), &rset)) {
-      //±ê×¼ÊäÈë¿É¶Á
+      //æ ‡å‡†è¾“å…¥å¯è¯»
       if (fgets(sendline, MAXLINE, fp) == NULL) {
-        //eof exit
+        // eof exit
         break;
-      }
-      else {
+      } else {
         write(connfd, sendline, strlen(sendline));
       }
     }
-
   }
 }

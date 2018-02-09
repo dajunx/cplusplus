@@ -1,20 +1,18 @@
-//new µÄÁíÒ»ÖÖĞÎÊ½
+ï»¿// new çš„å¦ä¸€ç§å½¢å¼
 /*
-new µÄÊ±ºò£¬ÓÃÒÑ¾­·ÖÅäÄÚ´æµÄµØÖ··µ»Ø¸ø´ı·ÖÅäÄÚ´æÖ¸Õë¡£±È½ÏÌØÊâ
+new çš„æ—¶å€™ï¼Œç”¨å·²ç»åˆ†é…å†…å­˜çš„åœ°å€è¿”å›ç»™å¾…åˆ†é…å†…å­˜æŒ‡é’ˆã€‚æ¯”è¾ƒç‰¹æ®Š
 */
 
 #include <iostream>
-class test
-{
+class test {
 public:
   test() {}
   ~test() {}
 };
 
-int main()
-{
-  void* pp = new int(5);
-  //int* pp = new int(5); // this way has the same result
-  int* p = new(pp) int();
+int main() {
+  void *pp = new int(5);
+  // int* pp = new int(5); // this way has the same result
+  int *p = new (pp) int();
   return 0;
 }

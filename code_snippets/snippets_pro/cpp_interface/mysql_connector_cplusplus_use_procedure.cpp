@@ -1,59 +1,57 @@
-// mysql-connector-c++ Ö´ÐÐ/²éÑ¯´æ´¢¹ý³Ì
-#include <driver/mysql_connection.h> 
-#include <cppconn/driver.h> 
-#include <cppconn/exception.h> 
-#include <cppconn/resultset.h> 
-#include <cppconn/statement.h>
+ï»¿// mysql-connector-c++ æ‰§è¡Œ/æŸ¥è¯¢å­˜å‚¨è¿‡ç¨‹
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
 #include <cppconn/prepared_statement.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+#include <driver/mysql_connection.h>
 using namespace std;
 
-int main()
-{
-  try { 
-    sql::Driver *driver; 
-    sql::Connection *con; 
-    sql::Statement *stmt; 
-    sql::ResultSet *res; 
+int main() {
+  try {
+    sql::Driver *driver;
+    sql::Connection *con;
+    sql::Statement *stmt;
+    sql::ResultSet *res;
     sql::PreparedStatement *pstmt;
 
-    driver = get_driver_instance(); 
-    con = driver->connect("localhost", "root", ""); 
-    //Ñ¡ÔñÒªÁ¬½ÓµÄÊý¾Ý¿â 
+    driver = get_driver_instance();
+    con = driver->connect("localhost", "root", "");
+    //é€‰æ‹©è¦è¿žæŽ¥çš„æ•°æ®åº“
     con->setSchema("test");
-    //ÉèÖÃ×Ö·û¸ñÊ½
+    //è®¾ç½®å­—ç¬¦æ ¼å¼
     con->setClientOption("characterSetResults", "utf8");
 
-    //Ö´ÐÐ´æ´¢¹ý³Ì
+    //æ‰§è¡Œå­˜å‚¨è¿‡ç¨‹
     pstmt = con->prepareStatement("call proc_adder(1, 5, @sum)");
     pstmt->execute();
-    //or below
-    //pstmt = con->prepareStatement("call proc_adder(?, ?, @sum)");
-    //pstmt->setInt(1, 1);
-    //pstmt->setInt(2, 5);
-    //pstmt->execute();
+    // or below
+    // pstmt = con->prepareStatement("call proc_adder(?, ?, @sum)");
+    // pstmt->setInt(1, 1);
+    // pstmt->setInt(2, 5);
+    // pstmt->execute();
 
-    //²éÑ¯´æ´¢¹ý³Ì½á¹û
+    //æŸ¥è¯¢å­˜å‚¨è¿‡ç¨‹ç»“æžœ
     pstmt = con->prepareStatement("select @sum as sum");
     res = pstmt->executeQuery();
-    //±éÀú½á¹û¼¯ 
-    while (res->next())  
-    { 
+    //éåŽ†ç»“æžœé›†
+    while (res->next()) {
       int id = res->getUInt64(1);
-      cout<<id<<endl;
+      cout << id << endl;
     }
 
-    delete res; 
-    //delete stmt;
+    delete res;
+    // delete stmt;
     delete pstmt;
     delete con;
 
-  } catch (sql::SQLException &e) { 
-    //ÓÐÒì³£µÄÇé¿öÏÂ£¬Êä³öÒì³£ 
-    cout << "# ERR: SQLException in " << __FILE__; 
-    cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl; 
-    cout << "# ERR: " << e.what(); 
-    cout << " (MySQL error code: " << e.getErrorCode(); 
-    cout << ", SQLState: " << e.getSQLState() << " )" << endl; 
+  } catch (sql::SQLException &e) {
+    //æœ‰å¼‚å¸¸çš„æƒ…å†µä¸‹ï¼Œè¾“å‡ºå¼‚å¸¸
+    cout << "# ERR: SQLException in " << __FILE__;
+    cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+    cout << "# ERR: " << e.what();
+    cout << " (MySQL error code: " << e.getErrorCode();
+    cout << ", SQLState: " << e.getSQLState() << " )" << endl;
   }
 
   return 0;

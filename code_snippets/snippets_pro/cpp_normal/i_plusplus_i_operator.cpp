@@ -1,31 +1,27 @@
-//i++ Óë++i ²Ù×÷·ûÖØÔØ
+ï»¿// i++ ä¸++i æ“ä½œç¬¦é‡è½½
 /*
-Time operator++();//ÖØÔØ++i;
-Time operator++(int);//ÖØÔØi++£»
-C++Ô¼¶¨£¬ºóÖÃ×ÔÔö/×Ô¼õÔËËã·ûÔö¼ÓÒ»¸öintĞÍ²ÎÊı¡£
+Time operator++();//é‡è½½++i;
+Time operator++(int);//é‡è½½i++ï¼›
+C++çº¦å®šï¼Œåç½®è‡ªå¢/è‡ªå‡è¿ç®—ç¬¦å¢åŠ ä¸€ä¸ªintå‹å‚æ•°ã€‚
 */
 
 #include <iostream>
 
-class test1
-{
+class test1 {
 public:
-  test1():x(0) {}
-  test1& operator++()
-  {
+  test1() : x(0) {}
+  test1 &operator++() {
     ++x;
     return *this;
   }
-  test1& operator++(int)
-  {
+  test1 &operator++(int) {
     test1 t1(*this);
     ++this->x;
     return *this;
   }
   int x;
 };
-int main()
-{
+int main() {
   test1 t1;
   t1++;
   ++t1;

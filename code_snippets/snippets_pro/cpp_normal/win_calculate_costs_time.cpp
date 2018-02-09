@@ -1,30 +1,30 @@
-
-//ÔÚwindows¶Ë ¾«È·¼ÆËã Ê±¼ä¼ä¸ô
+ï»¿
+//åœ¨windowsç«¯ ç²¾ç¡®è®¡ç®— æ—¶é—´é—´éš”
 
 #include <iostream>
 #include <windows.h>
 using namespace std;
 
-int main()
-{
-	LARGE_INTEGER Frequency;//¼ÆÊıÆ÷ÆµÂÊ
-	LARGE_INTEGER start_PerformanceCount;//ÆğÊ¼¼ÆÊıÆ÷
-	LARGE_INTEGER end_PerformanceCount;//½áÊø¼ÆÊıÆ÷
-	double run_time; //ÔËĞĞÊ±¼ä
-	QueryPerformanceFrequency(&Frequency); 
+int main() {
+  LARGE_INTEGER Frequency;              //è®¡æ•°å™¨é¢‘ç‡
+  LARGE_INTEGER start_PerformanceCount; //èµ·å§‹è®¡æ•°å™¨
+  LARGE_INTEGER end_PerformanceCount;   //ç»“æŸè®¡æ•°å™¨
+  double run_time;                      //è¿è¡Œæ—¶é—´
+  QueryPerformanceFrequency(&Frequency);
 
-	for (int i = 0 ; i < 10 ; ++i )
-	{
+  for (int i = 0; i < 10; ++i) {
 
-		QueryPerformanceCounter(&start_PerformanceCount); 
+    QueryPerformanceCounter(&start_PerformanceCount);
 
-		//ÔËĞĞ²âÊÔµÄ´úÂë
-		Sleep(10);
+    //è¿è¡Œæµ‹è¯•çš„ä»£ç 
+    Sleep(10);
 
-		QueryPerformanceCounter(&end_PerformanceCount); 
-		run_time = ( end_PerformanceCount.QuadPart - start_PerformanceCount.QuadPart ) / (double)Frequency.QuadPart;
-		cout<<run_time<<endl;
-	}
+    QueryPerformanceCounter(&end_PerformanceCount);
+    run_time =
+        (end_PerformanceCount.QuadPart - start_PerformanceCount.QuadPart) /
+        (double)Frequency.QuadPart;
+    cout << run_time << endl;
+  }
 
-	return 0;
+  return 0;
 }

@@ -1,32 +1,30 @@
-#include  <unistd.h>
-#include  <sys/types.h>       /* basic system data types */
-#include  <sys/socket.h>      /* basic socket definitions */
-#include  <netinet/in.h>      /* sockaddr_in{} and other Internet defns */
-#include  <arpa/inet.h>       /* inet(3) functions */
+ï»¿#include <unistd.h>
+#include <arpa/inet.h>  /* inet(3) functions */
+#include <netinet/in.h> /* sockaddr_in{} and other Internet defns */
+#include <sys/socket.h> /* basic socket definitions */
+#include <sys/types.h>  /* basic system data types */
 
-#include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-
-#include <poll.h> /* poll function */
 #include <limits.h>
+#include <poll.h> /* poll function */
 
 #define MAXLINE 10240
 
 #ifndef OPEN_MAX
 #define OPEN_MAX 40960
 #endif
-void handle(struct pollfd* clients, int maxClient, int readyClient);
+void handle(struct pollfd *clients, int maxClient, int readyClient);
 
-int  main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
   int servPort = 88960;
   int listenq = 1024;
   int listenfd, connfd;
   struct pollfd clients[OPEN_MAX];
-  int  maxi;
+  int maxi;
   socklen_t socklen = sizeof(struct sockaddr_in);
   struct sockaddr_in cliaddr, servaddr;
   char buf[MAXLINE];
@@ -47,7 +45,7 @@ int  main(int argc, char **argv)
     perror("setsockopt error");
   }
 
-  if(bind(listenfd, (struct sockaddr *) &servaddr, socklen) == -1) {
+  if (bind(listenfd, (struct sockaddr *)&servaddr, socklen) == -1) {
     perror("bind error");
     exit(-1);
   }
@@ -58,23 +56,23 @@ int  main(int argc, char **argv)
   clients[0].fd = listenfd;
   clients[0].events = POLLIN;
   int i;
-  for (i = 1; i< OPEN_MAX; i++)
+  for (i = 1; i < OPEN_MAX; i++)
     clients[i].fd = -1;
   maxi = listenfd + 1;
 
   printf("pollechoserver startup, listen on port:%d\n", servPort);
   printf("max connection is %d\n", OPEN_MAX);
 
-  for ( ; ; )
-  {
+  for (;;) {
     nready = poll(clients, maxi + 1, -1);
-    //printf("nready is %d,%d\n", nready, maxi);
+    // printf("nready is %d,%d\n", nready, maxi);
     if (nready == -1) {
       perror("poll error");
     }
     if (clients[0].revents & POLLIN) {
-      connfd = accept(listenfd, (struct sockaddr *) &cliaddr, &socklen);
-      sprintf(buf, "accept form %s:%d\n", inet_ntoa(cliaddr.sin_addr), cliaddr.sin_port);
+      connfd = accept(listenfd, (struct sockaddr *)&cliaddr, &socklen);
+      sprintf(buf, "accept form %s:%d\n", inet_ntoa(cliaddr.sin_addr),
+              cliaddr.sin_port);
       printf(buf, "");
 
       for (i = 0; i < OPEN_MAX; i++) {
@@ -101,8 +99,7 @@ int  main(int argc, char **argv)
   }
 }
 
-void handle(struct pollfd* clients, int maxClient, int nready)
-{
+void handle(struct pollfd *clients, int maxClient, int nready) {
   int connfd;
   int i, nread;
   char buf[MAXLINE];
@@ -110,12 +107,12 @@ void handle(struct pollfd* clients, int maxClient, int nready)
   if (nready == 0)
     return;
 
-  for (i = 1; i< maxClient; i++) {
+  for (i = 1; i < maxClient; i++) {
     connfd = clients[i].fd;
     if (connfd == -1)
       continue;
     if (clients[i].revents & (POLLIN | POLLERR)) {
-      nread = read(connfd, buf, MAXLINE);//¶ÁÈ¡¿Í»§¶ËsocketÁ÷
+      nread = read(connfd, buf, MAXLINE); //è¯»å–å®¢æˆ·ç«¯socketæµ
       if (nread < 0) {
         perror("read error");
         close(connfd);
@@ -130,9 +127,9 @@ void handle(struct pollfd* clients, int maxClient, int nready)
       }
       printf("read data '%s'", buf); // peterlin
 
-      //write(connfd, buf, nread);//ÏìÓ¦¿Í»§¶Ë
-      write(connfd, "server res", nread);//ÏìÓ¦¿Í»§¶Ë
-      if (--nready <= 0)//Ã»ÓÐÁ¬½ÓÐèÒª´¦Àí£¬ÍË³öÑ­»·
+      // write(connfd, buf, nread);//å“åº”å®¢æˆ·ç«¯
+      write(connfd, "server res", nread); //å“åº”å®¢æˆ·ç«¯
+      if (--nready <= 0) //æ²¡æœ‰è¿žæŽ¥éœ€è¦å¤„ç†ï¼Œé€€å‡ºå¾ªçŽ¯
         break;
     }
   }

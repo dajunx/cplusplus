@@ -1,27 +1,27 @@
-//Ê¹ÓÃ filesystem¶ÁÈ¡ Ğ´ÈëÎÄ¼şÄÚÈİ
+ï»¿//ä½¿ç”¨ filesystemè¯»å– å†™å…¥æ–‡ä»¶å†…å®¹
 /*
-Ê¹ÓÃ filesystem±éÀúÄ¿Â¼ÎÄ¼ş£¬¶ÁÈ¡ËùÓĞÎÄ¼şÄÚÈİ²¢±£´æµ½ÁíÍâÒ»¸öÎÄ¼şÖĞ¡£
-win¶ËĞ§ÂÊ½ÏµÍ£¬linuxĞ§ÂÊºÜ¸ß
-µÚ¶ş¸öread_content_from_file2 ¶ÁÈ¡³öÀ´µÄÎÄ±¾ÄÚÈİ½áÎ²´¦ÓëºÃÒ»Ğ©ÂÒÂë
-todo:ÓÅ»¯ÁËĞ´ÈëÎÄ¼şÄÚÈİ´úÂë£¬±ÜÃâÃ¿´ÎĞ´Èëµ¥¸öÎÄ¼şÄÚÈİ¾ÍnewÒ»¿éÄÚ´æ³öÀ´(Ô­À´µÄ·½Ê½ÊÇÓĞÄÚ´æĞ¹Â©µÄ)£¬Ã¿´Înew Ğ§ÂÊµÍ¡¢ÀË·ÑÏµÍ³×ÊÔ´¡£
+ä½¿ç”¨ filesysteméå†ç›®å½•æ–‡ä»¶ï¼Œè¯»å–æ‰€æœ‰æ–‡ä»¶å†…å®¹å¹¶ä¿å­˜åˆ°å¦å¤–ä¸€ä¸ªæ–‡ä»¶ä¸­ã€‚
+winç«¯æ•ˆç‡è¾ƒä½ï¼Œlinuxæ•ˆç‡å¾ˆé«˜
+ç¬¬äºŒä¸ªread_content_from_file2 è¯»å–å‡ºæ¥çš„æ–‡æœ¬å†…å®¹ç»“å°¾å¤„ä¸å¥½ä¸€äº›ä¹±ç 
+todo:ä¼˜åŒ–äº†å†™å…¥æ–‡ä»¶å†…å®¹ä»£ç ï¼Œé¿å…æ¯æ¬¡å†™å…¥å•ä¸ªæ–‡ä»¶å†…å®¹å°±newä¸€å—å†…å­˜å‡ºæ¥(åŸæ¥çš„æ–¹å¼æ˜¯æœ‰å†…å­˜æ³„æ¼çš„)ï¼Œæ¯æ¬¡new
+æ•ˆç‡ä½ã€æµªè´¹ç³»ç»Ÿèµ„æºã€‚
 */
-#include <iostream>
-#include <string>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/typeof/typeof.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <deque>
+#include <iostream>
+#include <string>
 using namespace boost::filesystem;
 std::deque<std::string> file_content_deque;
 std::deque<std::string> filelist_deque;
 std::string read_only_path("E:\\System Volume Information");
 
-void write_content_to_disk()
-{
+void write_content_to_disk() {
   path input_path("e:\\tmp.ipp");
   fstream fs(input_path.native(),
-    std::fstream::in | std::fstream::out | std::fstream::app);
+             std::fstream::in | std::fstream::out | std::fstream::app);
   BOOST_AUTO(it, file_content_deque.begin());
   for (; it != file_content_deque.end(); ++it) {
     fs << *it << "\n";
@@ -29,15 +29,14 @@ void write_content_to_disk()
   fs.close();
 }
 
-void write_filename_list_to_disk()
-{
+void write_filename_list_to_disk() {
   path input_path("e:\\tmp.txt");
   fstream fs(input_path.native(),
-    std::fstream::in | std::fstream::out | std::fstream::app);
+             std::fstream::in | std::fstream::out | std::fstream::app);
   BOOST_AUTO(it, filelist_deque.begin());
   int x = 0;
   for (; it != filelist_deque.end(); ++it) {
-    fs << *it <<"\n";
+    fs << *it << "\n";
     //     path file_path(*it);
     //     x = status(file_path).permissions();
     //     if (x != 438)
@@ -47,8 +46,7 @@ void write_filename_list_to_disk()
   fs.close();
 }
 
-void read_content_from_file1(std::string const& path_input)
-{
+void read_content_from_file1(std::string const &path_input) {
   std::string cache_dir_temp;
   if (path_input.empty()) {
     cache_dir_temp.assign("C:\\Users\\Administrator\\Pictures\\1.txt");
@@ -68,9 +66,8 @@ void read_content_from_file1(std::string const& path_input)
   fs.close();
 }
 
-// µÚ¶şÖÖ·½Ê½£¬ÓÃÒ»¸öchar¶ÑÀ´´æ·Åµ¥¸öÎÄ±¾ÄÚÈİ£¬²»¹ıÓĞµãÎÊÌâ
-void read_content_from_file2(std::string const& path_input)
-{
+// ç¬¬äºŒç§æ–¹å¼ï¼Œç”¨ä¸€ä¸ªcharå †æ¥å­˜æ”¾å•ä¸ªæ–‡æœ¬å†…å®¹ï¼Œä¸è¿‡æœ‰ç‚¹é—®é¢˜
+void read_content_from_file2(std::string const &path_input) {
   std::string cache_dir_temp;
   if (path_input.empty()) {
     cache_dir_temp.assign("C:\\Users\\Administrator\\Pictures\\1.txt");
@@ -82,17 +79,17 @@ void read_content_from_file2(std::string const& path_input)
     return;
   }
 
-  if (cache_dir_temp.find(".cpp") == std::string::npos
-    && cache_dir_temp.find(".cc") == std::string::npos
-    && cache_dir_temp.find(".hpp") == std::string::npos
-    && cache_dir_temp.find(".h") == std::string::npos) {
-      return;
+  if (cache_dir_temp.find(".cpp") == std::string::npos &&
+      cache_dir_temp.find(".cc") == std::string::npos &&
+      cache_dir_temp.find(".hpp") == std::string::npos &&
+      cache_dir_temp.find(".h") == std::string::npos) {
+    return;
   }
 
   ifstream file(input_path.native());
   file.seekg(0, ifstream::end);
   int size = file.tellg();
-  char* contents = new char [size];
+  char *contents = new char[size];
   file.seekg(0, ifstream::beg);
   file.read(contents, size);
   contents[size] = '\0';
@@ -100,17 +97,16 @@ void read_content_from_file2(std::string const& path_input)
   file.close();
 }
 
-void read_content_from_filelist3()
-{
+void read_content_from_filelist3() {
   path input_path_outer("e:\\tmp.ipp");
   fstream fs(input_path_outer.native(),
-    std::fstream::in | std::fstream::out | std::fstream::app);
+             std::fstream::in | std::fstream::out | std::fstream::app);
 
   BOOST_AUTO(it, filelist_deque.begin());
-  //ÓÅ»¯µã Ñ­»·Ç°newÒ»¿éÄÚ´æ¹©¸øÏò´ÅÅÌĞ´ÈëÄÚÈİÊ¹ÓÃ£¬ÄÚ´æÏûºÄ»áĞ¡ºÜ¶à¡£linux ¶ËÒ²²»±¨´í
-  //²»¹ıÕâ¸önewµÄÖµÊÇºóÆÚËã³öÀ´µÄ£¬²»ÖÇÄÜ
-  int max_size = 2234683; 
-  char* contents = new char [max_size];
+  //ä¼˜åŒ–ç‚¹ å¾ªç¯å‰newä¸€å—å†…å­˜ä¾›ç»™å‘ç£ç›˜å†™å…¥å†…å®¹ä½¿ç”¨ï¼Œå†…å­˜æ¶ˆè€—ä¼šå°å¾ˆå¤šã€‚linux
+  //ç«¯ä¹Ÿä¸æŠ¥é”™ ä¸è¿‡è¿™ä¸ªnewçš„å€¼æ˜¯åæœŸç®—å‡ºæ¥çš„ï¼Œä¸æ™ºèƒ½
+  int max_size = 2234683;
+  char *contents = new char[max_size];
   for (; it != filelist_deque.end(); ++it) {
     std::string cache_dir_temp = *it;
 
@@ -120,18 +116,18 @@ void read_content_from_filelist3()
         continue;
       }
 
-      if (cache_dir_temp.find(".cpp") == std::string::npos
-        && cache_dir_temp.find(".cc") == std::string::npos
-        && cache_dir_temp.find(".hpp") == std::string::npos
-        && cache_dir_temp.find(".h") == std::string::npos) {
-          continue;
+      if (cache_dir_temp.find(".cpp") == std::string::npos &&
+          cache_dir_temp.find(".cc") == std::string::npos &&
+          cache_dir_temp.find(".hpp") == std::string::npos &&
+          cache_dir_temp.find(".h") == std::string::npos) {
+        continue;
       }
 
       ifstream file(input_path.native());
       file.seekg(0, ifstream::end);
       int size = file.tellg();
-      //if (size > max_size) max_size = size;
-      //char* contents = new char [size];
+      // if (size > max_size) max_size = size;
+      // char* contents = new char [size];
       file.seekg(0, ifstream::beg);
       file.read(contents, size);
       contents[size] = '\0';
@@ -139,42 +135,39 @@ void read_content_from_filelist3()
       file.close();
       contents[0] = '\0';
     }
-  }  
+  }
 
   fs.close();
 }
 
-void set_cache_dir(std::string const& cache_dir_temp)
-{
+void set_cache_dir(std::string const &cache_dir_temp) {
   std::string udp_disk_cache_path_ = cache_dir_temp;
-  if (!cache_dir_temp.empty()
-    && cache_dir_temp[cache_dir_temp.size() - 1] != '/'
-    && cache_dir_temp[cache_dir_temp.size() - 1] != '\\') {
-      udp_disk_cache_path_ += '/';
+  if (!cache_dir_temp.empty() &&
+      cache_dir_temp[cache_dir_temp.size() - 1] != '/' &&
+      cache_dir_temp[cache_dir_temp.size() - 1] != '\\') {
+    udp_disk_cache_path_ += '/';
   }
   udp_disk_cache_path_ += "UDP_info.ini";
 }
 
-void get_path_file_list(std::string const& path_tmp)
-{
+void get_path_file_list(std::string const &path_tmp) {
   path input_path(path_tmp);
   if (!exists(input_path) || !is_directory(input_path)) {
     return;
   }
 
   for (directory_iterator itr = directory_iterator(input_path);
-    itr != directory_iterator(); ++itr) {
-      if (is_regular_file(*itr)) {
-        filelist_deque.push_back(itr->path().string());
-      } else if (is_directory(*itr)) {
-        get_path_file_list(itr->path().string());
-      }
+       itr != directory_iterator(); ++itr) {
+    if (is_regular_file(*itr)) {
+      filelist_deque.push_back(itr->path().string());
+    } else if (is_directory(*itr)) {
+      get_path_file_list(itr->path().string());
+    }
   }
 }
 
-void collect_filepathes(std::string const& path_tmp,
-  std::deque<std::string>& directory_path)
-{
+void collect_filepathes(std::string const &path_tmp,
+                        std::deque<std::string> &directory_path) {
   path input_path(path_tmp);
   if (!exists(input_path) || !is_directory(input_path)) {
     return;
@@ -183,20 +176,19 @@ void collect_filepathes(std::string const& path_tmp,
   int x = status(input_path).permissions();
 
   for (directory_iterator itr = directory_iterator(input_path);
-    itr != directory_iterator(); ++itr) {
-      if (read_only_path.compare(itr->path().string()) == 0) {
-        continue;
-      }
-      if (is_regular_file(*itr)) {
-        filelist_deque.push_back(itr->path().string());
-      } else if (is_directory(*itr)) {
-        directory_path.push_back(itr->path().string());
-      }
+       itr != directory_iterator(); ++itr) {
+    if (read_only_path.compare(itr->path().string()) == 0) {
+      continue;
+    }
+    if (is_regular_file(*itr)) {
+      filelist_deque.push_back(itr->path().string());
+    } else if (is_directory(*itr)) {
+      directory_path.push_back(itr->path().string());
+    }
   }
 }
 
-bool read_filepath_list(std::string const& path_tmp)
-{
+bool read_filepath_list(std::string const &path_tmp) {
   if (path_tmp.empty()) {
     return false;
   }
@@ -211,21 +203,19 @@ bool read_filepath_list(std::string const& path_tmp)
   return true;
 }
 
-void collect_filepath_from_path(std::string const& path_tmp)
-{
-  // ¶ÔÓ¦Â·¾¶´æÔÚÔò²»ÓÃÔÙ´Î½âÎö
+void collect_filepath_from_path(std::string const &path_tmp) {
+  // å¯¹åº”è·¯å¾„å­˜åœ¨åˆ™ä¸ç”¨å†æ¬¡è§£æ
   std::string save_filepath_name("e:\\tmp.txt");
   if (exists(save_filepath_name) && is_regular_file(save_filepath_name)) {
     if (read_filepath_list(save_filepath_name)) {
       return;
-    }    
+    }
   }
 
-  //»º´æÖ¸¶¨Ä¿Â¼ÏÂËùÓĞÎÄ¼şÂ·¾¶£¬Ã¿´Î½øÈëº¯Êı£¬Ö»¼ÇÂ¼ÎÄ¼şÂ·¾¶£¬¶ÔÄ¿Â¼Â·¾¶»º´æÏÂ´ÎÔÚ½âÎö
+  //ç¼“å­˜æŒ‡å®šç›®å½•ä¸‹æ‰€æœ‰æ–‡ä»¶è·¯å¾„ï¼Œæ¯æ¬¡è¿›å…¥å‡½æ•°ï¼Œåªè®°å½•æ–‡ä»¶è·¯å¾„ï¼Œå¯¹ç›®å½•è·¯å¾„ç¼“å­˜ä¸‹æ¬¡åœ¨è§£æ
   std::deque<std::string> directory_path;
   collect_filepathes(path_tmp, directory_path);
-  while (directory_path.size() > 0)
-  {
+  while (directory_path.size() > 0) {
     collect_filepathes(directory_path.front(), directory_path);
     directory_path.pop_front();
   }
@@ -233,22 +223,21 @@ void collect_filepath_from_path(std::string const& path_tmp)
   write_filename_list_to_disk();
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
   std::string path = "E:\\";
   collect_filepath_from_path(path);
-  //get_path_file_list(path);
+  // get_path_file_list(path);
 
-  //¶ÁÈ¡»º´æÖĞËùÓĞÎÄ¼şÄÚÈİ
+  //è¯»å–ç¼“å­˜ä¸­æ‰€æœ‰æ–‡ä»¶å†…å®¹
   //   BOOST_AUTO(it, filelist_deque.begin());
   //   for (; it != filelist_deque.end(); ++it) {
   //     read_content_from_file2(*it);
   //   }
 
-  // ²»Ê¹ÓÃµ¥¶ÀÈİÆ÷´æ·ÅÃ¿¸öÎÄ¼şÄÚÈİ£¬ÄÚÈİÖ±½Ó·Å½øfstreamÖĞ£¬Ê¡È¥ÈİÆ÷µÄÉêÇëÊÍ·Å
+  // ä¸ä½¿ç”¨å•ç‹¬å®¹å™¨å­˜æ”¾æ¯ä¸ªæ–‡ä»¶å†…å®¹ï¼Œå†…å®¹ç›´æ¥æ”¾è¿›fstreamä¸­ï¼Œçœå»å®¹å™¨çš„ç”³è¯·é‡Šæ”¾
   read_content_from_filelist3();
 
-  //write_content_to_disk();//Ğ´ÈëÎÄ¼ş´Ó¶ÁÈ¡ÎÄ¼şÑ­»·ÖĞ³é³öÀ´£¬Ğ´ÈëËÙ¶ÈºÜ¿ì
-  //file_content_deque.clear(); // µ«ÊÇÇåÀí deque ËÙ¶ÈºÜÂı 100w¼¶µÄ¶ÔÏóÇåÀí
+  // write_content_to_disk();//å†™å…¥æ–‡ä»¶ä»è¯»å–æ–‡ä»¶å¾ªç¯ä¸­æŠ½å‡ºæ¥ï¼Œå†™å…¥é€Ÿåº¦å¾ˆå¿«
+  // file_content_deque.clear(); // ä½†æ˜¯æ¸…ç† deque é€Ÿåº¦å¾ˆæ…¢ 100wçº§çš„å¯¹è±¡æ¸…ç†
   return 0;
 }

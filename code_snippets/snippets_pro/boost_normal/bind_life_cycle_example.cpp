@@ -1,38 +1,30 @@
-//bind ÉúÃüÖÜÆÚµÄÀı×Ó£¡
+ï»¿// bind ç”Ÿå‘½å‘¨æœŸçš„ä¾‹å­ï¼
 /*
-bind °ó¶¨£¬Ğ´ÔÚº¯Êıµ÷ÓÃÎ»ÖÃ£¬ÉúÃüÖÜÆÚ¾Í»áËæ×Åº¯Êıµ÷¶È½áÊø¶ø½áÊø£¬ÆäËûµØ·½ÒªÊ¹ÓÃ¸Ã bind°ó¶¨µÄ´úÂë¶ÎµÃÖµ¿½±´£¬¶ø²»ÄÜÊ¹ÓÃ const& ´æ´¢Öµ¡£
+bind
+ç»‘å®šï¼Œå†™åœ¨å‡½æ•°è°ƒç”¨ä½ç½®ï¼Œç”Ÿå‘½å‘¨æœŸå°±ä¼šéšç€å‡½æ•°è°ƒåº¦ç»“æŸè€Œç»“æŸï¼Œå…¶ä»–åœ°æ–¹è¦ä½¿ç”¨è¯¥
+bindç»‘å®šçš„ä»£ç æ®µå¾—å€¼æ‹·è´ï¼Œè€Œä¸èƒ½ä½¿ç”¨ const& å­˜å‚¨å€¼ã€‚
 */
 
-//¾«¼ò°æ±¾:
-#include <iostream>
+//ç²¾ç®€ç‰ˆæœ¬:
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/function.hpp>
 #include <boost/ref.hpp>
+#include <iostream>
 
 typedef boost::function<void()> test2_callback;
 
-
-class test1
-{
+class test1 {
 public:
-  void registe_callback()
-  {
-    test2_callback const& ff = fun2(boost::bind(&test1::call_back));
+  void registe_callback() {
+    test2_callback const &ff = fun2(boost::bind(&test1::call_back));
     ff();
   }
-  test2_callback const& fun2(test2_callback const& f)
-  {
-    return f;
-  }
-  static void call_back()
-  {
-    int i = 0;
-  }
+  test2_callback const &fun2(test2_callback const &f) { return f; }
+  static void call_back() { int i = 0; }
 };
 
-int main()
-{
+int main() {
   test1 t1;
   t1.registe_callback();
 
@@ -41,54 +33,40 @@ int main()
 
 //---------------------------------------------------------------------
 
-#include <iostream>
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/function.hpp>
 #include <boost/ref.hpp>
+#include <iostream>
 
-  typedef boost::function<void()> test2_callback;
+typedef boost::function<void()> test2_callback;
 
-class test2
-{
+class test2 {
 public:
-  test2(test2_callback const& f) : f_(f) {}
-  static void call_back()
-  {
-    int i = 0;
-  }
+  test2(test2_callback const &f) : f_(f) {}
+  static void call_back() { int i = 0; }
 
-  void call_binded_function()
-  {
-    f_();
-  }
+  void call_binded_function() { f_(); }
 
   test2_callback /*const&*/ f_;
 };
 
-class test1 : boost::enable_shared_from_this<test1>
-{
+class test1 : boost::enable_shared_from_this<test1> {
 public:
-  void registe_callback()
-  {
-    /*test2_callback ff = */fun2(boost::bind(&test2::call_back));
+  void registe_callback() {
+    /*test2_callback ff = */ fun2(boost::bind(&test2::call_back));
     /*ff()*/
   }
-  void /*test2_callback*/ fun2(test2_callback const& f)
-  {
+  void /*test2_callback*/ fun2(test2_callback const &f) {
     p_t2 = new test2(f);
     /*return f*/
   }
-  void call_binded_function()
-  {
-    p_t2->call_binded_function();
-  }
+  void call_binded_function() { p_t2->call_binded_function(); }
 
-  test2* p_t2;
+  test2 *p_t2;
 };
 
-int main()
-{
+int main() {
   test1 t1;
   t1.registe_callback();
   t1.call_binded_function();

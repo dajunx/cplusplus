@@ -1,39 +1,30 @@
-
-//tuple ²âÊÔ£¬¿â¹¦ÄÜ£º¸üÒ×ÓÚ¶¨Òå·µ»Ø¶à¸öÊıÖµµÄº¯Êı
+ï»¿
+// tuple æµ‹è¯•ï¼Œåº“åŠŸèƒ½ï¼šæ›´æ˜“äºå®šä¹‰è¿”å›å¤šä¸ªæ•°å€¼çš„å‡½æ•°
+#include <boost/tuple/tuple.hpp>
 #include <iostream>
 #include <string>
-#include <boost/tuple/tuple.hpp>
-boost::tuple<int, double> get_values()
-{
-  return boost::make_tuple(1, 1.5);
-}
-class base
-{
+boost::tuple<int, double> get_values() { return boost::make_tuple(1, 1.5); }
+class base {
 public:
   base() {}
-  base(const base& a) {}
-  virtual ~base() {};
-  virtual void test()
-  {
-    std::cout << "base::test()\n";
-  }
+  base(const base &a) {}
+  virtual ~base(){};
+  virtual void test() { std::cout << "base::test()\n"; }
 };
-class derived : public base
-{
+class derived : public base {
 public:
   derived() {}
-  derived(const derived & a) {}
+  derived(const derived &a) {}
   virtual void test() { std::cout << "derived::test()\n"; }
 };
-int main()
-{
+int main() {
   // test for constructor
   boost::tuple<int, int, std::string> tuile0(1, 2, "lin");
   boost::tuple<int, int, std::string> tuile1;
   boost::tuple<int, int, std::string> tuile2(10);
   boost::tuple<int, int, double> tuile3(10);
   tuile1 = boost::make_tuple(1, 2, "jun");
-  tuile2 = boost::make_tuple(1, 2, "jian"); // ³õÊ¼»¯Öµºó£¬»¹¿ÉÒÔ¸³Öµ
+  tuile2 = boost::make_tuple(1, 2, "jian"); // åˆå§‹åŒ–å€¼åï¼Œè¿˜å¯ä»¥èµ‹å€¼
   // get value function
   int a = boost::tuples::get<0>(tuile2);
   int b = boost::tuples::get<1>(tuile2);
@@ -41,16 +32,16 @@ int main()
   // return value
   boost::tuple<int, double> tup_re = get_values();
   // test for copy constructor
-  boost::tuple<int, std::string, derived> tup1(-5,"Tuples"); 
+  boost::tuple<int, std::string, derived> tup1(-5, "Tuples");
   derived bb;
   boost::tuple<int, std::string, derived> tup3;
-  tup3 = boost::make_tuple(1,"lin", bb);
-  boost::tuple<unsigned int, std::string, base> tup2; 
-  tup2=tup1;
+  tup3 = boost::make_tuple(1, "lin", bb);
+  boost::tuple<unsigned int, std::string, base> tup2;
+  tup2 = tup1;
   tup1.get<2>().test();
   tup2.get<2>().test();
-  // ±éÀúÔªËØ
-  boost::tuples::tuple<int,int,double> tuple1(10,30,20.000);
+  // éå†å…ƒç´ 
+  boost::tuples::tuple<int, int, double> tuple1(10, 30, 20.000);
   int head = tuple1.get_head();
   int tailhead = tuple1.get_tail().get_head();
   double tail = tuple1.get_tail().get_tail().get_head();

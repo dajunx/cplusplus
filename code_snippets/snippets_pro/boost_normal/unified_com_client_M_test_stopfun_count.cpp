@@ -1,26 +1,30 @@
-//unified_com_clientÄ£ĞÍ ²âÊÔstopÇé¿öÒıÓÃ¼ÆÊıÇé¿ö
+ï»¿// unified_com_clientæ¨¡å‹ æµ‹è¯•stopæƒ…å†µå¼•ç”¨è®¡æ•°æƒ…å†µ
 /*
-1¡¢µ÷ÓÃ stop ¾²Ì¬º¯Êı¡£²âÊÔÀ´¿´£¬io_serviceµÄstopº¯Êıµ÷ÓÃÖ®ºó£¬»áÖ´ĞĞÍê±Ï postµ½io_serviceÉÏµÄhandler£¬stopµ÷ÓÃÖ®ºópostµÄhandler²»»áÖ´ĞĞ¡£
-¿ÉÄÜµÄÔ­ÒòÊÇ Íê³É¶Ë¿ÚµÄµ÷¶ÈÊÒFIFO£¬stopº¯Êıµ÷ÓÃ»á PostQueuedCompletionStatus Í¶µİÒ»¸ö¹Ø±ÕrunËÀÑ­»·µÄÍ¶µİ£¬µ±run¶ÁÈ¡µ½¸Ãº¯ÊıµÄÊ±ºò£¬»á×ßÍË³öÁ÷³Ì¡£
-2¡¢Èôio_service ÔÚstopÖ®ºó£¬Ó¦ÓÃpostÇëÇó£¬Ó¦ÓÃ¼ÆÊıÒÔ¼°io_service ¼ÆÊı²»»áÇåÁã.
-3¡¢post³öÈ¥µÄÍ¶µİ£¬ÈôÊ¹ÓÃweak_ptr ÔòÔö¼Ó¶ÔÏóµÄweak_count£¬¶ÔÓ¦handlerµ÷ÓÃµÄÊ±ºò²é¿´use_countÊÇ·ñÎª0£¬
-  ´ËÊÂ¶ÔÏóÊÇ·ñÒÑ¾­Îö¹¹£¬¶øshared_from_this »áÔö¼Ó¶ÔÓ¦µÄuse_count£¬handlerµ÷ÓÃµÄÊ±ºò¶ÔÏó¿Ï¶¨Î´ÊÍ·Å¡£
-4¡¢½ûÓÃ IOCP £¬Ê¹ÓÃºê BOOST_ASIO_DISABLE_IOCP
+1ã€è°ƒç”¨ stop é™æ€å‡½æ•°ã€‚æµ‹è¯•æ¥çœ‹ï¼Œio_serviceçš„stopå‡½æ•°è°ƒç”¨ä¹‹åï¼Œä¼šæ‰§è¡Œå®Œæ¯•
+poståˆ°io_serviceä¸Šçš„handlerï¼Œstopè°ƒç”¨ä¹‹åpostçš„handlerä¸ä¼šæ‰§è¡Œã€‚ å¯èƒ½çš„åŸå› æ˜¯
+å®Œæˆç«¯å£çš„è°ƒåº¦å®¤FIFOï¼Œstopå‡½æ•°è°ƒç”¨ä¼š PostQueuedCompletionStatus
+æŠ•é€’ä¸€ä¸ªå…³é—­runæ­»å¾ªç¯çš„æŠ•é€’ï¼Œå½“runè¯»å–åˆ°è¯¥å‡½æ•°çš„æ—¶å€™ï¼Œä¼šèµ°é€€å‡ºæµç¨‹ã€‚
+2ã€è‹¥io_service åœ¨stopä¹‹åï¼Œåº”ç”¨postè¯·æ±‚ï¼Œåº”ç”¨è®¡æ•°ä»¥åŠio_service è®¡æ•°ä¸ä¼šæ¸…é›¶.
+3ã€postå‡ºå»çš„æŠ•é€’ï¼Œè‹¥ä½¿ç”¨weak_ptr
+åˆ™å¢åŠ å¯¹è±¡çš„weak_countï¼Œå¯¹åº”handlerè°ƒç”¨çš„æ—¶å€™æŸ¥çœ‹use_countæ˜¯å¦ä¸º0ï¼Œ
+  æ­¤äº‹å¯¹è±¡æ˜¯å¦å·²ç»ææ„ï¼Œè€Œshared_from_this
+ä¼šå¢åŠ å¯¹åº”çš„use_countï¼Œhandlerè°ƒç”¨çš„æ—¶å€™å¯¹è±¡è‚¯å®šæœªé‡Šæ”¾ã€‚ 4ã€ç¦ç”¨ IOCP ï¼Œä½¿ç”¨å®
+BOOST_ASIO_DISABLE_IOCP
 */
+#include "E:\Work\iSpeak\common\sdk\utilities\inc\bind_weak_ptr.hpp"
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/chrono/chrono.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/ref.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/weak_ptr.hpp>
 #include <iostream>
 #include <vector>
-#include <boost/thread/thread.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/chrono/chrono.hpp>
-#include <boost/asio.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/weak_ptr.hpp>
-#include <boost/ref.hpp>
-#include "E:\Work\iSpeak\common\sdk\utilities\inc\bind_weak_ptr.hpp"
 
 using namespace boost;
 typedef boost::shared_ptr<boost::asio::io_service> io_service_ptr;
@@ -31,9 +35,9 @@ volatile bool after_stop_post = false;
 struct test1 : public boost::enable_shared_from_this<test1> {
   io_service_ptr ptr_io_service;
 
-  static io_service_ptr get_instance(bool stop = false,
-    boost::shared_ptr<test1> ptr_test1 = nullptr)
-  {
+  static io_service_ptr
+  get_instance(bool stop = false,
+               boost::shared_ptr<test1> ptr_test1 = nullptr) {
     static io_service_ptr ptr_io_service;
     static io_work_ptr ptr_io_work;
     static boost::shared_ptr<boost::thread> ptr_thread;
@@ -47,42 +51,43 @@ struct test1 : public boost::enable_shared_from_this<test1> {
         if (ptr_thread->try_join_for(boost::chrono::milliseconds(100))) {
           ptr_thread.reset();
         } else {
-          ptr_io_service->stop(); // ÏÈstop ºóÔÚpost£¬ÈôpostÊÇshared_from_this·½Ê½£¬io_service»á¹Ü×Å ¼ÆÊı²»»áÊÍ·Å
+          ptr_io_service->stop(); // å…ˆstop
+                                  // ååœ¨postï¼Œè‹¥postæ˜¯shared_from_thisæ–¹å¼ï¼Œio_serviceä¼šç®¡ç€
+                                  // è®¡æ•°ä¸ä¼šé‡Šæ”¾
           if (false == after_stop_post) {
             after_stop_post = true;
-            //ptr_test1->post1(9999);
-            //ptr_test1.reset();
+            // ptr_test1->post1(9999);
+            // ptr_test1.reset();
           }
-          //ptr_io_service->stop();
+          // ptr_io_service->stop();
         }
       }
       ptr_io_service.reset();
-    }  else {
+    } else {
       if (!ptr_io_service) {
         ptr_io_service = boost::make_shared<boost::asio::io_service>();
-        ptr_io_work = boost::make_shared<boost::asio::io_service::work>
-          (boost::ref(*ptr_io_service));
+        ptr_io_work = boost::make_shared<boost::asio::io_service::work>(
+            boost::ref(*ptr_io_service));
 
-        ptr_thread = boost::make_shared<boost::thread>(
-          boost::bind(&test1::thread, ptr_io_service, boost::ref(io_service_running)));
+        ptr_thread = boost::make_shared<boost::thread>(boost::bind(
+            &test1::thread, ptr_io_service, boost::ref(io_service_running)));
         while (!io_service_running) {
           boost::this_thread::sleep(boost::posix_time::milliseconds(1));
         }
-        //ptr_instance = boost::make_shared<test1>();
+        // ptr_instance = boost::make_shared<test1>();
       }
     }
 
     return ptr_io_service;
   }
 
-  static void thread(io_service_ptr ptr_io_service, bool& io_service_running)
-  {
-    //ptr_io_service->run();
+  static void thread(io_service_ptr ptr_io_service, bool &io_service_running) {
+    // ptr_io_service->run();
     boost::unwrap_ref(io_service_running) = true;
     do {
       try {
         ptr_io_service->run();
-      } catch (std::exception& e) {
+      } catch (std::exception &e) {
       }
 
       if (io_service_running) {
@@ -93,44 +98,35 @@ struct test1 : public boost::enable_shared_from_this<test1> {
     } while (1);
   }
 
-  test1()
-  {
-    ptr_io_service = get_instance();
-  }
+  test1() { ptr_io_service = get_instance(); }
 
-  void fun1(int i)
-  {
+  void fun1(int i) {
     std::cout << "index :" << i << std::endl;
     ++finished_count;
     boost::this_thread::sleep(boost::posix_time::milliseconds(500));
   }
 
-  void post(int i)
-  {
-    //ptr_io_service->post(boost::bind(&test1::fun1, shared_from_this(), i));
-    //ptr_io_service->post(boost::bind(&test1::fun1, boost::weak_ptr<test1>(shared_from_this()), i));
+  void post(int i) {
+    // ptr_io_service->post(boost::bind(&test1::fun1, shared_from_this(), i));
+    // ptr_io_service->post(boost::bind(&test1::fun1,
+    // boost::weak_ptr<test1>(shared_from_this()), i));
     ptr_io_service->post(boost::bind(&test1::fun1, this, i));
   }
 
-  void post1(int i)
-  {
+  void post1(int i) {
     ptr_io_service->post(boost::bind(&test1::fun1, shared_from_this(), i));
-    //ptr_io_service->post(boost::bind(&test1::fun1, boost::weak_ptr<test1>(shared_from_this()), i));
+    // ptr_io_service->post(boost::bind(&test1::fun1,
+    // boost::weak_ptr<test1>(shared_from_this()), i));
   }
 
-  static io_service_ptr stop(boost::shared_ptr<test1> ptr_test1)
-  {
+  static io_service_ptr stop(boost::shared_ptr<test1> ptr_test1) {
     return get_instance(true, ptr_test1);
   }
 
-  ~test1()
-  {
-    int i = 0;
-  }
+  ~test1() { int i = 0; }
 };
 
-int main()
-{
+int main() {
   boost::shared_ptr<test1> ptr_test1 = boost::make_shared<test1>();
   ptr_test1->post(0);
   boost::shared_ptr<test1> ptr_test2 = boost::make_shared<test1>();
@@ -141,7 +137,7 @@ int main()
   //   ptr_test1.reset();
   //   ptr_test2.reset();
 
-  //io_service_ptr ptr_io_service = test1::stop(ptr_test2);
+  // io_service_ptr ptr_io_service = test1::stop(ptr_test2);
   boost::this_thread::sleep(boost::posix_time::seconds(5));
   ptr_test1.reset();
   ptr_test2.reset();

@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** FileName     : SimpleFactoryPatternDemo
 ** Author       : Jelly Young
 ** Date         : 2013/11/17
@@ -9,55 +9,34 @@
 #include <vector>
 using namespace std;
 
-typedef enum ProductTypeTag
-{
-  TypeA,
-  TypeB,
-  TypeC
-}PRODUCTTYPE;
+typedef enum ProductTypeTag { TypeA, TypeB, TypeC } PRODUCTTYPE;
 
 // Here is the product class
-class Product
-{
+class Product {
 public:
   virtual void Show() = 0;
 };
 
-class ProductA : public Product
-{
+class ProductA : public Product {
 public:
-  void Show()
-  {
-    cout<<"I'm ProductA"<<endl;
-  }
+  void Show() { cout << "I'm ProductA" << endl; }
 };
 
-class ProductB : public Product
-{
+class ProductB : public Product {
 public:
-  void Show()
-  {
-    cout<<"I'm ProductB"<<endl;
-  }
+  void Show() { cout << "I'm ProductB" << endl; }
 };
 
-class ProductC : public Product
-{
+class ProductC : public Product {
 public:
-  void Show()
-  {
-    cout<<"I'm ProductC"<<endl;
-  }
+  void Show() { cout << "I'm ProductC" << endl; }
 };
 
 // Here is the Factory class
-class Factory
-{
+class Factory {
 public:
-  Product* CreateProduct(PRODUCTTYPE type)
-  {
-    switch (type)
-    {
+  Product *CreateProduct(PRODUCTTYPE type) {
+    switch (type) {
     case TypeA:
       return new ProductA();
 
@@ -73,8 +52,7 @@ public:
   }
 };
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   // First, create a factory object
   Factory *ProductFactory = new Factory();
   Product *productObjA = ProductFactory->CreateProduct(TypeA);
@@ -96,7 +74,7 @@ int main(int argc, char *argv[])
   productObjA = NULL;
 
   delete productObjB;
-  productObjB = NULL;        
+  productObjB = NULL;
 
   delete productObjC;
   productObjC = NULL;

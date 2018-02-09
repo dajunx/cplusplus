@@ -1,71 +1,72 @@
-//steady_timer ¶¨Ê±Æ÷Ê¹ÓÃ
+ï»¿// steady_timer å®šæ—¶å™¨ä½¿ç”¨
 
-//boost::posix_time::to_simple_stringº¯ÊıĞèÒªÕâÁ½¸öÍ·ÎÄ¼ş  
-#include <boost/date_time.hpp>  
-#include <boost/date_time/posix_time/ptime.hpp>  
-//Ê¹ÓÃboost.chrono´úÌæstd.chrono,  
-#define BOOST_ASIO_DISABLE_STD_CHRONO  
-#include <boost/asio.hpp>  
-#include <boost/asio/steady_timer.hpp>  
-#include <boost/asio/placeholders.hpp>  
-#include <boost/thread.hpp>  
+// boost::posix_time::to_simple_stringå‡½æ•°éœ€è¦è¿™ä¸¤ä¸ªå¤´æ–‡ä»¶
+#include <boost/date_time.hpp>
+#include <boost/date_time/posix_time/ptime.hpp>
+//ä½¿ç”¨boost.chronoä»£æ›¿std.chrono,
+#define BOOST_ASIO_DISABLE_STD_CHRONO
+#include <boost/asio.hpp>
+#include <boost/asio/placeholders.hpp>
+#include <boost/asio/steady_timer.hpp>
+#include <boost/thread.hpp>
 
-class MyClass  
-{  
-public:  
-  MyClass() :m_work(m_io), m_timer(m_io){}  
-public:  
-  boost::thread_group m_thgp;  
-  boost::asio::io_service m_io;  
-  boost::asio::io_service::work m_work;  
-  boost::asio::steady_timer m_timer;  
-public:  
-  void Init()  
-  {  
-    boost::system::error_code errCode;  
-    m_thgp.create_thread(boost::bind(&boost::asio::io_service::run, boost::ref(m_io), errCode));  
-    std::cout << "Init_1, " << LocalTime() << std::endl;  
-    m_timer.expires_from_now(boost::chrono::milliseconds(4000)); //ÉèÖÃ¹ıÆÚÊ±¼ä³¤¶È  
-    std::cout << "Init_2, " << LocalTime() << std::endl;  
-    m_timer.async_wait(boost::bind(&MyClass::Test, this, boost::asio::placeholders::error));//Òì²½µÈ´ı  
+class MyClass {
+public:
+  MyClass() : m_work(m_io), m_timer(m_io) {}
+
+public:
+  boost::thread_group m_thgp;
+  boost::asio::io_service m_io;
+  boost::asio::io_service::work m_work;
+  boost::asio::steady_timer m_timer;
+
+public:
+  void Init() {
+    boost::system::error_code errCode;
+    m_thgp.create_thread(
+        boost::bind(&boost::asio::io_service::run, boost::ref(m_io), errCode));
+    std::cout << "Init_1, " << LocalTime() << std::endl;
+    m_timer.expires_from_now(
+        boost::chrono::milliseconds(4000)); //è®¾ç½®è¿‡æœŸæ—¶é—´é•¿åº¦
+    std::cout << "Init_2, " << LocalTime() << std::endl;
+    m_timer.async_wait(boost::bind(
+        &MyClass::Test, this, boost::asio::placeholders::error)); //å¼‚æ­¥ç­‰å¾…
     std::cout << "Init_3, " << LocalTime() << std::endl;
-    //ÓÉConsole¿ÉÖª, º¯ÊıÁ¢¼´·µ»ØÁË, ¶¨Ê±Æ÷µÄexpires_from_nowÊÇÓÉÍê³É¶Ë¿Ú´¦ÀíµÄ  
-  }  
-  void Stop()  
-  {  
-    std::cout << "Stop_1, " << LocalTime() << std::endl;  
-    m_timer.cancel();  // È¡ÏûËùÓĞhandler  
-    m_work.~work();  
-    m_thgp.join_all();  
-    std::cout << "Stop_2, " << LocalTime() << std::endl;  
-  }  
-  static std::string LocalTime()  
-  {  
-    return boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time());  
-  }  
+    //ç”±Consoleå¯çŸ¥, å‡½æ•°ç«‹å³è¿”å›äº†, å®šæ—¶å™¨çš„expires_from_nowæ˜¯ç”±å®Œæˆç«¯å£å¤„ç†çš„
+  }
+  void Stop() {
+    std::cout << "Stop_1, " << LocalTime() << std::endl;
+    m_timer.cancel(); // å–æ¶ˆæ‰€æœ‰handler
+    m_work.~work();
+    m_thgp.join_all();
+    std::cout << "Stop_2, " << LocalTime() << std::endl;
+  }
+  static std::string LocalTime() {
+    return boost::posix_time::to_simple_string(
+        boost::posix_time::microsec_clock::local_time());
+  }
 
-  void Test(const boost::system::error_code& ec)  
-  {
-    printf("test_1, %s, ec.value=%d, ec.message=%s\n", LocalTime().c_str(), ec.value(), ec.message().c_str());  
-    if (ec)  return;  
+  void Test(const boost::system::error_code &ec) {
+    printf("test_1, %s, ec.value=%d, ec.message=%s\n", LocalTime().c_str(),
+           ec.value(), ec.message().c_str());
+    if (ec)
+      return;
     m_timer.expires_from_now(boost::chrono::milliseconds(4000));
     std::cout << "test_2, " << LocalTime() << std::endl;
     m_timer.async_wait(boost::bind(&MyClass::Test, boost::ref(*this), _1));
     std::cout << "test_3, " << LocalTime() << std::endl;
   }
-};  
+};
 
-int main(int argc, char** argv)  
-{  
-  MyClass my;  
-  my.Init();  
-  for (int i = 0; i < 30; ++i)  
-  {  
-    boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));  
-  }  
-  my.Stop();  
-  std::cout << "press ENTER to exit..." << std::endl;  
+int main(int argc, char **argv) {
+  MyClass my;
+  my.Init();
+  for (int i = 0; i < 30; ++i) {
+    boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
+  }
+  my.Stop();
+  std::cout << "press ENTER to exit..." << std::endl;
   // 	std::cin.sync();
-  // 	while (getchar() != '\n') {}  
+  // 	while (getchar() != '\n') {}
   return 0;
-}  
+}

@@ -1,54 +1,53 @@
-//vector ÉèÖÃcapacityºÍ²»capacityËÙ¶È²îÒì
+ï»¿// vector è®¾ç½®capacityå’Œä¸capacityé€Ÿåº¦å·®å¼‚
 /*
-ÔÚrelease°æ±¾£¬·Ö±ğÔÚ2¸öÏß³ÌÔËĞĞ£¬Ã¿´ÎÔËĞĞ10000000´Î£¬È¡100´ÎÆ½¾ùÖµ£¬reserve°æ±¾ÔÚ·Çreserve°æ±¾Ò»°ëÊ±¼ä£¬40¶àºÁÃë¡£
-ÔÚdebug°æ±¾£¬½á¹ûÃ»É¶²îÒì£¬²»½â¡£Ã¿´ÎÔËĞĞ10000000´Î£¬È¡10´ÎÆ½¾ùÖµ£¬Ê±¼äÔÚ3300ºÁÃë¶àµã¡£
+åœ¨releaseç‰ˆæœ¬ï¼Œåˆ†åˆ«åœ¨2ä¸ªçº¿ç¨‹è¿è¡Œï¼Œæ¯æ¬¡è¿è¡Œ10000000æ¬¡ï¼Œå–100æ¬¡å¹³å‡å€¼ï¼Œreserveç‰ˆæœ¬åœ¨éreserveç‰ˆæœ¬ä¸€åŠæ—¶é—´ï¼Œ40å¤šæ¯«ç§’ã€‚
+åœ¨debugç‰ˆæœ¬ï¼Œç»“æœæ²¡å•¥å·®å¼‚ï¼Œä¸è§£ã€‚æ¯æ¬¡è¿è¡Œ10000000æ¬¡ï¼Œå–10æ¬¡å¹³å‡å€¼ï¼Œæ—¶é—´åœ¨3300æ¯«ç§’å¤šç‚¹ã€‚
 */
 
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/thread/thread.hpp>
 #include <iostream>
 #include <vector>
-#include <boost/thread/thread.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 #define loop_num (100)
 
-void fun2()
-{
+void fun2() {
   long total_costtime = 0;
-  for (int j=0;j<loop_num;++j)
-  {
-    boost::posix_time::ptime start_time = boost::posix_time::microsec_clock::local_time();
+  for (int j = 0; j < loop_num; ++j) {
+    boost::posix_time::ptime start_time =
+        boost::posix_time::microsec_clock::local_time();
     std::vector<int> vec_int;
     vec_int.reserve(10000000);
-    for (int i=0;i<10000000;++i)
-    {
+    for (int i = 0; i < 10000000; ++i) {
       vec_int.push_back(i);
     }
-    boost::posix_time::ptime end_time = boost::posix_time::microsec_clock::local_time();
+    boost::posix_time::ptime end_time =
+        boost::posix_time::microsec_clock::local_time();
     boost::posix_time::time_duration cost = end_time - start_time;
     total_costtime += cost.total_milliseconds();
-  }  
-  std::cout<<"cost time2:"<<total_costtime/loop_num<<" ms."<<std::endl;
+  }
+  std::cout << "cost time2:" << total_costtime / loop_num << " ms."
+            << std::endl;
 }
 
-void fun1()
-{
+void fun1() {
   long total_costtime = 0;
-  for (int j=0;j<loop_num;++j)
-  {
-    boost::posix_time::ptime start_time = boost::posix_time::microsec_clock::local_time();
+  for (int j = 0; j < loop_num; ++j) {
+    boost::posix_time::ptime start_time =
+        boost::posix_time::microsec_clock::local_time();
     std::vector<int> vec_int;
-    for (int i=0;i<10000000;++i)
-    {
+    for (int i = 0; i < 10000000; ++i) {
       vec_int.push_back(i);
     }
-    boost::posix_time::ptime end_time = boost::posix_time::microsec_clock::local_time();
+    boost::posix_time::ptime end_time =
+        boost::posix_time::microsec_clock::local_time();
     boost::posix_time::time_duration cost = end_time - start_time;
     total_costtime += cost.total_milliseconds();
-  }  
-  std::cout<<"cost time1:"<<total_costtime/loop_num<<" ms."<<std::endl;
+  }
+  std::cout << "cost time1:" << total_costtime / loop_num << " ms."
+            << std::endl;
 }
 
-int main()
-{
+int main() {
   boost::thread th1(fun1);
   boost::thread th2(fun2);
   th1.join();

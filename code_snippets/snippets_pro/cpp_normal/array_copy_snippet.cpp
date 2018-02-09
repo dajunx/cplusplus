@@ -1,9 +1,10 @@
-//Êı×é¿½±´
+ï»¿//æ•°ç»„æ‹·è´
 
-// ¿½±´Êı×é
+// æ‹·è´æ•°ç»„
 int random_numb[max_tmp];
 //   for (int i=0;i<max_tmp;++i)
 //   {
 //     random_numb[i] = random_numb_tmp[i];
 //   }
-memcpy(reinterpret_cast<char*>(random_numb), reinterpret_cast<char*>(random_numb_tmp), max_tmp);
+memcpy(reinterpret_cast<char *>(random_numb),
+       reinterpret_cast<char *>(random_numb_tmp), max_tmp);

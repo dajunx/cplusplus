@@ -1,18 +1,16 @@
-//´òÓ¡Ïß³Ìid ´úÂëÆ¬¶Î
-//´òÓ¡Ïß³Ìid¡¢µ±Ç°Ê±¼ä
-void writer()
-{
-  while (--write_max>-1) {
+ï»¿//æ‰“å°çº¿ç¨‹id ä»£ç ç‰‡æ®µ
+//æ‰“å°çº¿ç¨‹idã€å½“å‰æ—¶é—´
+void writer() {
+  while (--write_max > -1) {
     boost::mutex::scoped_lock sl(m);
     if (number == 5) {
       not_full.wait(m);
     }
     ++number;
-    log_array<< "after writer: " << number
-      << ", time:"
-      <<boost::posix_time::to_simple_string(boost::posix_time::microsec_clock::local_time())
-      << ", this_thread:" << boost::this_thread::get_id()
-      <<std::endl;
+    log_array << "after writer: " << number << ", time:"
+              << boost::posix_time::to_simple_string(
+                     boost::posix_time::microsec_clock::local_time())
+              << ", this_thread:" << boost::this_thread::get_id() << std::endl;
 
     not_empty.notify_one();
   }

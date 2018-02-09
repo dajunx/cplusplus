@@ -1,78 +1,70 @@
-/*
-  ºÏ²¢Á½¸öÎÄ¼şÄÚÈİ£¬¶¯´Ê+Ãû×Ö
+ï»¿/*
+  åˆå¹¶ä¸¤ä¸ªæ–‡ä»¶å†…å®¹ï¼ŒåŠ¨è¯+åå­—
 */
 #include <Windows.h>
-#include <iostream>
+#include <ctime> //åŒ…å« #include <time.h>
 #include <fstream>
-#include <string>
+#include <iostream>
 #include <sstream>
+#include <string>
 #include <vector>
-#include <ctime> //°üº¬ #include <time.h>
 
-void writedata(std::vector<std::string>& write_data, std::string& out_filename)
-{
+void writedata(std::vector<std::string> &write_data,
+               std::string &out_filename) {
   std::stringstream outPutFilename;
-  time_t timep;  
-  struct tm *p;   
-  time(&timep);   
+  time_t timep;
+  struct tm *p;
+  time(&timep);
   p = localtime(&timep);
-  outPutFilename<<"ºÏ²¢½á¹û "
-    <<(1900+p->tm_year) << "-"
-    <<(1+p->tm_mon) << "-"
-    <<p->tm_mday << " "
-    <<p->tm_hour << "-"
-    <<p->tm_min << "-"
-    <<p->tm_sec << ".txt";
+  outPutFilename << "åˆå¹¶ç»“æœ " << (1900 + p->tm_year) << "-" << (1 + p->tm_mon)
+                 << "-" << p->tm_mday << " " << p->tm_hour << "-" << p->tm_min
+                 << "-" << p->tm_sec << ".txt";
 
   out_filename = outPutFilename.str();
   std::fstream file(out_filename,
-    std::fstream::in | std::fstream::out | std::fstream::trunc);
+                    std::fstream::in | std::fstream::out | std::fstream::trunc);
 
   std::vector<std::string>::iterator it = write_data.begin();
-  for (; it != write_data.end();++it)
-  {
-    file<<*it<<std::endl;
+  for (; it != write_data.end(); ++it) {
+    file << *it << std::endl;
   }
   file.flush();
   file.close();
 }
 
-void writelog(std::string szlog)
-{
+void writelog(std::string szlog) {
   std::fstream file("log.txt",
-    std::fstream::in | std::fstream::out | std::fstream::app);
-  file<<szlog<<std::endl;
+                    std::fstream::in | std::fstream::out | std::fstream::app);
+  file << szlog << std::endl;
   file.close();
 }
 
-bool ReadDataFromFileLBLIntoString(const std::string& filename, std::vector<std::string>& file_data)
-{
-  std::ifstream fin(filename);  
+bool ReadDataFromFileLBLIntoString(const std::string &filename,
+                                   std::vector<std::string> &file_data) {
+  std::ifstream fin(filename);
   if (fin.is_open() == true) {
-    std::string s;  
-    while(getline(fin,s))
-    {
+    std::string s;
+    while (getline(fin, s)) {
       file_data.push_back(s);
     }
     fin.close();
     return true;
   } else {
-    std::cout<<"------- Ãû´Ê.txt »ò ¶¯´Ê.txt ÎÄ¼ş Î´ÕÒµ½£¬Çë´´½¨--------"<<std::endl;
+    std::cout << "------- åè¯.txt æˆ– åŠ¨è¯.txt æ–‡ä»¶ æœªæ‰¾åˆ°ï¼Œè¯·åˆ›å»º--------"
+              << std::endl;
   }
 
   fin.close();
   return false;
 }
 
-bool checkTwoFileExist()
-{
+bool checkTwoFileExist() {
   bool ret = false;
-  std::string input_file1("Ãû´Ê.txt"), input_file2("¶¯´Ê.txt");
+  std::string input_file1("åè¯.txt"), input_file2("åŠ¨è¯.txt");
   std::ifstream fin1(input_file1);
   std::ifstream fin2(input_file2);
 
-  do 
-  {
+  do {
     if (fin1.is_open() == false) {
       break;
     }
@@ -86,19 +78,20 @@ bool checkTwoFileExist()
   return ret;
 }
 
-int main(int argc,char *argv[]) 
-{
-  std::cout<<"------------------Ê¹ÓÃËµÃ÷---------------------"<<std::endl;
-  std::cout<<std::endl;
-  std::cout<<"ÇëÔÚ³ÌĞòµ±Ç°Ä¿Â¼·ÅÖÃ Ãû´Ê.txt¡¢¶¯´Ê.txt Á½¸ö´ı´¦ÀíÎÄ¼ş"<<std::endl;
-  std::cout<<std::endl;
-  std::cout<<"------------------´¦ÀíÖĞ...---------------------"<<std::endl;
+int main(int argc, char *argv[]) {
+  std::cout << "------------------ä½¿ç”¨è¯´æ˜---------------------" << std::endl;
+  std::cout << std::endl;
+  std::cout << "è¯·åœ¨ç¨‹åºå½“å‰ç›®å½•æ”¾ç½® åè¯.txtã€åŠ¨è¯.txt ä¸¤ä¸ªå¾…å¤„ç†æ–‡ä»¶"
+            << std::endl;
+  std::cout << std::endl;
+  std::cout << "------------------å¤„ç†ä¸­...---------------------" << std::endl;
   if (checkTwoFileExist() == false) {
-    std::cout<<"¼ì²âµ½µ±Ç°Ä¿Â¼Ã»ÓĞ Ãû´Ê.txt¡¢¶¯´Ê.txt Á½¸ö´ı´¦ÀíÎÄ¼ş"<<std::endl;
+    std::cout << "æ£€æµ‹åˆ°å½“å‰ç›®å½•æ²¡æœ‰ åè¯.txtã€åŠ¨è¯.txt ä¸¤ä¸ªå¾…å¤„ç†æ–‡ä»¶"
+              << std::endl;
     Sleep(3000);
   }
 
-  std::string input_file1("Ãû´Ê.txt"), input_file2("¶¯´Ê.txt");
+  std::string input_file1("åè¯.txt"), input_file2("åŠ¨è¯.txt");
   std::vector<std::string> vec_inputdata1, vec_inputdata2, vec_merge_data;
   bool bReadFileRes = false;
   if (ReadDataFromFileLBLIntoString(input_file1, vec_inputdata1) == false) {
@@ -111,11 +104,9 @@ int main(int argc,char *argv[])
   std::vector<std::string>::iterator it_input_file1 = vec_inputdata1.begin();
   std::vector<std::string>::iterator it_input_file2;
 
-  for (;it_input_file1 != vec_inputdata1.end();it_input_file1++)
-  {
+  for (; it_input_file1 != vec_inputdata1.end(); it_input_file1++) {
     it_input_file2 = vec_inputdata2.begin();
-    for (;it_input_file2 != vec_inputdata2.end();it_input_file2++)
-    {
+    for (; it_input_file2 != vec_inputdata2.end(); it_input_file2++) {
       vec_merge_data.push_back(*it_input_file1 + *it_input_file2);
       vec_merge_data.push_back(*it_input_file2 + *it_input_file1);
     }
@@ -127,19 +118,19 @@ int main(int argc,char *argv[])
   int input_file2_count = vec_inputdata2.size();
   int merge_count = vec_merge_data.size();
 
-  std::cout<<"------------------»ã×ÜĞÅÏ¢---------------------"<<std::endl;
-  std::cout<<"Êä³öÎÄ¼şÃû:"<<outPutFileName<<std::endl;
-  std::cout<<"¶¯´ÊÊäÈëÁ¿: "<< input_file1_count <<std::endl;
-  std::cout<<"Ãû´ÊÊäÈëÁ¿: "<< input_file2_count <<std::endl;
-  std::cout<<"ºÏ³ÉÁ¿: "<< merge_count <<std::endl;
+  std::cout << "------------------æ±‡æ€»ä¿¡æ¯---------------------" << std::endl;
+  std::cout << "è¾“å‡ºæ–‡ä»¶å:" << outPutFileName << std::endl;
+  std::cout << "åŠ¨è¯è¾“å…¥é‡: " << input_file1_count << std::endl;
+  std::cout << "åè¯è¾“å…¥é‡: " << input_file2_count << std::endl;
+  std::cout << "åˆæˆé‡: " << merge_count << std::endl;
   Sleep(3000);
 
-  //log
+  // log
   std::stringstream szlog;
-  szlog<<"Êä³öÎÄ¼şÃû: "<<outPutFileName
-    <<", ¶¯´ÊÊäÈëÁ¿: "<<input_file1_count
-    <<", Ãû´ÊÊäÈëÁ¿: "<<input_file2_count
-    <<", ºÏ³ÉÁ¿: "<<merge_count<<std::endl;
+  szlog << "è¾“å‡ºæ–‡ä»¶å: " << outPutFileName
+        << ", åŠ¨è¯è¾“å…¥é‡: " << input_file1_count
+        << ", åè¯è¾“å…¥é‡: " << input_file2_count << ", åˆæˆé‡: " << merge_count
+        << std::endl;
   writelog(szlog.str());
 
   return 0;

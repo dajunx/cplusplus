@@ -1,38 +1,33 @@
-//·ÃÎÊÀà³ÉÔ±º¯Êı¡¢ÆÕÍ¨º¯Êı
-//link:http://stackoverflow.com/questions/10231330/how-to-get-a-methods-address-in-a-class
+ï»¿//è®¿é—®ç±»æˆå‘˜å‡½æ•°ã€æ™®é€šå‡½æ•°
+// link:http://stackoverflow.com/questions/10231330/how-to-get-a-methods-address-in-a-class
 
-#include <iostream>
 #include <boost/function.hpp>
+#include <iostream>
 
-class test1
-{
+class test1 {
 public:
   test1() {}
   ~test1() {}
   void fun() {}
 };
 
-void fun1()
-{
-  int i = 0;
-}
+void fun1() { int i = 0; }
 
-int main()
-{
-  // ¶¨ÒåÀà³ÉÔ±º¯Êı Ô­Ê¼·½Ê½
+int main() {
+  // å®šä¹‰ç±»æˆå‘˜å‡½æ•° åŸå§‹æ–¹å¼
   void (test1::*ff)(void);
   ff = &test1::fun;
 
   test1 t1;
   (t1.*ff)();
 
-  // ¶¨ÒåÆÕÍ¨º¯ÊıÖ¸Õë·½Ê½
+  // å®šä¹‰æ™®é€šå‡½æ•°æŒ‡é’ˆæ–¹å¼
   void (*pfun)();
   pfun = &fun1;
   pfun();
 
-  // boost function ·½Ê½
-  boost::function<void(test1*)> ff1(&test1::fun);
+  // boost function æ–¹å¼
+  boost::function<void(test1 *)> ff1(&test1::fun);
   ff1(&t1);
   return 0;
 }

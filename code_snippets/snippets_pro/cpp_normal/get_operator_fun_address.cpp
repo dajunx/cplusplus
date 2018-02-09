@@ -1,20 +1,18 @@
-//»ñÈ¡ operator()  º¯ÊıµØÖ·
+ï»¿//è·å– operator()  å‡½æ•°åœ°å€
 #include <iostream>
 
-struct cop{
-  bool operator()(const int& a, const int& b) const
-  {
+struct cop {
+  bool operator()(const int &a, const int &b) const {
     return a < b;
-    //return true;
+    // return true;
   }
 };
 
-int main()
-{  
-  bool (cop::*ff)(const int& a, const int& b) const;
+int main() {
+  bool (cop::*ff)(const int &a, const int &b) const;
   ff = &cop::operator();
   cop cop_temp;
-  (cop_temp.*ff)(1,2););
+  (cop_temp.*ff)(1, 2););
 
   return 0;
 }

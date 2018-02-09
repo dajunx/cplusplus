@@ -1,10 +1,9 @@
-//va_start¡¢va_end¡¢va_listµÄÊ¹ÓÃ ÁĞ×Ó
+ï»¿// va_startã€va_endã€va_listçš„ä½¿ç”¨ åˆ—å­
 
-#include<stdio.h>
-#include<stdarg.h>
+#include <stdarg.h>
+#include <stdio.h>
 
-void simple_va_fun(int start, ...)
-{
+void simple_va_fun(int start, ...) {
   va_list arg_ptr;
   int nArgValue = start;
   int nArgCount = 0;
@@ -17,25 +16,23 @@ void simple_va_fun(int start, ...)
   return;
 }
 
-int writeMultiString(void* c, ...)
-{
+int writeMultiString(void *c, ...) {
   va_list ap;
-  const char* str;
+  const char *str;
 
   va_start(ap, c);
-  str = va_arg(ap, const char*);
+  str = va_arg(ap, const char *);
 
   while (str != NULL) {
-    fputs(str, (FILE*)c);
-    str = va_arg(ap, const char*);
+    fputs(str, (FILE *)c);
+    str = va_arg(ap, const char *);
   }
 
   va_end(ap);
   return 0;
 }
 
-int main()
-{
+int main() {
   simple_va_fun(100, -1);
   simple_va_fun(100, 200, -1);
 

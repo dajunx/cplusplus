@@ -1,44 +1,36 @@
-//shared_ptr Ñ­»·ÒıÓÃÎÊÌâ
-//std::shared_ptr ºÍ std::weak_ptrµÄÓÃ·¨ÒÔ¼°ÒıÓÃ¼ÆÊıµÄÑ­»·ÒıÓÃÎÊÌâ
-#include <iostream>  
-#include <boost/shared_ptr.hpp>
+ï»¿// shared_ptr å¾ªç¯å¼•ç”¨é—®é¢˜
+// std::shared_ptr å’Œ std::weak_ptrçš„ç”¨æ³•ä»¥åŠå¼•ç”¨è®¡æ•°çš„å¾ªç¯å¼•ç”¨é—®é¢˜
 #include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <iostream>
 
-class Woman;  
-class Man{  
-private:  
-  boost::weak_ptr<Woman> _wife;  
-  //boost::shared_ptr<Woman> _wife;  
-public:  
-  void setWife(boost::shared_ptr<Woman> woman){  
-    _wife = woman;  
-  }  
-  ~Man(){  
-    std::cout << "kill man\n";  
-  }  
-};  
+class Woman;
+class Man {
+private:
+  boost::weak_ptr<Woman> _wife;
+  // boost::shared_ptr<Woman> _wife;
+public:
+  void setWife(boost::shared_ptr<Woman> woman) { _wife = woman; }
+  ~Man() { std::cout << "kill man\n"; }
+};
 
-class Woman{  
-private:  
-  //boost::weak_ptr<Man> _husband;  
-  boost::shared_ptr<Man> _husband;  
-public:  
-  void setHusband(boost::shared_ptr<Man> man){  
-    _husband = man;  
-  }  
-  ~Woman(){  
-    std::cout <<"kill woman\n";  
-  }  
-};  
+class Woman {
+private:
+  // boost::weak_ptr<Man> _husband;
+  boost::shared_ptr<Man> _husband;
 
+public:
+  void setHusband(boost::shared_ptr<Man> man) { _husband = man; }
+  ~Woman() { std::cout << "kill woman\n"; }
+};
 
-int main(int argc, char** argv){  
-  boost::shared_ptr<Man> m(boost::make_shared<Man>());  
-  boost::shared_ptr<Woman> w(boost::make_shared<Woman>());  
-  if(m && w) {  
-    m->setWife(w);  
-    w->setHusband(m);  
-  }  
-  return 0;  
+int main(int argc, char **argv) {
+  boost::shared_ptr<Man> m(boost::make_shared<Man>());
+  boost::shared_ptr<Woman> w(boost::make_shared<Woman>());
+  if (m && w) {
+    m->setWife(w);
+    w->setHusband(m);
+  }
+  return 0;
 }

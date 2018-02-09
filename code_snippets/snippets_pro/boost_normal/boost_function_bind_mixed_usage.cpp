@@ -1,18 +1,17 @@
-// boost function bind ªÏ∫œ π”√
+Ôªø// boost function bind Ê∑∑Âêà‰ΩøÁî®
 
-#include <iostream>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <boost/lambda/lambda.hpp>
+#include <iostream>
 
-void fun1(int i, int j)
-{
-  std::cout<<"fun1 i:"<<i<<", j:"<<j<<std::endl;
+void fun1(int i, int j) {
+  std::cout << "fun1 i:" << i << ", j:" << j << std::endl;
 }
 
-int main()
-{
-  boost::function<void(int, int)> ff = boost::bind(&fun1, boost::lambda::_1, boost::lambda::_2);
+int main() {
+  boost::function<void(int, int)> ff =
+      boost::bind(&fun1, boost::lambda::_1, boost::lambda::_2);
   boost::function<void(int)> ff1 = boost::bind(ff, 9, boost::lambda::_1);
   ff1(10);
 

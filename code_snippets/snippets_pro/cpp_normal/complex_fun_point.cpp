@@ -1,24 +1,19 @@
-//¸´ÔÓº¯ÊıÖ¸Õë
-//¸´ÔÓµÄº¯ÊıÖ¸Õë£¬Ö¸ÕëĞÎ²ÎÎª º¯ÊıÖ¸Õë
+ï»¿//å¤æ‚å‡½æ•°æŒ‡é’ˆ
+//å¤æ‚çš„å‡½æ•°æŒ‡é’ˆï¼ŒæŒ‡é’ˆå½¢å‚ä¸º å‡½æ•°æŒ‡é’ˆ
 
 #include <iostream>
 
 typedef int (*pfun)(int);
 typedef int (*pfunmulti)(pfun);
 
-int fun1(int i)
-{
+int fun1(int i) {
   i = 0;
   return i;
 }
 
-int fun2(pfun p_fun)
-{
-  return (*p_fun)(9);
-}
+int fun2(pfun p_fun) { return (*p_fun)(9); }
 
-int main()
-{
+int main() {
   pfun p_fun;
   pfunmulti p_fun_multi;
   //   int (*p_fun)(int i);
@@ -29,5 +24,5 @@ int main()
   p_fun_multi = &fun2;
   p_fun_multi(p_fun);
 
-  return(0);
+  return (0);
 }

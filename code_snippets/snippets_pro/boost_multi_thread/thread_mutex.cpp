@@ -1,23 +1,22 @@
-//boost thread¿âmutexÊ¹ÓÃ
-//º¯Êı×÷ÓÃÓòµÄËø£¨·ÅÔÚº¯Êı¿ªÊ¼£©£¬»áÔÚreturn Ö®ºóÔÙ½âËø£¨°ÑreturnµÄÊı¾İÑ¹Õ»£©£¿´ıÔÚÑĞ¾¿
-#include <iostream>
-#include <boost/thread/thread.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+ï»¿// boost threadåº“mutexä½¿ç”¨
+//å‡½æ•°ä½œç”¨åŸŸçš„é”ï¼ˆæ”¾åœ¨å‡½æ•°å¼€å§‹ï¼‰ï¼Œä¼šåœ¨return
+//ä¹‹åå†è§£é”ï¼ˆæŠŠreturnçš„æ•°æ®å‹æ ˆï¼‰ï¼Ÿå¾…åœ¨ç ”ç©¶
 #include <boost/bind.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/function.hpp>
+#include <boost/thread/lock_guard.hpp> // lock_guard å¤´æ–‡ä»¶
+#include <boost/thread/lock_types.hpp> // unique_lock å¤´æ–‡ä»¶
 #include <boost/thread/mutex.hpp>
-#include <boost/thread/lock_guard.hpp> // lock_guard Í·ÎÄ¼ş
-#include <boost/thread/lock_types.hpp> // unique_lock Í·ÎÄ¼ş
-#include <boost/thread/shared_mutex.hpp> // shared_lock ĞèÒª
+#include <boost/thread/shared_mutex.hpp> // shared_lock éœ€è¦
 #include <boost/thread/thread.hpp>
+#include <iostream>
 
 boost::mutex mutex_;
 boost::shared_mutex shared_mutex_;
 int temp = 0;
 #define FOR_LOOP_COUNT (10000)
 
-void fun1()
-{
+void fun1() {
   for (int i = 0; i < FOR_LOOP_COUNT; ++i) {
     mutex_.lock();
     temp++;
@@ -25,44 +24,39 @@ void fun1()
   }
 }
 
-void fun2()
-{
-  //lock_guard Óëfun1ÀàËÆ£¬Ö»ÊÇÂú×ãRAII·ç¸ñ£¬¹¹ÔìÊ±lock£¬Îö¹¹Ê±µ÷ÓÃunlock
+void fun2() {
+  // lock_guard ä¸fun1ç±»ä¼¼ï¼Œåªæ˜¯æ»¡è¶³RAIIé£æ ¼ï¼Œæ„é€ æ—¶lockï¼Œææ„æ—¶è°ƒç”¨unlock
   boost::lock_guard<boost::mutex> l(mutex_);
   for (int i = 0; i < FOR_LOOP_COUNT; ++i) {
     temp++;
   }
 }
 
-void fun3()
-{
-  //unique_lock ÄÚ²¿Ôö¼Óis_lockedÅĞ¶ÏÊÇ·ñ¼ÓËø,ÓĞtry_lock timed_lock
+void fun3() {
+  // unique_lock å†…éƒ¨å¢åŠ is_lockedåˆ¤æ–­æ˜¯å¦åŠ é”,æœ‰try_lock timed_lock
   boost::unique_lock<boost::mutex> l(mutex_);
   for (int i = 0; i < FOR_LOOP_COUNT; ++i) {
     temp++;
   }
 }
 
-void fun4()
-{
-  //shared_lock
+void fun4() {
+  // shared_lock
   boost::shared_lock<boost::shared_mutex> l(shared_mutex_);
   for (int i = 0; i < FOR_LOOP_COUNT; ++i) {
     temp++;
   }
 }
 
-void fun5()
-{
-  //ÔÚ mutex ÏÂ unique_lock<mutex>
+void fun5() {
+  //åœ¨ mutex ä¸‹ unique_lock<mutex>
   boost::mutex::scoped_lock l(mutex_);
   for (int i = 0; i < FOR_LOOP_COUNT; ++i) {
     temp++;
   }
 }
 
-int main()
-{
+int main() {
   boost::function<void()> ff = boost::bind(&fun5);
   boost::thread th1(ff);
   boost::thread th2(ff);

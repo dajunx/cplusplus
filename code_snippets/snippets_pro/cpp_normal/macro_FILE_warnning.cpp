@@ -1,15 +1,15 @@
-//__FILE__ È«Â·¾¶¡¢Ïà¶ÔÂ·¾¶ÎÊÌâ
+ï»¿//__FILE__ å…¨è·¯å¾„ã€ç›¸å¯¹è·¯å¾„é—®é¢˜
 /*
-__FILE__ ºêÔÚdebugÄ£Ê½ÏÂ£¬hºÍcppÎÄ¼ş¶¼ÊÇÈ«Â·¾¶£»ÔÚreleaseÄ£Ê½ÏÂ£¬hÊÇÈ«Â·¾¶¡¢cppÊÇÏà¶ÔÂ·¾¶
+__FILE__
+å®åœ¨debugæ¨¡å¼ä¸‹ï¼Œhå’Œcppæ–‡ä»¶éƒ½æ˜¯å…¨è·¯å¾„ï¼›åœ¨releaseæ¨¡å¼ä¸‹ï¼Œhæ˜¯å…¨è·¯å¾„ã€cppæ˜¯ç›¸å¯¹è·¯å¾„
 */
 
+#include "common.h"
 #include <iostream>
 #include <string>
-#include "common.h"
 using namespace std;
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
   show();
   std::string path = __FILE__;
   cout << "__FILE__ => " << path << endl;

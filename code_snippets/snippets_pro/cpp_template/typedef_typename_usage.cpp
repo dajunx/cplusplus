@@ -1,29 +1,25 @@
-//typedef typename ×÷ÓÃ
+ï»¿// typedef typename ä½œç”¨
 /*
-Èç¹û°Ñ×¢ÊÍÈ¡Ïû£¬¾Í»á²úÉú±àÒë´íÎó¡£±ØĞëÊ¹ÓÃ¹Ø¼ü×ÖtypenameµÄÔ­ÒòÊÇTÊÇÒ»¸ötemplate parameter¡£
-ÔÚÊµÀı»¯Ö®Ç°£¬±àÒëÆ÷¶ÔTÒ»ÎŞËùÖª£¬Òò´Ë²»ÖªµÀA::a_type ´ú±íµÄÊÇÒ»¸ötype»òÊÇÒ»¸ömember function»òÊÇÒ»¸ödata member£¬
-Ê¹ÓÃtypename¿ÉÒÔ¸æËß±àÒëÆ÷ÕâÊÇÒ»¸ötypeÊ¹µÃ±àÒëÄÜË³ÀûÍ¨¹ı¡£
+å¦‚æœæŠŠæ³¨é‡Šå–æ¶ˆï¼Œå°±ä¼šäº§ç”Ÿç¼–è¯‘é”™è¯¯ã€‚å¿…é¡»ä½¿ç”¨å…³é”®å­—typenameçš„åŸå› æ˜¯Tæ˜¯ä¸€ä¸ªtemplate
+parameterã€‚ åœ¨å®ä¾‹åŒ–ä¹‹å‰ï¼Œç¼–è¯‘å™¨å¯¹Tä¸€æ— æ‰€çŸ¥ï¼Œå› æ­¤ä¸çŸ¥é“A::a_type
+ä»£è¡¨çš„æ˜¯ä¸€ä¸ªtypeæˆ–æ˜¯ä¸€ä¸ªmember functionæˆ–æ˜¯ä¸€ä¸ªdata memberï¼Œ
+ä½¿ç”¨typenameå¯ä»¥å‘Šè¯‰ç¼–è¯‘å™¨è¿™æ˜¯ä¸€ä¸ªtypeä½¿å¾—ç¼–è¯‘èƒ½é¡ºåˆ©é€šè¿‡ã€‚
 */
 // link:http://blog.csdn.net/fallstones/article/details/6265764
 
 #include <iostream>
-template<typename T>
-class A
-{
+template <typename T> class A {
 public:
   typedef T a_type;
 };
-template<typename A>
-class B
-{
+template <typename A> class B {
 public:
-  //typedef A::a_type b_type;
+  // typedef A::a_type b_type;
   typedef typename A::a_type b_type;
   b_type x;
 };
 
-int main()
-{
+int main() {
   B<A<int>> b;
   b.x = 9;
   return 0;

@@ -1,27 +1,29 @@
-/*
-std::chrono::steady_clock ÎªÁË±íÊ¾ÎÈ¶¨µÄÊ±¼ä¼ä¸ô£¬ºóÒ»´Îµ÷ÓÃnow()µÃµ½µÄÊ±¼ä×ÜÊÇ±ÈÇ°Ò»´ÎµÄÖµ´ó£¨Õâ¾ä»°µÄÒâË¼ÆäÊµÊÇ£¬Èç¹ûÖĞÍ¾ĞŞ¸ÄÁËÏµÍ³Ê±¼ä£¬Ò²²»Ó°Ïìnow()µÄ½á¹û£©£¬Ã¿´Îtick¶¼±£Ö¤¹ıÁËÎÈ¶¨µÄÊ±¼ä¼ä¸ô¡£
-duration_cast<microseconds>(steady_clock::now().time_since_epoch()).count();  Õâ¸öÊÇ¼ÇÂ¼µÄ¿ª»úµ½ÏÖÔÚµÄÊ±¼ä¼ä¸ô
+ï»¿/*
+std::chrono::steady_clock
+ä¸ºäº†è¡¨ç¤ºç¨³å®šçš„æ—¶é—´é—´éš”ï¼Œåä¸€æ¬¡è°ƒç”¨now()å¾—åˆ°çš„æ—¶é—´æ€»æ˜¯æ¯”å‰ä¸€æ¬¡çš„å€¼å¤§ï¼ˆè¿™å¥è¯çš„æ„æ€å…¶å®æ˜¯ï¼Œå¦‚æœä¸­é€”ä¿®æ”¹äº†ç³»ç»Ÿæ—¶é—´ï¼Œä¹Ÿä¸å½±å“now()çš„ç»“æœï¼‰ï¼Œæ¯æ¬¡tickéƒ½ä¿è¯è¿‡äº†ç¨³å®šçš„æ—¶é—´é—´éš”ã€‚
+duration_cast<microseconds>(steady_clock::now().time_since_epoch()).count();
+è¿™ä¸ªæ˜¯è®°å½•çš„å¼€æœºåˆ°ç°åœ¨çš„æ—¶é—´é—´éš”
 */
 
+#include <boost/chrono.hpp>
+#include <boost/date_time.hpp>
 #include <iostream>
 #include <string>
-#include <boost/date_time.hpp>
-#include <boost/chrono.hpp>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
 
 boost::posix_time::ptime base_at;
-void fun()
-{
-  //boost::posix_time::ptime base_at;
+void fun() {
+  // boost::posix_time::ptime base_at;
   using namespace boost::chrono;
-  // tick_count_now ¼ÇÂ¼¿ª»úµ½ÏÖÔÚµÄÊ±¼ä
-  boost::int64_t tick_count_now = duration_cast<microseconds>(
-    steady_clock::now().time_since_epoch()).count();
+  // tick_count_now è®°å½•å¼€æœºåˆ°ç°åœ¨çš„æ—¶é—´
+  boost::int64_t tick_count_now =
+      duration_cast<microseconds>(steady_clock::now().time_since_epoch())
+          .count();
 
-  boost::int64_t tick_count_now_ = duration_cast<seconds>(
-    steady_clock::now().time_since_epoch()).count();
+  boost::int64_t tick_count_now_ =
+      duration_cast<seconds>(steady_clock::now().time_since_epoch()).count();
 
   std::string base_str;
   base_at = boost::posix_time::microsec_clock::local_time();
@@ -33,18 +35,19 @@ void fun()
   int i = 0;
 }
 
-void fun3()
-{
+void fun3() {
   using namespace boost::chrono;
-  boost::posix_time::ptime time = base_at + boost::posix_time::microsec
-    (duration_cast<microseconds>
-    (steady_clock::now().time_since_epoch()).count());
+  boost::posix_time::ptime time =
+      base_at +
+      boost::posix_time::microsec(
+          duration_cast<microseconds>(steady_clock::now().time_since_epoch())
+              .count());
 
-  std::cout<<"localtime :"<<boost::posix_time::to_simple_string(time)<<std::endl;
+  std::cout << "localtime :" << boost::posix_time::to_simple_string(time)
+            << std::endl;
 }
 
-void fun1()
-{
+void fun1() {
   using namespace boost::chrono;
 
   system_clock::time_point tp = system_clock::now();
@@ -52,13 +55,13 @@ void fun1()
 
   std::cout << "current time since epoch, expressed in:" << std::endl;
   std::cout << "periods: " << dtn.count() << std::endl;
-  std::cout << "seconds: " << dtn.count() * system_clock::period::num /
-    system_clock::period::den;
+  std::cout << "seconds: "
+            << dtn.count() * system_clock::period::num /
+                   system_clock::period::den;
   std::cout << std::endl;
 }
 
-int main()
-{
+int main() {
   fun();
   fun3();
 

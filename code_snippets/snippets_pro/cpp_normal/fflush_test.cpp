@@ -1,47 +1,45 @@
-/* c-sytle io test
+ï»¿/* c-sytle io test
   getInputDataFromBuf:
-  c·ç¸ñio²âÊÔ£¬ÈçÏÂÊÇ ²âÊÔË¢ĞÂ»º³åÇø²âÊÔ
-  1.ÈôÃ»ÓĞ fflush(stdin)£¬½á¹ûÈçÏÂ
-    ÊäÈë 123abc»Ø³µ
-    ÏÔÊ¾ a = 123, c = a
-  2.ÈôÓĞ fflush(stdin)£¬½á¹ûÈçÏÂ
-    ÊäÈë 123abc»Ø³µ
-        xyz»Ø³µ
-    Êä³ö a = 123, c = x
+  cé£æ ¼ioæµ‹è¯•ï¼Œå¦‚ä¸‹æ˜¯ æµ‹è¯•åˆ·æ–°ç¼“å†²åŒºæµ‹è¯•
+  1.è‹¥æ²¡æœ‰ fflush(stdin)ï¼Œç»“æœå¦‚ä¸‹
+    è¾“å…¥ 123abcå›è½¦
+    æ˜¾ç¤º a = 123, c = a
+  2.è‹¥æœ‰ fflush(stdin)ï¼Œç»“æœå¦‚ä¸‹
+    è¾“å…¥ 123abcå›è½¦
+        xyzå›è½¦
+    è¾“å‡º a = 123, c = x
 
   ConnBufWithStream
-  setbuf(stdout, outbuf) °Ñ»º³åÇøÓëÁ÷ÏàÁ¬.
-  ÔÚ fflushµ÷¶Èºó²Å»áÔÚÆÁÄ»´òÓ¡³öÁ½ĞĞ "This is a test of buffered output." ×Ö·û
+  setbuf(stdout, outbuf) æŠŠç¼“å†²åŒºä¸æµç›¸è¿.
+  åœ¨ fflushè°ƒåº¦åæ‰ä¼šåœ¨å±å¹•æ‰“å°å‡ºä¸¤è¡Œ "This is a test of buffered output." å­—ç¬¦
 
-  Ïà¹ØÁ¬½Ó£º
-  1¡¢http://c.biancheng.net/cpp/html/2506.html
-  2¡¢http://c.biancheng.net/cpp/html/265.html
+  ç›¸å…³è¿æ¥ï¼š
+  1ã€http://c.biancheng.net/cpp/html/2506.html
+  2ã€http://c.biancheng.net/cpp/html/265.html
 */
 #include <stdio.h>
 #include <stdlib.h>
-char outbuf[BUFSIZ]; 
+char outbuf[BUFSIZ];
 
-void getInputDataFromBuf()
-{
+void getInputDataFromBuf() {
   int a;
   char c;
 
   scanf("%d", &a);
-  fflush(stdin); // Ë¢ĞÂ»º³åÇø
+  fflush(stdin); // åˆ·æ–°ç¼“å†²åŒº
   c = getchar();
   printf("a = %d, c = %c \n", a, c);
 }
 
-void ConnBufWithStream()
-{
-  setbuf(stdout, outbuf);  // °Ñ»º³åÇøÓëÁ÷ÏàÁ¬
+void ConnBufWithStream() {
+  setbuf(stdout, outbuf); // æŠŠç¼“å†²åŒºä¸æµç›¸è¿
   puts("This is a test of buffered output.\n");
   puts(outbuf);
-  fflush(stdout);  // Ë¢ĞÂ
-  puts(outbuf);  // Êä³ö
+  fflush(stdout); // åˆ·æ–°
+  puts(outbuf);   // è¾“å‡º
 }
 
-int main(){
+int main() {
   getInputDataFromBuf();
   ConnBufWithStream();
   return 0;

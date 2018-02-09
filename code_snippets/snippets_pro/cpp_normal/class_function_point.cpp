@@ -1,50 +1,40 @@
-//Ààº¯Êı Ö¸Õë (Î´µ¥¶À±àÒë)
-//²Î¿¼Á´½Ó£ºhttps://stackoverflow.com/questions/1485983/calling-c-class-methods-via-a-function-pointer
+ï»¿//ç±»å‡½æ•° æŒ‡é’ˆ (æœªå•ç‹¬ç¼–è¯‘)
+//å‚è€ƒé“¾æ¥ï¼šhttps://stackoverflow.com/questions/1485983/calling-c-class-methods-via-a-function-pointer
 
 #include <iostream>
 #include <map>
 #include <vector>
 
-class test1
-{
+class test1 {
 public:
   test1() {}
   ~test1() {}
   void show() {
     int i = 0;
-    std::cout<<"i am show function"<<std::endl;
+    std::cout << "i am show function" << std::endl;
   }
 };
 
-//¸ß¼¶Ó¦ÓÃ
-class test2
-{
+//é«˜çº§åº”ç”¨
+class test2 {
 public:
   test2() {}
   ~test2() {}
-  struct ff
-  {
-    void null() {
-      std::cout<<"i am class test2::ff function."<<std::endl;
-    }
+  struct ff {
+    void null() { std::cout << "i am class test2::ff function." << std::endl; }
   };
 
-  typedef void(ff::*null)();
-  operator null()
-  {
+  typedef void (ff::*null)();
+  operator null() {
     int i = 0;
     return &ff::null;
   }
   ff f1;
 };
 
-void fun1()
-{
-  std::cout<<"fun1"<<std::endl;
-}
+void fun1() { std::cout << "fun1" << std::endl; }
 
-int main()
-{
+int main() {
   test1 t1;
   void (test1::*p)() = NULL;
   p = &test1::show;

@@ -1,27 +1,25 @@
-//bind ²âÊÔ
+ï»¿// bind æµ‹è¯•
 /*
-bindÖĞµÚ¶ş¸ö²ÎÊı ÈôÊÇÖ¸Õë£¬ÔòÔÚÄÚ²¿²»»áµ÷ÓÃ¶ÔÓ¦µÄ¿½±´¹¹Ôìº¯Êı£»·ñÔòÒªµ÷ÓÃ¶à´Î¿½±´¹¹Ôìº¯Êı.
-boost::lambda ²ÎÊıÖ»ÓĞ3¸ö£¬ÓĞÏŞÖÆ£¬Ê¹ÓÃ _1 _2ÕâÖÖ·½Ê½¿ÉÒÔ·ÀÖ¹8¸ö²ÎÊıµ½bindÖĞ
+bindä¸­ç¬¬äºŒä¸ªå‚æ•°
+è‹¥æ˜¯æŒ‡é’ˆï¼Œåˆ™åœ¨å†…éƒ¨ä¸ä¼šè°ƒç”¨å¯¹åº”çš„æ‹·è´æ„é€ å‡½æ•°ï¼›å¦åˆ™è¦è°ƒç”¨å¤šæ¬¡æ‹·è´æ„é€ å‡½æ•°.
+boost::lambda å‚æ•°åªæœ‰3ä¸ªï¼Œæœ‰é™åˆ¶ï¼Œä½¿ç”¨ _1 _2è¿™ç§æ–¹å¼å¯ä»¥é˜²æ­¢8ä¸ªå‚æ•°åˆ°bindä¸­
 */
-#include <iostream>
-#include <boost/function.hpp>
 #include <boost/bind.hpp>
+#include <boost/function.hpp>
 #include <boost/lambda/lambda.hpp>
+#include <iostream>
 
-class test1
-{
+class test1 {
 public:
   test1() {}
-  test1(const test1& p) {}
+  test1(const test1 &p) {}
   ~test1() {}
-  void do_something1(int& i, int& j)
-  {
+  void do_something1(int &i, int &j) {
     i = 9;
     j = 11;
   }
-  void do_something2(int& x_ , int& y_ , int& z_ , int& f_ , int& g_ , int& h_ ,
-    int& i_ , int& j_)
-  {
+  void do_something2(int &x_, int &y_, int &z_, int &f_, int &g_, int &h_,
+                     int &i_, int &j_) {
     x_ = 7;
     y_ = 7;
     z_ = 7;
@@ -31,27 +29,27 @@ public:
     i_ = 7;
     j_ = 7;
   }
-  // µÚÈıÖÖ·½Ê½
-  void bind()
-  {
+  // ç¬¬ä¸‰ç§æ–¹å¼
+  void bind() {
     int x = 0, y = 0;
-    test1* p = this;
-    boost::bind(&test1::do_something1, p, boost::lambda::_1, boost::lambda::_2)(x, y);
+    test1 *p = this;
+    boost::bind(&test1::do_something1, p, boost::lambda::_1,
+                boost::lambda::_2)(x, y);
   }
 };
-int main()
-{
+int main() {
   test1 t1;
-  //t1.bind();
-  //   boost::function<void(int&)> f(boost::bind(&test1::do_something, t1, boost::lambda::_1));
-  //   int x = 0;
-  //   f(x);
-  // µÚ¶şÖÖÊ¹ÓÃbind·½Ê½
-  int x = 0, y = 0, z = 0, f = 0, g = 0, h = 0, i = 0,j = 0;
-  // bindÖĞµÚ¶ş¸ö²ÎÊı ÈôÊÇÖ¸Õë£¬ÔòÔÚÄÚ²¿²»»áµ÷ÓÃ¶ÔÓ¦µÄ¿½±´¹¹Ôìº¯Êı£»·ñÔòÒªµ÷ÓÃ¶à´Î¿½±´¹¹Ôìº¯Êı
-  //boost::bind(&test1::do_something, /*t1*/&t1, boost::lambda::_1, boost::lambda::_2)(x, y);
-  // ÕâÖÖ·½Ê½ ²»ÓÃ¹Ë¼É boost::lambda Ö»ÓĞ_1 _2 _3Èı¸ö²ÎÊıÎÊÌâÁË
-  boost::bind(&test1::do_something2, &t1,
-    _1, _2, _3, _4, _5, _6, _7, _8)(x , y , z , f , g , h , i , j);
+  // t1.bind();
+  //   boost::function<void(int&)> f(boost::bind(&test1::do_something, t1,
+  //   boost::lambda::_1)); int x = 0; f(x);
+  // ç¬¬äºŒç§ä½¿ç”¨bindæ–¹å¼
+  int x = 0, y = 0, z = 0, f = 0, g = 0, h = 0, i = 0, j = 0;
+  // bindä¸­ç¬¬äºŒä¸ªå‚æ•°
+  // è‹¥æ˜¯æŒ‡é’ˆï¼Œåˆ™åœ¨å†…éƒ¨ä¸ä¼šè°ƒç”¨å¯¹åº”çš„æ‹·è´æ„é€ å‡½æ•°ï¼›å¦åˆ™è¦è°ƒç”¨å¤šæ¬¡æ‹·è´æ„é€ å‡½æ•°
+  // boost::bind(&test1::do_something, /*t1*/&t1, boost::lambda::_1,
+  // boost::lambda::_2)(x, y);
+  // è¿™ç§æ–¹å¼ ä¸ç”¨é¡¾å¿Œ boost::lambda åªæœ‰_1 _2 _3ä¸‰ä¸ªå‚æ•°é—®é¢˜äº†
+  boost::bind(&test1::do_something2, &t1, _1, _2, _3, _4, _5, _6, _7,
+              _8)(x, y, z, f, g, h, i, j);
   return 0;
 }

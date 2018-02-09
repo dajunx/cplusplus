@@ -1,76 +1,71 @@
-//c++ time Ïà¹Ø ³õ²½ÌåÑé
+ï»¿// c++ time ç›¸å…³ åˆæ­¥ä½“éªŒ
 
-#include <iostream>
-#include <ctime> //°üº¬ #include <time.h>
 #include <Windows.h> //Sleep()
+#include <ctime>     //åŒ…å« #include <time.h>
+#include <iostream>
 #include <string>
 
-int main()
-{
-  //ÏµÍ³µÄµ±Ç°ÈÕÀúÊ±¼ä£¬×Ô 1970Äê1ÔÂ1ÈÕÒÔÀ´¾­¹ıµÄÃëÊı(Ê±¼ä´Á)¡£Èç¹ûÏµÍ³Ã»ÓĞÊ±¼ä£¬Ôò·µ»Ø .1¡£
-  //time_t time(time_t *time);
+int main() {
+  //ç³»ç»Ÿçš„å½“å‰æ—¥å†æ—¶é—´ï¼Œè‡ª
+  //1970å¹´1æœˆ1æ—¥ä»¥æ¥ç»è¿‡çš„ç§’æ•°(æ—¶é—´æˆ³)ã€‚å¦‚æœç³»ç»Ÿæ²¡æœ‰æ—¶é—´ï¼Œåˆ™è¿”å› .1ã€‚ time_t
+  // time(time_t *time);
   time_t tt, tt1;
   tt = time(NULL);
   tt1 = time(NULL);
 
-
-  //¸Ãº¯Êı·µ»ØÒ»¸öÖ¸Ïò±íÊ¾±¾µØÊ±¼äµÄ tm ½á¹¹µÄÖ¸Õë¡£
-  //struct tm *localtime(const time_t *time);
-  struct tm* p_tm1;
+  //è¯¥å‡½æ•°è¿”å›ä¸€ä¸ªæŒ‡å‘è¡¨ç¤ºæœ¬åœ°æ—¶é—´çš„ tm ç»“æ„çš„æŒ‡é’ˆã€‚
+  // struct tm *localtime(const time_t *time);
+  struct tm *p_tm1;
   p_tm1 = localtime(&tt);
 
-  //¸Ãº¯Êı·µ»ØÒ»¸öÖ¸Ïò time µÄÖ¸Õë£¬time Îª tm ½á¹¹£¬ÓÃĞ­µ÷ÊÀ½çÊ±£¨UTC£©Ò²±»³ÆÎª¸ñÁÖÄáÖÎ±ê×¼Ê±¼ä£¨GMT£©±íÊ¾¡£
-  //struct tm *gmtime(const time_t *time);
+  //è¯¥å‡½æ•°è¿”å›ä¸€ä¸ªæŒ‡å‘ time çš„æŒ‡é’ˆï¼Œtime ä¸º tm
+  //ç»“æ„ï¼Œç”¨åè°ƒä¸–ç•Œæ—¶ï¼ˆUTCï¼‰ä¹Ÿè¢«ç§°ä¸ºæ ¼æ—å°¼æ²»æ ‡å‡†æ—¶é—´ï¼ˆGMTï¼‰è¡¨ç¤ºã€‚ struct tm
+  // *gmtime(const time_t *time);
   memset(p_tm1, 0, sizeof(struct tm));
   p_tm1 = gmtime(&tt);
 
-
-  //¸Ã·µ»ØÒ»¸ö±íÊ¾µ±µØÊ±¼äµÄ×Ö·û´®Ö¸Õë£¬×Ö·û´®ĞÎÊ½ day month year hours:minutes:seconds year\n\0¡£
-  //char *ctime(const time_t *time);
-  char* time_sz = (char*)malloc(sizeof(char)*31);
+  //è¯¥è¿”å›ä¸€ä¸ªè¡¨ç¤ºå½“åœ°æ—¶é—´çš„å­—ç¬¦ä¸²æŒ‡é’ˆï¼Œå­—ç¬¦ä¸²å½¢å¼ day month year
+  //hours:minutes:seconds year\n\0ã€‚ char *ctime(const time_t *time);
+  char *time_sz = (char *)malloc(sizeof(char) * 31);
   time_sz = ctime(&tt);
 
-  //¸Ãº¯Êı·µ»ØÒ»¸öÖ¸Ïò×Ö·û´®µÄÖ¸Õë£¬×Ö·û´®°üº¬ÁË time ËùÖ¸Ïò½á¹¹ÖĞ´æ´¢µÄĞÅÏ¢£¬
-  //  ·µ»ØĞÎÊ½Îª£ºday month date hours:minutes:seconds year\n\0¡£
-  //char * asctime ( const struct tm * time );
-  memset(time_sz, 0, sizeof(char)*31);
+  //è¯¥å‡½æ•°è¿”å›ä¸€ä¸ªæŒ‡å‘å­—ç¬¦ä¸²çš„æŒ‡é’ˆï¼Œå­—ç¬¦ä¸²åŒ…å«äº† time æ‰€æŒ‡å‘ç»“æ„ä¸­å­˜å‚¨çš„ä¿¡æ¯ï¼Œ
+  //  è¿”å›å½¢å¼ä¸ºï¼šday month date hours:minutes:seconds year\n\0ã€‚
+  // char * asctime ( const struct tm * time );
+  memset(time_sz, 0, sizeof(char) * 31);
   time_sz = asctime(p_tm1);
 
-
-  //¸Ãº¯Êı·µ»ØÈÕÀúÊ±¼ä£¬Ïàµ±ÓÚ time ËùÖ¸Ïò½á¹¹ÖĞ´æ´¢µÄÊ±¼ä
-  //time_t mktime(struct tm *time);
+  //è¯¥å‡½æ•°è¿”å›æ—¥å†æ—¶é—´ï¼Œç›¸å½“äº time æ‰€æŒ‡å‘ç»“æ„ä¸­å­˜å‚¨çš„æ—¶é—´
+  // time_t mktime(struct tm *time);
   memset(&tt, 0, sizeof(time_t));
   tt = mktime(p_tm1);
 
-
-  //¸Ãº¯Êı·µ»Ø³ÌĞòÖ´ĞĞÆğ£¨Ò»°ãÎª³ÌĞòµÄ¿ªÍ·£©£¬´¦ÀíÆ÷Ê±ÖÓËùÊ¹ÓÃµÄÊ±¼ä¡£Èç¹ûÊ±¼ä²»¿ÉÓÃ£¬Ôò·µ»Ø .1
-  //clock_t clock(void);
+  //è¯¥å‡½æ•°è¿”å›ç¨‹åºæ‰§è¡Œèµ·ï¼ˆä¸€èˆ¬ä¸ºç¨‹åºçš„å¼€å¤´ï¼‰ï¼Œå¤„ç†å™¨æ—¶é’Ÿæ‰€ä½¿ç”¨çš„æ—¶é—´ã€‚å¦‚æœæ—¶é—´ä¸å¯ç”¨ï¼Œåˆ™è¿”å›
+  //.1 clock_t clock(void);
   clock_t cbe = clock();
   Sleep(3);
   clock_t ced = clock();
   int clock_leg = ced - cbe;
 
-
-  //¸Ãº¯Êı·µ»Ø time1 ºÍ time2 Ö®¼äÏà²îµÄÃëÊı¡£
-  //double difftime ( time_t time2, time_t time1 );
+  //è¯¥å‡½æ•°è¿”å› time1 å’Œ time2 ä¹‹é—´ç›¸å·®çš„ç§’æ•°ã€‚
+  // double difftime ( time_t time2, time_t time1 );
   double time_leng = difftime(tt1, tt);
 
-
-  //¸Ãº¯Êı¿ÉÓÃÓÚ¸ñÊ½»¯ÈÕÆÚºÍÊ±¼äÎªÖ¸¶¨µÄ¸ñÊ½¡£
-  //size_t strftime();
-  char* strptr = (char*)malloc(sizeof(char)*32);
-  size_t st = strftime(strptr, sizeof(char)*31, "%A", p_tm1);
+  //è¯¥å‡½æ•°å¯ç”¨äºæ ¼å¼åŒ–æ—¥æœŸå’Œæ—¶é—´ä¸ºæŒ‡å®šçš„æ ¼å¼ã€‚
+  // size_t strftime();
+  char *strptr = (char *)malloc(sizeof(char) * 32);
+  size_t st = strftime(strptr, sizeof(char) * 31, "%A", p_tm1);
 
   int i = 0;
   return 0;
 }
 
 /*
-asctime£º½« ÈÕÆÚ(struct tm)×ª»»³É×Ö·û´®
-ctime£º½« ÃëÊı×ª»»³É×Ö·û´®
-gettimeofday£º¸ù¾İ¸ø¶¨µÄÓë1970Äê1ÔÂ1ÈÕÏà¼õµÃÃëÊı£¬µÃµ½Ê±¼äºÍÈÕÆÚ
-gmtime£º¸ù¾İ¸ø¶¨µÄÓë1970Äê1ÔÂ1ÈÕÏà¼õµÃÃëÊı£¬È¡µÃÊ±¼äºÍÈÕÆÚ
-localtime£º¸ù¾İ¸ø¶¨µÄÓë1970Äê1ÔÂ1ÈÕÏà¼õµÃÃëÊı£¬È¡µÃµ±µØµÄÊ±ÇøµÄÊ±¼äºÍÈÕÆÚ
-mktime£º½«Ê±¼ä½á¹¹Êı¾İ×ª»»³É¾­¹ıµÄÃëÊı
-settimeofday£º¡¡ÉèÖÃÏµÍ³Ê±¼ä£¬Ö»ÓĞ£ò£ï£ï£ôÓÃ»§ÄÜÔËĞĞ
+asctimeï¼šå°† æ—¥æœŸ(struct tm)è½¬æ¢æˆå­—ç¬¦ä¸²
+ctimeï¼šå°† ç§’æ•°è½¬æ¢æˆå­—ç¬¦ä¸²
+gettimeofdayï¼šæ ¹æ®ç»™å®šçš„ä¸1970å¹´1æœˆ1æ—¥ç›¸å‡å¾—ç§’æ•°ï¼Œå¾—åˆ°æ—¶é—´å’Œæ—¥æœŸ
+gmtimeï¼šæ ¹æ®ç»™å®šçš„ä¸1970å¹´1æœˆ1æ—¥ç›¸å‡å¾—ç§’æ•°ï¼Œå–å¾—æ—¶é—´å’Œæ—¥æœŸ
+localtimeï¼šæ ¹æ®ç»™å®šçš„ä¸1970å¹´1æœˆ1æ—¥ç›¸å‡å¾—ç§’æ•°ï¼Œå–å¾—å½“åœ°çš„æ—¶åŒºçš„æ—¶é—´å’Œæ—¥æœŸ
+mktimeï¼šå°†æ—¶é—´ç»“æ„æ•°æ®è½¬æ¢æˆç»è¿‡çš„ç§’æ•°
+settimeofdayï¼šã€€è®¾ç½®ç³»ç»Ÿæ—¶é—´ï¼Œåªæœ‰ï½’ï½ï½ï½”ç”¨æˆ·èƒ½è¿è¡Œ
 */

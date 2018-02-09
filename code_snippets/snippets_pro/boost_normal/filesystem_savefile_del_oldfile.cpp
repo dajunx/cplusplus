@@ -1,22 +1,21 @@
-///TODo ´ıÕûÀí´úÂë
-//Ö÷Òª¹¦ÄÜÊÇ Éú³ÉÎÄ¼ş + Î¬»¤Ò»¶¨Á¿µÄÎÄ¼şÊıÄ¿(¼´É¾³ıÀÏµÄÎÄ¼ş)
+ï»¿/// TODo å¾…æ•´ç†ä»£ç 
+//ä¸»è¦åŠŸèƒ½æ˜¯ ç”Ÿæˆæ–‡ä»¶ + ç»´æŠ¤ä¸€å®šé‡çš„æ–‡ä»¶æ•°ç›®(å³åˆ é™¤è€çš„æ–‡ä»¶)
 
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <set>
-#include <vector>
 #include <string>
-#include <fstream>
+#include <vector>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/lambda/bind.hpp>
 #include <boost/thread.hpp>
 
-bool test1(std::string& str_file_name)
-{
+bool test1(std::string &str_file_name) {
   std::string content;
-  // ×¼±¸Ä¿Â¼;
+  // å‡†å¤‡ç›®å½•;
   const std::string str_splash = "\\/";
   namespace fs = boost::filesystem;
   fs::path cur_path(fs::initial_path());
@@ -29,17 +28,19 @@ bool test1(std::string& str_file_name)
   str_tag_path = str_tag_path.substr(0, pos);
   fs::create_directories(fs::path(str_tag_path));
 
-  boost::posix_time::ptime epoch(boost::gregorian::date(1970,1,1), boost::posix_time::hours(8));
+  boost::posix_time::ptime epoch(boost::gregorian::date(1970, 1, 1),
+                                 boost::posix_time::hours(8));
 
   std::stringstream str_date;
   boost::posix_time::ptime t(boost::posix_time::second_clock::local_time());
-  std::cout<<"second: "<<(t - epoch).total_seconds()<<std::endl;
-  str_date<<str_file_name<<".";
-  str_date<<(t - epoch).total_seconds();
+  std::cout << "second: " << (t - epoch).total_seconds() << std::endl;
+  str_date << str_file_name << ".";
+  str_date << (t - epoch).total_seconds();
 
   content.append(str_date.str().c_str());
-  //Ğ´ÈëxmlÎÄ¼ş;
-  std::ofstream of_config(str_file_name.c_str(), std::ios::trunc), of_config_tmp(str_date.str().c_str(), std::ios::trunc);
+  //å†™å…¥xmlæ–‡ä»¶;
+  std::ofstream of_config(str_file_name.c_str(), std::ios::trunc),
+      of_config_tmp(str_date.str().c_str(), std::ios::trunc);
   if (of_config.is_open()) {
     of_config << content << std::endl;
     of_config.close();
@@ -48,29 +49,31 @@ bool test1(std::string& str_file_name)
     of_config_tmp.close();
   }
 
-  //É¾³ı¹ıÆÚÎÄ¼ş
+  //åˆ é™¤è¿‡æœŸæ–‡ä»¶
   int number_of_files = 0;
   std::map<std::string, boost::filesystem::path> file_name_map;
   boost::filesystem::directory_iterator end_itr;
-  for (boost::filesystem::directory_iterator itr(str_tag_path); itr != end_itr; ++itr)
-  {
-    if(boost::filesystem::is_directory(itr->status())) {
+  for (boost::filesystem::directory_iterator itr(str_tag_path); itr != end_itr;
+       ++itr) {
+    if (boost::filesystem::is_directory(itr->status())) {
       continue;
     }
 
-    if (memcmp(itr->path().leaf().normalize().generic_string().c_str(), str_file_name.c_str(), str_file_name.length()) == 0) {
-      file_name_map.insert(std::pair<std::string, boost::filesystem::path>(itr->path().leaf().normalize().generic_string(), itr->path().leaf()));
+    if (memcmp(itr->path().leaf().normalize().generic_string().c_str(),
+               str_file_name.c_str(), str_file_name.length()) == 0) {
+      file_name_map.insert(std::pair<std::string, boost::filesystem::path>(
+          itr->path().leaf().normalize().generic_string(), itr->path().leaf()));
       number_of_files++;
     }
   }
-  std::cout<<"file count: "<<number_of_files<<std::endl;
+  std::cout << "file count: " << number_of_files << std::endl;
 
   int max_count = 5;
-  std::map<std::string, boost::filesystem::path>::iterator it_begin = file_name_map.begin();
+  std::map<std::string, boost::filesystem::path>::iterator it_begin =
+      file_name_map.begin();
   int del_file_count = file_name_map.size() - max_count;
   it_begin++;
-  for (; it_begin != file_name_map.end() && del_file_count > 0; it_begin++)
-  {
+  for (; it_begin != file_name_map.end() && del_file_count > 0; it_begin++) {
     boost::filesystem::remove(it_begin->second);
     del_file_count--;
   }
@@ -78,14 +81,11 @@ bool test1(std::string& str_file_name)
   return false;
 }
 
-
-int main()
-{
+int main() {
   std::string file_name("file_name_test.log");
   test1(file_name);
 
-  for (int i = 0;i < 100; ++i)
-  {
+  for (int i = 0; i < 100; ++i) {
     std::string file_name("file_name_test.log");
     test1(file_name);
     boost::this_thread::sleep(boost::posix_time::seconds(1));

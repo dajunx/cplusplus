@@ -1,69 +1,63 @@
-//Observer Ä£Ê½ ¼òµ¥ÁĞ×Ó
-#include <iostream>  
-#include <vector>  
-#include <string>  
-using namespace std;  
-class Secretary;  
-// ¿´¹ÉÆ±µÄÍ¬ÊÂÀà£¨¹Û²ì¶ÔÏó£¬¹Û²ìÕß£©  
-class StockObserver  
-{  
-public:  
-  StockObserver(string strName, Secretary* strSub)  
-  {  
-    name = strName;  
-    sub = strSub;  
-  }  
+ï»¿// Observer æ¨¡å¼ ç®€å•åˆ—å­
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+class Secretary;
+// çœ‹è‚¡ç¥¨çš„åŒäº‹ç±»ï¼ˆè§‚å¯Ÿå¯¹è±¡ï¼Œè§‚å¯Ÿè€…ï¼‰
+class StockObserver {
+public:
+  StockObserver(string strName, Secretary *strSub) {
+    name = strName;
+    sub = strSub;
+  }
 
-  void Update();  
-private:  
-  string name;  
-  Secretary* sub;  
-};  
+  void Update();
 
-// ÃØÊéÀà£¨Ö÷Ìâ¶ÔÏó£¬Í¨ÖªÕß£©  
-class Secretary  
-{  
-public:  
-  string action;  
-  void Add(StockObserver ob) { observers.push_back(ob); }  
-  void Remove(int addIndex)  
-  {  
-    if(addIndex >=0 && addIndex < observers.size())  
-      observers.erase(observers.begin() + addIndex);  
-  }  
-  void Notify()  
-  {  
-    vector<StockObserver>::iterator it;  
-    for (it=observers.begin(); it!=observers.end(); ++it)  
-    {  
-      (*it).Update();  
-    }  
-  }  
-private:  
-  vector<StockObserver> observers;  
-};  
+private:
+  string name;
+  Secretary *sub;
+};
 
-void StockObserver::Update()  
-{  
-  cout << name << " : " << sub->action << ", begin to work" << endl;  
-} 
-int main()  
-{  
-  // ´´½¨Í¨ÖªÕß  
-  Secretary* p = new Secretary();  
+// ç§˜ä¹¦ç±»ï¼ˆä¸»é¢˜å¯¹è±¡ï¼Œé€šçŸ¥è€…ï¼‰
+class Secretary {
+public:
+  string action;
+  void Add(StockObserver ob) { observers.push_back(ob); }
+  void Remove(int addIndex) {
+    if (addIndex >= 0 && addIndex < observers.size())
+      observers.erase(observers.begin() + addIndex);
+  }
+  void Notify() {
+    vector<StockObserver>::iterator it;
+    for (it = observers.begin(); it != observers.end(); ++it) {
+      (*it).Update();
+    }
+  }
 
-  // ¹Û²ìÕß  
-  StockObserver* s1 = new StockObserver("Lazy", p);  
-  StockObserver* s2 = new StockObserver("SnowFire", p);  
-  // ¼ÓÈëÍ¨Öª¶ÓÁĞ  
-  p->Add(*s1);  
-  p->Add(*s2);  
-  // ÊÂ¼ş  
-  p->action = "The boss is coming...";  
-  // Í¨Öª  
-  p->Notify(); 
-  // ¶¯Ì¬É¾³ı  
+private:
+  vector<StockObserver> observers;
+};
+
+void StockObserver::Update() {
+  cout << name << " : " << sub->action << ", begin to work" << endl;
+}
+int main() {
+  // åˆ›å»ºé€šçŸ¥è€…
+  Secretary *p = new Secretary();
+
+  // è§‚å¯Ÿè€…
+  StockObserver *s1 = new StockObserver("Lazy", p);
+  StockObserver *s2 = new StockObserver("SnowFire", p);
+  // åŠ å…¥é€šçŸ¥é˜Ÿåˆ—
+  p->Add(*s1);
+  p->Add(*s2);
+  // äº‹ä»¶
+  p->action = "The boss is coming...";
+  // é€šçŸ¥
+  p->Notify();
+  // åŠ¨æ€åˆ é™¤
   p->Remove(0);
-  p->Notify();  
-  return 0;    
-}  
+  p->Notify();
+  return 0;
+}

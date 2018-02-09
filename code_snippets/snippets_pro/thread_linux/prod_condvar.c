@@ -1,4 +1,4 @@
-/*************************************************************************\
+﻿/*************************************************************************\
 *                  Copyright (C) Michael Kerrisk, 2016.                   *
 *                                                                         *
 * This program is free software. You may use, modify, and redistribute it *
@@ -14,108 +14,102 @@
 
    A simple POSIX threads producer-consumer example using a condition variable.
 */
-#include <time.h>
-#include <pthread.h>
 #include "tlpi_hdr.h"
+#include <pthread.h>
+#include <time.h>
 
 static pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
 static int avail = 0;
 
-static void *
-threadFunc(void *arg)
-{
-    int cnt = atoi((char *) arg);
-    int s, j;
+static void *threadFunc(void *arg) {
+  int cnt = atoi((char *)arg);
+  int s, j;
 
-    for (j = 0; j < cnt; j++) {
-        sleep(1);
+  for (j = 0; j < cnt; j++) {
+    sleep(1);
 
-        /* Code to produce a unit omitted */
+    /* Code to produce a unit omitted */
 
-        s = pthread_mutex_lock(&mtx);
-        if (s != 0)
-            errExitEN(s, "pthread_mutex_lock");
+    s = pthread_mutex_lock(&mtx);
+    if (s != 0)
+      errExitEN(s, "pthread_mutex_lock");
 
-        avail++;        /* Let consumer know another unit is available */
+    avail++; /* Let consumer know another unit is available */
 
-        s = pthread_mutex_unlock(&mtx);
-        if (s != 0)
-            errExitEN(s, "pthread_mutex_unlock");
+    s = pthread_mutex_unlock(&mtx);
+    if (s != 0)
+      errExitEN(s, "pthread_mutex_unlock");
 
-        s = pthread_cond_signal(&cond);         /* Wake sleeping consumer */
-        if (s != 0)
-            errExitEN(s, "pthread_cond_signal");
-    }
+    s = pthread_cond_signal(&cond); /* Wake sleeping consumer */
+    if (s != 0)
+      errExitEN(s, "pthread_cond_signal");
+  }
 
-    return NULL;
+  return NULL;
 }
 
-int
-main(int argc, char *argv[])
-{
-    pthread_t tid;
-    int s, j;
-    int totRequired;            /* Total number of units that all threads
-                                   will produce */
-    int numConsumed;            /* Total units so far consumed */
-    Boolean done;
-    time_t t;
+int main(int argc, char *argv[]) {
+  pthread_t tid;
+  int s, j;
+  int totRequired; /* Total number of units that all threads
+                      will produce */
+  int numConsumed; /* Total units so far consumed */
+  Boolean done;
+  time_t t;
 
-    t = time(NULL);
+  t = time(NULL);
 
-    /* Create all threads */
+  /* Create all threads */
 
-    totRequired = 0;
-    for (j = 1; j < argc; j++) {
-        totRequired += atoi(argv[j]);
+  totRequired = 0;
+  for (j = 1; j < argc; j++) {
+    totRequired += atoi(argv[j]);
 
-        s = pthread_create(&tid, NULL, threadFunc, argv[j]);
-        if (s != 0)
-            errExitEN(s, "pthread_create");
+    s = pthread_create(&tid, NULL, threadFunc, argv[j]);
+    if (s != 0)
+      errExitEN(s, "pthread_create");
+  }
+
+  /* Loop to consume available units */
+
+  numConsumed = 0;
+  done = FALSE;
+
+  for (;;) {
+    s = pthread_mutex_lock(&mtx);
+    if (s != 0)
+      errExitEN(s, "pthread_mutex_lock");
+
+    while (avail == 0) { /* Wait for something to consume */
+      s = pthread_cond_wait(&cond, &mtx);
+      if (s != 0)
+        errExitEN(s, "pthread_cond_wait");
     }
 
-    /* Loop to consume available units */
+    /* At this point, 'mtx' is locked... */
 
-    numConsumed = 0;
-    done = FALSE;
+    while (avail > 0) { /* Consume all available units */
 
-    for (;;) {
-        s = pthread_mutex_lock(&mtx);
-        if (s != 0)
-            errExitEN(s, "pthread_mutex_lock");
+      /* Do something with produced unit */
 
-        while (avail == 0) {            /* Wait for something to consume */
-            s = pthread_cond_wait(&cond, &mtx);
-            if (s != 0)
-                errExitEN(s, "pthread_cond_wait");
-        }
+      numConsumed++;
+      avail--;
+      printf("T=%ld: numConsumed=%d\n", (long)(time(NULL) - t), numConsumed);
 
-        /* At this point, 'mtx' is locked... */
-
-        while (avail > 0) {             /* Consume all available units */
-
-            /* Do something with produced unit */
-
-            numConsumed ++;
-            avail--;
-            printf("T=%ld: numConsumed=%d\n", (long) (time(NULL) - t),
-                    numConsumed);
-
-            done = numConsumed >= totRequired;
-        }
-
-        s = pthread_mutex_unlock(&mtx);
-        if (s != 0)
-            errExitEN(s, "pthread_mutex_unlock");
-
-        if (done)
-            break;
-
-        /* Perhaps do other work here that does not require mutex lock */
-
+      done = numConsumed >= totRequired;
     }
 
-    exit(EXIT_SUCCESS);
+    s = pthread_mutex_unlock(&mtx);
+    if (s != 0)
+      errExitEN(s, "pthread_mutex_unlock");
+
+    if (done)
+      break;
+
+    /* Perhaps do other work here that does not require mutex lock */
+  }
+
+  exit(EXIT_SUCCESS);
 }

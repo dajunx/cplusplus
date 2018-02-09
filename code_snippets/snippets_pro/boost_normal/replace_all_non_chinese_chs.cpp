@@ -1,46 +1,44 @@
-//Ìæ»»µôÄÚÈİÖĞËùÓĞ·ÇÖĞÎÄ×Ö·û£¬ÕıÔò±í´ïÊ½Îª  [^\u4e00-\u9fa5]+£¬Ìæ»»µôÖĞÎÄ×Ö·ûÀàËÆ±í´ïÊ½Îª [\u4e00-\u9fa5]+
+ï»¿//æ›¿æ¢æ‰å†…å®¹ä¸­æ‰€æœ‰éä¸­æ–‡å­—ç¬¦ï¼Œæ­£åˆ™è¡¨è¾¾å¼ä¸º
+//[^\u4e00-\u9fa5]+ï¼Œæ›¿æ¢æ‰ä¸­æ–‡å­—ç¬¦ç±»ä¼¼è¡¨è¾¾å¼ä¸º [\u4e00-\u9fa5]+
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <iterator>
-#include <fstream>
-#include <string>
-#include <map>
-#include <list>
 #include <boost/locale.hpp>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <list>
+#include <map>
+#include <sstream>
+#include <string>
 
 #include <boost/regex.hpp>
 using namespace std;
 
-void read(std::wstring& ret)
-{
+void read(std::wstring &ret) {
   std::ifstream file("text_reocord.log");
   std::string str;
-  while(file>>str){
-    //std::cout<<"ch : "<<str<<std::endl;
+  while (file >> str) {
+    // std::cout<<"ch : "<<str<<std::endl;
     ret.append(boost::locale::conv::utf_to_utf<wchar_t>(str));
   }
 }
 
-void write(std::wstring& ret)
-{
+void write(std::wstring &ret) {
   std::string str = boost::locale::conv::utf_to_utf<char>(ret);
   std::fstream file("text_reocord_to.log",
-    std::fstream::in | std::fstream::out | std::fstream::app);
-  file<<str;
+                    std::fstream::in | std::fstream::out | std::fstream::app);
+  file << str;
   file.close();
 }
 
-void fun2()
-{
-  std::ifstream fin("C:\\Users\\Administrator\\Desktop\\hole_.log"); 
-  std::fstream out("C:\\Users\\Administrator\\Desktop\\hole_to.log", std::fstream::in | std::fstream::out | std::fstream::app);
+void fun2() {
+  std::ifstream fin("C:\\Users\\Administrator\\Desktop\\hole_.log");
+  std::fstream out("C:\\Users\\Administrator\\Desktop\\hole_to.log",
+                   std::fstream::in | std::fstream::out | std::fstream::app);
   std::string s;
   std::wstring ws;
-  boost::wregex reg1(L"[^\u4e00-\u9fa5]+", boost::regex::icase|boost::regex::perl);
-  while(getline(fin,s))
-  {    
+  boost::wregex reg1(L"[^\u4e00-\u9fa5]+",
+                     boost::regex::icase | boost::regex::perl);
+  while (getline(fin, s)) {
     ws = boost::locale::conv::utf_to_utf<wchar_t>(s);
     ws = boost::regex_replace(ws, reg1, "$1");
     out << boost::locale::conv::utf_to_utf<char>(ws) << std::endl;
@@ -50,14 +48,14 @@ void fun2()
   out.close();
 }
 
-void fun1()
-{
+void fun1() {
   std::wstring s1 = L"Boost Libraries";
-  std::wstring s2 = L"ÁÖ»ú À­·çµÄ¾­ ÊÊ·¿fasdf";
+  std::wstring s2 = L"æ—æœº æ‹‰é£çš„ç» é€‚æˆ¿fasdf";
   boost::wregex reg(L"^[\u4e00-\u9fa5]+");
-  //std::cout << std::boolalpha << boost::regex_match(s1, reg) << '\n';
+  // std::cout << std::boolalpha << boost::regex_match(s1, reg) << '\n';
 
-  boost::wregex reg1(L"[^\u4e00-\u9fa5]+", boost::regex::icase|boost::regex::perl);
+  boost::wregex reg1(L"[^\u4e00-\u9fa5]+",
+                     boost::regex::icase | boost::regex::perl);
   std::wstring s3;
   read(s3);
   std::wstring res = boost::regex_replace(s3, reg1, "$1");
@@ -66,10 +64,9 @@ void fun1()
   int i = 0;
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char **argv) {
   fun1();
 
   int i = 0;
-  return 0;  
+  return 0;
 }

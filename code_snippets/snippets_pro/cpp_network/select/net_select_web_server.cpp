@@ -1,21 +1,20 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+﻿#include <stdio.h>
 #include <arpa/inet.h>
-#define MYPORT 88960    // the port users will be connecting to
-#define BACKLOG 10     // how many pending connections queue will hold
+#include <errno.h>
+#include <netinet/in.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+#define MYPORT 88960 // the port users will be connecting to
+#define BACKLOG 10   // how many pending connections queue will hold
 #define BUF_SIZE 200
 
-int fd_A[BACKLOG];    // accepted connection fd
-int conn_amount;    // current connection amount
+int fd_A[BACKLOG]; // accepted connection fd
+int conn_amount;   // current connection amount
 
-void showclient()
-{
+void showclient() {
   int i;
   printf("client amount: %d\n", conn_amount);
   for (i = 0; i < BACKLOG; i++) {
@@ -24,10 +23,9 @@ void showclient()
   printf("\n\n");
 }
 
-int main()
-{
-  int sock_fd, new_fd;  // listen on sock_fd, new connection on new_fd
-  struct sockaddr_in server_addr;    // server address information
+int main() {
+  int sock_fd, new_fd;            // listen on sock_fd, new connection on new_fd
+  struct sockaddr_in server_addr; // server address information
   struct sockaddr_in client_addr; // connector's address information
   socklen_t sin_size;
   int yes = 1;
@@ -50,7 +48,8 @@ int main()
   server_addr.sin_addr.s_addr = INADDR_ANY; // automatically fill with my IP
   memset(server_addr.sin_zero, '\0', sizeof(server_addr.sin_zero));
 
-  if (bind(sock_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1) {
+  if (bind(sock_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) ==
+      -1) {
     perror("bind");
     exit(1);
   }
@@ -101,15 +100,14 @@ int main()
 
         char str[] = "Good,very nice!\n";
 
-        send(fd_A[i],str,sizeof(str) + 1, 0);
+        send(fd_A[i], str, sizeof(str) + 1, 0);
 
-
-        if (ret <= 0) {        // client close
+        if (ret <= 0) { // client close
           printf("client[%d] close\n", i);
           close(fd_A[i]);
           FD_CLR(fd_A[i], &fdsr);
           fd_A[i] = 0;
-        } else {        // receive data
+        } else { // receive data
           if (ret < BUF_SIZE)
             memset(&buf[ret], '\0', 1);
           printf("client[%d] send:%s\n", i, buf);
@@ -129,11 +127,10 @@ int main()
       if (conn_amount < BACKLOG) {
         fd_A[conn_amount++] = new_fd;
         printf("new connection client[%d] %s:%d\n", conn_amount,
-          inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+               inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
         if (new_fd > maxsock)
           maxsock = new_fd;
-      }
-      else {
+      } else {
         printf("max connections arrive, exit\n");
         send(new_fd, "bye", 4, 0);
         close(new_fd);

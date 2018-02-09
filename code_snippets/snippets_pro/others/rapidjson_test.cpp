@@ -1,61 +1,60 @@
-
-//ÌÚÑ¶ json ¿ªÔ´¿â²âÊÔ£¬Ê¹ÓÃ°æ±¾ v0.1 https://github.com/Tencent/rapidjson
-// Ô´Âë¼û 3rd
+ï»¿
+//è…¾è®¯ json å¼€æºåº“æµ‹è¯•ï¼Œä½¿ç”¨ç‰ˆæœ¬ v0.1 https://github.com/Tencent/rapidjson
+// æºç è§ 3rd
 
 #include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
 #include "rapidjson/filestream.h"
 #include "rapidjson/reader.h"
-#include <iostream>
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 #include <cstdio>
+#include <iostream>
 
 using namespace rapidjson;
 
-void load_json(std::string file_name, Document& d)
-{
-  FILE * pFile = fopen(file_name.c_str(), "r");
-  if(pFile){
-    //¶ÁÈ¡ÎÄ¼ş½øĞĞ½âÎö³Éjson
+void load_json(std::string file_name, Document &d) {
+  FILE *pFile = fopen(file_name.c_str(), "r");
+  if (pFile) {
+    //è¯»å–æ–‡ä»¶è¿›è¡Œè§£ææˆjson
     rapidjson::FileStream inputStream(pFile);
     d.ParseStream<0>(inputStream);
     fclose(pFile);
   }
 }
 
-void parse_json_to_multifiles(std::string file_name, Document& d)
-{
-  const rapidjson::Value& value1 = d;
-  for (rapidjson::Value::ConstMemberIterator iter = value1.MemberBegin(); iter!=value1.MemberEnd(); ++iter)
-  {
-    const rapidjson::Value& name_json = iter->name; // Õâ¸ö±ØĞëÊÇ×Ö·û´®
-    const rapidjson::Value& value_json = iter->value; // Õâ¸ö¿ÉÒÔÎª¶ÔÏó¡¢Êı×éµÈ
-    //printf("%s\n", name_json.GetString());
-    std::cout<<"name_json: "<<name_json.GetString()<<std::endl;
-    std::cout<<name_json.GetType()<<std::endl;
+void parse_json_to_multifiles(std::string file_name, Document &d) {
+  const rapidjson::Value &value1 = d;
+  for (rapidjson::Value::ConstMemberIterator iter = value1.MemberBegin();
+       iter != value1.MemberEnd(); ++iter) {
+    const rapidjson::Value &name_json = iter->name; // è¿™ä¸ªå¿…é¡»æ˜¯å­—ç¬¦ä¸²
+    const rapidjson::Value &value_json = iter->value; // è¿™ä¸ªå¯ä»¥ä¸ºå¯¹è±¡ã€æ•°ç»„ç­‰
+    // printf("%s\n", name_json.GetString());
+    std::cout << "name_json: " << name_json.GetString() << std::endl;
+    std::cout << name_json.GetType() << std::endl;
 
     rapidjson::Document document;
     document.SetObject();
-    rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+    rapidjson::Document::AllocatorType &allocator = document.GetAllocator();
     std::string partner_id_data;
     rapidjson::Value data(rapidjson::kObjectType);
-    //data.Swap(const_cast<rapidjson::Value&>(value1[name_json.GetString()])); //version > 0.11 ĞÂ°æ±¾½Úµã¿½±´·½Ê½
-    data = const_cast<rapidjson::Value&>(value1[name_json.GetString()]);
+    // data.Swap(const_cast<rapidjson::Value&>(value1[name_json.GetString()]));
+    // //version > 0.11 æ–°ç‰ˆæœ¬èŠ‚ç‚¹æ‹·è´æ–¹å¼
+    data = const_cast<rapidjson::Value &>(value1[name_json.GetString()]);
     document.AddMember("keywords", data, allocator);
 
     std::string sub_file_name;
     std::string str_partner_id(name_json.GetString());
-    sub_file_name.append(file_name, 0, file_name.size() -4); //ÌŞ³ı ".txt" Æ¬¶Î
+    sub_file_name.append(file_name, 0, file_name.size() - 4); //å‰”é™¤ ".txt" ç‰‡æ®µ
     sub_file_name.append(str_partner_id.c_str());
     sub_file_name.append(".txt");
-    //std::cout<<"filename: "<<sub_file_name<<std::endl;
+    // std::cout<<"filename: "<<sub_file_name<<std::endl;
 
-    //Ğ´Èë´ÅÅÌÎÄ¼ş
-    FILE * pFile1 = fopen(sub_file_name.c_str(), "w");
-    if(pFile1){
-      //¶ÁÈ¡ÎÄ¼ş½øĞĞ½âÎö³Éjson
+    //å†™å…¥ç£ç›˜æ–‡ä»¶
+    FILE *pFile1 = fopen(sub_file_name.c_str(), "w");
+    if (pFile1) {
+      //è¯»å–æ–‡ä»¶è¿›è¡Œè§£ææˆjson
       rapidjson::FileStream inputStream(pFile1);
-      //StringBuffer buffer;
+      // StringBuffer buffer;
       Writer<rapidjson::FileStream> writer(inputStream);
       document.Accept(writer);
       fclose(pFile1);
@@ -65,8 +64,7 @@ void parse_json_to_multifiles(std::string file_name, Document& d)
   }
 }
 
-int main() 
-{
+int main() {
   std::string file_name("filter_words.txt");
   Document d;
   load_json(file_name, d);

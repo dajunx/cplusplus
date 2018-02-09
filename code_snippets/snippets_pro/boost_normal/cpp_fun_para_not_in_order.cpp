@@ -1,29 +1,27 @@
-/*
-²ÎÕÕ effective c++ item.17 
-c++º¯Êıµ÷ÓÃ²ÎÊı ²¢²»×ÜÊÇÒÔÌØ¶¨´ÎĞòÍê³Éº¯Êı²ÎÊıµÄºËËã£¬Èç54ĞĞ´úÂëµÄµ÷ÓÃË³Ğò£¬
-    ³õ¿´¿ÉÄÜÊÇ new man,boost::shared_ptr,right µÄË³Ğò£¬
-    ÆäÊµË³ĞòÊÇ new man,right£¬boost::shared_ptr µÄË³Ğò£¡£¡£¡
+ï»¿/*
+å‚ç…§ effective c++ item.17
+c++å‡½æ•°è°ƒç”¨å‚æ•° å¹¶ä¸æ€»æ˜¯ä»¥ç‰¹å®šæ¬¡åºå®Œæˆå‡½æ•°å‚æ•°çš„æ ¸ç®—ï¼Œå¦‚54è¡Œä»£ç çš„è°ƒç”¨é¡ºåºï¼Œ
+    åˆçœ‹å¯èƒ½æ˜¯ new man,boost::shared_ptr,right çš„é¡ºåºï¼Œ
+    å…¶å®é¡ºåºæ˜¯ new man,rightï¼Œboost::shared_ptr çš„é¡ºåºï¼ï¼ï¼
 */
 
+#include <fstream>
 #include <iostream>
 #include <string>
-#include <fstream>
 
 #include <boost/make_shared.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 using namespace std;
 
-void write(std::string& data)
-{
+void write(std::string &data) {
   std::fstream file("file.txt",
-    std::fstream::in | std::fstream::out | std::fstream::app);
-  file<<data;
+                    std::fstream::in | std::fstream::out | std::fstream::app);
+  file << data;
   file.close();
 }
 
-class Man
-{
+class Man {
 public:
   Man() {
     std::string tmp("new man");
@@ -32,33 +30,23 @@ public:
   ~Man() {
     std::string tmp("releaes man");
     write(tmp);
-    std::cout<<"i'm a man."<<std::endl;
+    std::cout << "i'm a man." << std::endl;
   }
-  void show_data() {
-    std::cout<<"man show data."<<std::endl;
-  }
+  void show_data() { std::cout << "man show data." << std::endl; }
 };
 
-void fun1(boost::shared_ptr<Man> ptr_tmp, int rights)
-{
-  ptr_tmp->show_data();
-}
+void fun1(boost::shared_ptr<Man> ptr_tmp, int rights) { ptr_tmp->show_data(); }
 
-int right()
-{
+int right() {
   throw 0;
   return 5;
 }
 
-int main()
-{
-  // Àı×ÓÊ¹µÃ Man¹¹ÔìµÄÁÙÊ±¶ÔÏó ÄÚ´æĞ¹Â¶£¡£¡£¡
-  try
-  {
+int main() {
+  // ä¾‹å­ä½¿å¾— Manæ„é€ çš„ä¸´æ—¶å¯¹è±¡ å†…å­˜æ³„éœ²ï¼ï¼ï¼
+  try {
     fun1(boost::shared_ptr<Man>(new Man()), right());
-  }
-  catch (...)
-  {
+  } catch (...) {
     int j = 0;
   }
 

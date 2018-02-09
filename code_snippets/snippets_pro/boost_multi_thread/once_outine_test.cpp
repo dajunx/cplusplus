@@ -1,23 +1,16 @@
-//Ò»´ÎÊµÏÖonce routine
-#include <boost/thread/thread.hpp>
+ï»¿//ä¸€æ¬¡å®žçŽ°once routine
 #include <boost/thread/once.hpp>
+#include <boost/thread/thread.hpp>
 #include <iostream>
 
 int i = 0;
 boost::once_flag flag = BOOST_ONCE_INIT;
 
-void init()
-{
-  ++i;
-}
+void init() { ++i; }
 
-void thread()
-{
-  boost::call_once(&init, flag);
-}
+void thread() { boost::call_once(&init, flag); }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
   boost::thread thrd1(&thread);
   boost::thread thrd2(&thread);
   thrd1.join();

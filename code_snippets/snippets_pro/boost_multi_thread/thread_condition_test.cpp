@@ -1,28 +1,26 @@
-//thread conditionÌõ¼ş±äÁ¿
+ï»¿// thread conditionæ¡ä»¶å˜é‡
 /*
-²ÉÓÃcondition¿ØÖÆÉú²úÕßºÍÏû·ÑÕß£¬ÈôÈ¥µôÖ»±£ÁôËø»úÖÆ£¬»á²úÉúËÀËø£ºÏû·ÑÕßÈ¡²»µ½Êı¾İ¡¢²¢ÇÒ²»ÊÍ·ÅËø->µ¼ÖÂÉú³ÉÕßÎŞ·¨Éú³É=>ĞÎ³ÉËÀËø¡£
-ĞŞ¸ÄµãÊÇÈÃ Ïû·ÑÕßÃ»ÄÚÈİÊ± whileÑ­»·²¢ÊÍ·ÅËøÖ±µ½ÓĞÊı¾İ£¬·½·¨ºÜõ¿½Å
+é‡‡ç”¨conditionæ§åˆ¶ç”Ÿäº§è€…å’Œæ¶ˆè´¹è€…ï¼Œè‹¥å»æ‰åªä¿ç•™é”æœºåˆ¶ï¼Œä¼šäº§ç”Ÿæ­»é”ï¼šæ¶ˆè´¹è€…å–ä¸åˆ°æ•°æ®ã€å¹¶ä¸”ä¸é‡Šæ”¾é”->å¯¼è‡´ç”Ÿæˆè€…æ— æ³•ç”Ÿæˆ=>å½¢æˆæ­»é”ã€‚
+ä¿®æ”¹ç‚¹æ˜¯è®© æ¶ˆè´¹è€…æ²¡å†…å®¹æ—¶ whileå¾ªç¯å¹¶é‡Šæ”¾é”ç›´åˆ°æœ‰æ•°æ®ï¼Œæ–¹æ³•å¾ˆè¹©è„š
 */
-#include <boost/thread/thread.hpp>
-#include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
 #include <iostream>
 const int BUF_SIZE = 10;
 const int ITERS = 100;
 boost::mutex io_mutex;
 
-class buffer
-{
+class buffer {
 public:
   typedef boost::mutex::scoped_lock scoped_lock;
-  buffer(): p(0), c(0), full(0) {}
-  void put(int m)
-  {
+  buffer() : p(0), c(0), full(0) {}
+  void put(int m) {
     scoped_lock lock(mutex);
     if (full == BUF_SIZE) {
       {
         boost::mutex::scoped_lock lock(io_mutex);
-        std::cout <<"Buffer is full. Waiting..."<< std::endl;
+        std::cout << "Buffer is full. Waiting..." << std::endl;
       }
       while (full == BUF_SIZE) {
         cond.wait(lock);
@@ -34,13 +32,12 @@ public:
     cond.notify_one();
   }
 
-  int get()
-  {
+  int get() {
     scoped_lock lk(mutex);
     if (full == 0) {
       {
-        boost::mutex::scoped_lock  lock(io_mutex);
-        std::cout <<"Buffer is empty. Waiting..."<< std::endl;
+        boost::mutex::scoped_lock lock(io_mutex);
+        std::cout << "Buffer is empty. Waiting..." << std::endl;
       }
       while (full == 0) {
         cond.wait(lk);
@@ -62,19 +59,17 @@ private:
 
 buffer buf;
 
-void writer()
-{
+void writer() {
   for (int n = 0; n < ITERS; ++n) {
     {
-      boost::mutex::scoped_lock  lock(io_mutex);
+      boost::mutex::scoped_lock lock(io_mutex);
       std::cout << "sending: " << n << std::endl;
     }
     buf.put(n);
   }
 }
 
-void reader()
-{
+void reader() {
   for (int x = 0; x < ITERS; ++x) {
     int n = buf.get();
     {
@@ -84,8 +79,7 @@ void reader()
   }
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
   boost::thread thrd1(&reader);
   boost::thread thrd2(&writer);
   thrd1.join();

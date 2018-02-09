@@ -1,35 +1,33 @@
-/*
-  ²âÊÔ£¬Ïß³ÌÓÃ×÷´®ĞĞ¶ÓÁĞ£¬ÓÃÀ´´¦ÀíÍ¶µİ¸ø×ÓÏß³ÌµÄÈÎÎñÇëÇó
+ï»¿/*
+  æµ‹è¯•ï¼Œçº¿ç¨‹ç”¨ä½œä¸²è¡Œé˜Ÿåˆ—ï¼Œç”¨æ¥å¤„ç†æŠ•é€’ç»™å­çº¿ç¨‹çš„ä»»åŠ¡è¯·æ±‚
 */
-#include <iostream>
-#include <stdio.h>
-#include <pthread.h>
 #include <deque>
-#include <vector>
+#include <iostream>
+#include <pthread.h>
+#include <stdio.h>
 #include <unistd.h>
+#include <vector>
 typedef void (*FUN)(int);
-static std::deque<FUN> MsgDeq; //¹²ÏíÏûÏ¢¶ÓÁĞ
+static std::deque<FUN> MsgDeq; //å…±äº«æ¶ˆæ¯é˜Ÿåˆ—
 std::vector<int> vec_thread_datas;
 static bool post_event_finished = false;
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
-class c_mutex{
+class c_mutex {
 public:
-  c_mutex(){pthread_mutex_lock(&mutex);}
-  ~c_mutex(){pthread_mutex_unlock(&mutex);}
+  c_mutex() { pthread_mutex_lock(&mutex); }
+  ~c_mutex() { pthread_mutex_unlock(&mutex); }
 };
-// loopÏß³Ì
-void* fun2(void* arg)
-{
+// loopçº¿ç¨‹
+void *fun2(void *arg) {
   std::deque<FUN>::iterator it;
   int input_cb_data = 0;
-  while(true)
-  {
+  while (true) {
     pthread_mutex_lock(&mutex);
-    // Ìõ¼ş±äÁ¿Ê¹ÓÃÀı×Ó£¬
-    // Ìõ¼ş±äÁ¿µÄÊ¹ÓÃÄ¿µÄÒ²ÊÇ±ÜÃâÏû·ÑÕßÆ½·²È¥³¢ÊÔ¼ÓËø²é¿´ÊÇ·ñÓÖĞÂÊı¾İµ½À´
-    while(MsgDeq.empty()) {
+    // æ¡ä»¶å˜é‡ä½¿ç”¨ä¾‹å­ï¼Œ
+    // æ¡ä»¶å˜é‡çš„ä½¿ç”¨ç›®çš„ä¹Ÿæ˜¯é¿å…æ¶ˆè´¹è€…å¹³å‡¡å»å°è¯•åŠ é”æŸ¥çœ‹æ˜¯å¦åˆæ–°æ•°æ®åˆ°æ¥
+    while (MsgDeq.empty()) {
       pthread_cond_wait(&cond, &mutex);
     }
 
@@ -42,47 +40,41 @@ void* fun2(void* arg)
       break;
     }
   }
-  return (void*)0;
+  return (void *)0;
 }
 
-void* fun1(void* arg)
-{
+void *fun1(void *arg) {
   std::deque<FUN>::iterator it;
   int input_cb_data = 0;
-  while(true)
-  {
-    if(false == MsgDeq.empty()) {
+  while (true) {
+    if (false == MsgDeq.empty()) {
       c_mutex t;
       it = MsgDeq.begin();
       (*(*it))(input_cb_data++);
       MsgDeq.pop_front();
     } else {
-      //printf("thread empty loop\n");
+      // printf("thread empty loop\n");
     }
     if (post_event_finished == true && true == MsgDeq.empty()) {
       break;
     }
   }
-  return (void*)0;
+  return (void *)0;
 }
 
-void show_callback(int i){
-  vec_thread_datas.push_back(i);
-}
-void post(){ MsgDeq.push_back(&show_callback); }
+void show_callback(int i) { vec_thread_datas.push_back(i); }
+void post() { MsgDeq.push_back(&show_callback); }
 
-int main()
-{
+int main() {
   pthread_t t1, t2;
-  void* res;
+  void *res;
   int s;
 
   s = pthread_create(&t1, NULL, fun2, NULL);
-  //s = pthread_create(&t2, NULL, fun2, NULL);
+  // s = pthread_create(&t2, NULL, fun2, NULL);
 
-  // ÔÚÖ÷Ïß³ÌÍ¶µİÇëÇó
-  for(int i=0;i<1000000;i++)
-  {
+  // åœ¨ä¸»çº¿ç¨‹æŠ•é€’è¯·æ±‚
+  for (int i = 0; i < 1000000; i++) {
     c_mutex t;
     pthread_cond_signal(&cond);
     post();
@@ -90,14 +82,14 @@ int main()
   post_event_finished = true;
 
   s = pthread_join(t1, &res);
-  //s = pthread_join(t2, &res);
+  // s = pthread_join(t2, &res);
 
-  // ´òÓ¡Ïß³Ì´¦ÀíÍêµÄ¹é×ÜÊı¾İ
+  // æ‰“å°çº¿ç¨‹å¤„ç†å®Œçš„å½’æ€»æ•°æ®
   std::vector<int>::iterator it = vec_thread_datas.begin();
   printf("vector size:%d\n", vec_thread_datas.size());
-  for(int i = 0;it != vec_thread_datas.end();it++, i++) {
+  for (int i = 0; it != vec_thread_datas.end(); it++, i++) {
     if (i != *it) {
-      std::cout<<"pos:"<<i<<" data"<<*it<<std::endl;
+      std::cout << "pos:" << i << " data" << *it << std::endl;
     }
   }
 

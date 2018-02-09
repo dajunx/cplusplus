@@ -7,9 +7,6 @@
     <Filter Include="boost\boost">
       <UniqueIdentifier>{f6fc1f64-9b72-4d4f-8b74-9f817e68f8fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="boost\多线程">
-      <UniqueIdentifier>{23111761-5001-4f63-9d3a-210aa443737d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="boost\network">
       <UniqueIdentifier>{a079670a-04a6-481f-80e5-000e18556f89}</UniqueIdentifier>
     </Filter>
@@ -63,6 +60,9 @@
     </Filter>
     <Filter Include="normal_cplusplus\thread_win">
       <UniqueIdentifier>{a4458db0-9c42-4e67-82db-2819655b4cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="boost\multiple_thread">
+      <UniqueIdentifier>{23111761-5001-4f63-9d3a-210aa443737d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -406,16 +406,16 @@
       <Filter>boost\network</Filter>
     </ClCompile>
     <ClCompile Include="boost_multi_thread\thread_local_data_save.cpp">
-      <Filter>boost\多线程</Filter>
+      <Filter>boost\multiple_thread</Filter>
     </ClCompile>
     <ClCompile Include="boost_multi_thread\thread_mutex.cpp">
-      <Filter>boost\多线程</Filter>
+      <Filter>boost\multiple_thread</Filter>
     </ClCompile>
     <ClCompile Include="boost_multi_thread\once_outine_test.cpp">
-      <Filter>boost\多线程</Filter>
+      <Filter>boost\multiple_thread</Filter>
     </ClCompile>
     <ClCompile Include="boost_multi_thread\thread_condition_test.cpp">
-      <Filter>boost\多线程</Filter>
+      <Filter>boost\multiple_thread</Filter>
     </ClCompile>
     <ClCompile Include="boost_normal\cpp_fun_para_not_in_order.cpp">
       <Filter>boost\boost</Filter>

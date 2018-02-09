@@ -1,32 +1,24 @@
-//ÆÕÍ¨º¯Êý Ö¸Õë
+ï»¿//æ™®é€šå‡½æ•° æŒ‡é’ˆ
 
 #include <iostream>
 #include <map>
 #include <vector>
 
-typedef void fun1(int& i);
+typedef void fun1(int &i);
 
-void incrNum(int& i)
-{
-  i++;
-}
+void incrNum(int &i) { i++; }
 
-void show(fun1* f1, int& input)
-{
-  f1(input);
-}
+void show(fun1 *f1, int &input) { f1(input); }
 
-int main()
-{
-  fun1* f1 = incrNum;
+int main() {
+  fun1 *f1 = incrNum;
   int i = 0;
-  // º¯ÊýÖ¸Õë£¬´«½øº¯Êý½øÐÐµ÷¶È
-  //show(incrNum, i);
+  // å‡½æ•°æŒ‡é’ˆï¼Œä¼ è¿›å‡½æ•°è¿›è¡Œè°ƒåº¦
+  // show(incrNum, i);
   show(f1, i);
 
   return 0;
 }
-
 
 /*
 #include <iostream>

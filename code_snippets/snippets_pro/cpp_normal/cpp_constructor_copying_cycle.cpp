@@ -1,30 +1,24 @@
-//c++ ¸³Öµ²Ù×÷·û ºÍ ¿½±´¹¹Ôì ²úÉúµÄÎÊÌâ
+ï»¿// c++ èµ‹å€¼æ“ä½œç¬¦ å’Œ æ‹·è´æ„é€  äº§ç”Ÿçš„é—®é¢˜
 
 #include <iostream>
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 
-struct test1
-{
+struct test1 {
   int x;
-  test1(int w=0) {x= w;}
-  
-  //ÈçÏÂÈôÖµ·µ»Ø£¬Ôò»áÔÚcopying ºÍ ¹¹Ôìº¯ÊıÖĞÑ­»·
-  //const test1 operator = (const test1& o)
+  test1(int w = 0) { x = w; }
 
-  const test1& operator = (const test1& o)
-  {
+  //å¦‚ä¸‹è‹¥å€¼è¿”å›ï¼Œåˆ™ä¼šåœ¨copying å’Œ æ„é€ å‡½æ•°ä¸­å¾ªç¯
+  // const test1 operator = (const test1& o)
+
+  const test1 &operator=(const test1 &o) {
     x = o.x;
     return *this;
   }
-  test1(const test1& o)
-  {
-    *this = o;
-  }
+  test1(const test1 &o) { *this = o; }
 };
-int main()
-{
+int main() {
   test1 tt1(5);
   test1 tt2 = tt1;
   return 0;

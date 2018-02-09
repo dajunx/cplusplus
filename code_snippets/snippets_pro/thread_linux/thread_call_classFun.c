@@ -1,32 +1,27 @@
-/*
-  linuxÏÂÏß³Ì²âÊÔµ÷ÓÃ classµÄ³ÉÔ±º¯Êı£º
-    ÏŞÖÆ£ºÏß³ÌÖ»ÄÜ°ó¶¨ staticÀàĞÍµÄ³ÉÔ±º¯Êı£»»¹ÓĞÈôÏëÔÚÏß³Ìº¯ÊıÖĞ·ÃÎÊÀàµÄ ·Çstatic³ÉÔ±£¬±ØĞë´«µİÀà¶ÔÏó½øÀ´
-  ²Î¿¼Á´½Ó£ºhttps://stackoverflow.com/questions/1151582/pthread-function-from-a-class
+ï»¿/*
+  linuxä¸‹çº¿ç¨‹æµ‹è¯•è°ƒç”¨ classçš„æˆå‘˜å‡½æ•°ï¼š
+    é™åˆ¶ï¼šçº¿ç¨‹åªèƒ½ç»‘å®š staticç±»å‹çš„æˆå‘˜å‡½æ•°ï¼›è¿˜æœ‰è‹¥æƒ³åœ¨çº¿ç¨‹å‡½æ•°ä¸­è®¿é—®ç±»çš„
+  éstaticæˆå‘˜ï¼Œå¿…é¡»ä¼ é€’ç±»å¯¹è±¡è¿›æ¥
+  å‚è€ƒé“¾æ¥ï¼šhttps://stackoverflow.com/questions/1151582/pthread-function-from-a-class
 */
 #include <iostream>
 #include <pthread.h>
 #include <unistd.h>
 
-class test1{
+class test1 {
 public:
-  static void* fun1(void* arg)
-  {   
-    test1* p1 = (test1*)arg;
-    std::cout<<"fun1 called."<<std::endl;
+  static void *fun1(void *arg) {
+    test1 *p1 = (test1 *)arg;
+    std::cout << "fun1 called." << std::endl;
     p1->show();
-    return (void*)0;
-  }   
-  void show()
-  {   
-    std::cout<<"show call"<<std::endl;
-  }   
-
+    return (void *)0;
+  }
+  void show() { std::cout << "show call" << std::endl; }
 };
 
-int main()
-{
-  pthread_t t1; 
-  void* res;
+int main() {
+  pthread_t t1;
+  void *res;
   int s;
 
   test1 tt1;

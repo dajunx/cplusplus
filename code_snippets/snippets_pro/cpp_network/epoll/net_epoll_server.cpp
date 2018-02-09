@@ -1,34 +1,32 @@
-#include  <unistd.h>
-#include  <sys/types.h>       /* basic system data types */
-#include  <sys/socket.h>      /* basic socket definitions */
-#include  <netinet/in.h>      /* sockaddr_in{} and other Internet defns */
-#include  <arpa/inet.h>       /* inet(3) functions */
-#include <sys/epoll.h> /* epoll function */
-#include <fcntl.h>     /* nonblocking */
+ï»¿#include <unistd.h>
+#include <arpa/inet.h>    /* inet(3) functions */
+#include <fcntl.h>        /* nonblocking */
+#include <netinet/in.h>   /* sockaddr_in{} and other Internet defns */
+#include <sys/epoll.h>    /* epoll function */
 #include <sys/resource.h> /*setrlimit */
+#include <sys/socket.h>   /* basic socket definitions */
+#include <sys/types.h>    /* basic system data types */
 
-#include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAXEPOLLSIZE 10000
 #define MAXLINE 10240
 int handle(int connfd);
-int setnonblocking(int sockfd)
-{
-  if (fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0)|O_NONBLOCK) == -1) {
+int setnonblocking(int sockfd) {
+  if (fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0) | O_NONBLOCK) == -1) {
     return -1;
   }
   return 0;
 }
 
-int main(int argc, char **argv)
-{
-  int  servPort = 88960;
+int main(int argc, char **argv) {
+  int servPort = 88960;
   int listenq = 1024;
 
-  int listenfd, connfd, kdpfd, nfds, n, nread, curfds,acceptCount = 0;
+  int listenfd, connfd, kdpfd, nfds, n, nread, curfds, acceptCount = 0;
   struct sockaddr_in servaddr, cliaddr;
   socklen_t socklen = sizeof(struct sockaddr_in);
   struct epoll_event ev;
@@ -36,19 +34,17 @@ int main(int argc, char **argv)
   struct rlimit rt;
   char buf[MAXLINE];
 
-  /* ÉèÖÃÃ¿¸ö½ø³ÌÔÊĞí´ò¿ªµÄ×î´óÎÄ¼şÊı */
+  /* è®¾ç½®æ¯ä¸ªè¿›ç¨‹å…è®¸æ‰“å¼€çš„æœ€å¤§æ–‡ä»¶æ•° */
   rt.rlim_max = rt.rlim_cur = MAXEPOLLSIZE;
-  if (setrlimit(RLIMIT_NOFILE, &rt) == -1)
-  {
+  if (setrlimit(RLIMIT_NOFILE, &rt) == -1) {
     perror("setrlimit error");
     return -1;
   }
 
-
   bzero(&servaddr, sizeof(servaddr));
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = htonl (INADDR_ANY);
-  servaddr.sin_port = htons (servPort);
+  servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+  servaddr.sin_port = htons(servPort);
 
   listenfd = socket(AF_INET, SOCK_STREAM, 0);
   if (listenfd == -1) {
@@ -63,50 +59,46 @@ int main(int argc, char **argv)
     perror("setnonblock error");
   }
 
-  if (bind(listenfd, (struct sockaddr *) &servaddr, sizeof(struct sockaddr)) == -1)
-  {
+  if (bind(listenfd, (struct sockaddr *)&servaddr, sizeof(struct sockaddr)) ==
+      -1) {
     perror("bind error");
     return -1;
   }
-  if (listen(listenfd, listenq) == -1)
-  {
+  if (listen(listenfd, listenq) == -1) {
     perror("listen error");
     return -1;
   }
-  /* ´´½¨ epoll ¾ä±ú£¬°Ñ¼àÌı socket ¼ÓÈëµ½ epoll ¼¯ºÏÀï */
+  /* åˆ›å»º epoll å¥æŸ„ï¼ŒæŠŠç›‘å¬ socket åŠ å…¥åˆ° epoll é›†åˆé‡Œ */
   kdpfd = epoll_create(MAXEPOLLSIZE);
   ev.events = EPOLLIN | EPOLLET;
   ev.data.fd = listenfd;
-  if (epoll_ctl(kdpfd, EPOLL_CTL_ADD, listenfd, &ev) < 0)
-  {
+  if (epoll_ctl(kdpfd, EPOLL_CTL_ADD, listenfd, &ev) < 0) {
     fprintf(stderr, "epoll set insertion error: fd=%d\n", listenfd);
     return -1;
   }
   curfds = 1;
 
-  printf("epollserver startup,port %d, max connection is %d, backlog is %d\n", servPort, MAXEPOLLSIZE, listenq);
+  printf("epollserver startup,port %d, max connection is %d, backlog is %d\n",
+         servPort, MAXEPOLLSIZE, listenq);
 
   for (;;) {
-    /* µÈ´ıÓĞÊÂ¼ş·¢Éú */
+    /* ç­‰å¾…æœ‰äº‹ä»¶å‘ç”Ÿ */
     nfds = epoll_wait(kdpfd, events, curfds, -1);
-    if (nfds == -1)
-    {
+    if (nfds == -1) {
       perror("epoll_wait");
       continue;
     }
-    /* ´¦ÀíËùÓĞÊÂ¼ş */
-    for (n = 0; n < nfds; ++n)
-    {
-      if (events[n].data.fd == listenfd)
-      {
-        connfd = accept(listenfd, (struct sockaddr *)&cliaddr,&socklen);
-        if (connfd < 0)
-        {
+    /* å¤„ç†æ‰€æœ‰äº‹ä»¶ */
+    for (n = 0; n < nfds; ++n) {
+      if (events[n].data.fd == listenfd) {
+        connfd = accept(listenfd, (struct sockaddr *)&cliaddr, &socklen);
+        if (connfd < 0) {
           perror("accept error");
           continue;
         }
 
-        sprintf(buf, "accept form %s:%d\n", inet_ntoa(cliaddr.sin_addr), cliaddr.sin_port);
+        sprintf(buf, "accept form %s:%d\n", inet_ntoa(cliaddr.sin_addr),
+                cliaddr.sin_port);
         printf("%d:%s", ++acceptCount, buf);
 
         if (curfds >= MAXEPOLLSIZE) {
@@ -119,20 +111,18 @@ int main(int argc, char **argv)
         }
         ev.events = EPOLLIN | EPOLLET;
         ev.data.fd = connfd;
-        if (epoll_ctl(kdpfd, EPOLL_CTL_ADD, connfd, &ev) < 0)
-        {
-          fprintf(stderr, "add socket '%d' to epoll failed: %s\n", connfd, strerror(errno));
+        if (epoll_ctl(kdpfd, EPOLL_CTL_ADD, connfd, &ev) < 0) {
+          fprintf(stderr, "add socket '%d' to epoll failed: %s\n", connfd,
+                  strerror(errno));
           return -1;
         }
         curfds++;
         continue;
       }
-      // ´¦Àí¿Í»§¶ËÇëÇó
+      // å¤„ç†å®¢æˆ·ç«¯è¯·æ±‚
       if (handle(events[n].data.fd) < 0) {
-        epoll_ctl(kdpfd, EPOLL_CTL_DEL, events[n].data.fd,&ev);
+        epoll_ctl(kdpfd, EPOLL_CTL_DEL, events[n].data.fd, &ev);
         curfds--;
-
-
       }
     }
   }
@@ -143,7 +133,7 @@ int main(int argc, char **argv)
 int handle(int connfd) {
   int nread;
   char buf[MAXLINE];
-  nread = read(connfd, buf, MAXLINE);//¶ÁÈ¡¿Í»§¶ËsocketÁ÷
+  nread = read(connfd, buf, MAXLINE); //è¯»å–å®¢æˆ·ç«¯socketæµ
 
   if (nread == 0) {
     printf("client close the connection\n");
@@ -155,6 +145,6 @@ int handle(int connfd) {
     close(connfd);
     return -1;
   }
-  write(connfd, buf, nread);//ÏìÓ¦¿Í»§¶Ë
+  write(connfd, buf, nread); //å“åº”å®¢æˆ·ç«¯
   return 0;
 }

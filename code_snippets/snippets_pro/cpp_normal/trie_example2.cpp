@@ -1,47 +1,46 @@
-//url:http://blog.csdn.net/hguisu/article/details/8131559
+ï»¿// url:http://blog.csdn.net/hguisu/article/details/8131559
 
-#include <stdio.h>
 #include "stdlib.h"
 #include <iostream>
+#include <stdio.h>
 #include <string.h>
 using namespace std;
 
 #define NULL 0
 
 const int num_chars = 26;
-class Trie
-{
+class Trie {
 public:
   Trie() : root(new Trie_node) {}
   virtual ~Trie() {}
-  int trie_search(const char* word, char* entry) const
-  {
+  int trie_search(const char *word, char *entry) const {
     char char_code;
 
-    Trie_node* location = root;  //´Ó¸ù½áµã¿ªÊ¼
+    Trie_node *location = root; //ä»æ ¹ç»“ç‚¹å¼€å§‹
     while (location != NULL && *word != 0) {
       if (*word >= 'A' && *word <= 'Z') {
         char_code = *word - 'A';
       } else if (*word >= 'a' && *word <= 'z') {
         char_code = *word - 'a';
-      } else { return 0; } // ²»ºÏ·¨µÄµ¥´Ê
-      //×ªÈëÏàÓ¦·ÖÖ§Ö¸Õë
+      } else {
+        return 0;
+      } // ä¸åˆæ³•çš„å•è¯
+      //è½¬å…¥ç›¸åº”åˆ†æ”¯æŒ‡é’ˆ
       location = location->branch[char_code];
       word++;
     }
-    //ÕÒµ½£¬»ñÈ¡Êı¾İ£¬³É¹¦·µ»Ø
+    //æ‰¾åˆ°ï¼Œè·å–æ•°æ®ï¼ŒæˆåŠŸè¿”å›
     if (location != NULL && location->data != NULL) {
       strcpy(entry, location->data);
       return 1;
     } else {
       return 0;
-    } // ²»ºÏ·¨µÄµ¥´Ê
+    } // ä¸åˆæ³•çš„å•è¯
   }
 
-  void insert(const char* word, const char* entry)
-  {
+  void insert(const char *word, const char *entry) {
     char char_code;
-    Trie_node* location = root;   //´Ó¸ù½áµã¿ªÊ¼
+    Trie_node *location = root; //ä»æ ¹ç»“ç‚¹å¼€å§‹
     while (location != NULL && *word != 0) {
       if (*word >= 'A' && *word <= 'Z') {
         char_code = *word - 'A';
@@ -51,28 +50,28 @@ public:
         return;
       }
 
-      //²»´æÔÚ´Ë·ÖÖ§
+      //ä¸å­˜åœ¨æ­¤åˆ†æ”¯
       if (location->branch[char_code] == NULL) {
-        location->branch[char_code] = new Trie_node;  //´´½¨¿Õ·ÖÖ§
+        location->branch[char_code] = new Trie_node; //åˆ›å»ºç©ºåˆ†æ”¯
       }
 
-      //×ªÈë·ÖÖ§
+      //è½¬å…¥åˆ†æ”¯
       location = location->branch[char_code];
       word++;
     }
 
-    if (location->data == NULL) {//²åÈëÊı¾İ
+    if (location->data == NULL) { //æ’å…¥æ•°æ®
       location->data = new char[strlen(entry) + 1];
-      strcpy(location->data, entry);    //¸ødata¸³Öµ±íÃ÷µ¥´Ê´æÔÚ
+      strcpy(location->data, entry); //ç»™dataèµ‹å€¼è¡¨æ˜å•è¯å­˜åœ¨
     }
   }
-  int remove(const char* word, char* entry);
+  int remove(const char *word, char *entry);
+
 protected:
   struct Trie_node {
-    char* data; //Èô²»Îª¿Õ£¬±íÊ¾´Órootµ½´Ë½áµã¹¹³ÉÒ»¸öµ¥´Ê
-    Trie_node* branch[num_chars]; //·ÖÖ§
-    Trie_node()
-    {
+    char *data; //è‹¥ä¸ä¸ºç©ºï¼Œè¡¨ç¤ºä»rootåˆ°æ­¤ç»“ç‚¹æ„æˆä¸€ä¸ªå•è¯
+    Trie_node *branch[num_chars]; //åˆ†æ”¯
+    Trie_node() {
       data = NULL;
       for (int i = 0; i < num_chars; ++i) {
         branch[i] = NULL;
@@ -80,11 +79,10 @@ protected:
     }
   };
 
-  Trie_node* root; //¸ù½áµã(Ö¸Õë)
+  Trie_node *root; //æ ¹ç»“ç‚¹(æŒ‡é’ˆ)
 };
 
-int main()
-{
+int main() {
   Trie t;
   char entry[100];
   t.insert("a", "DET");

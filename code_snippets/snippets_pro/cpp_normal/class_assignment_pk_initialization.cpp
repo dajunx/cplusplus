@@ -1,17 +1,16 @@
-
-// class ÖĞ ³õÊ¼»¯ºÍ¸³Öµ²»Í¬µã£¬×¢Òâ25~28ĞĞ´úÂë¶¯×÷£¡Ê×ÏÈ¶Ôt2µ÷ÓÃdefault¹¹Ôì£¬28ºÅÔÚµ÷ÓÃ´øÓĞÒ»¸öint²ÎÊıµÄ¹¹Ôìº¯Êı£¡£¡£¡
+ï»¿
+// class ä¸­
+// åˆå§‹åŒ–å’Œèµ‹å€¼ä¸åŒç‚¹ï¼Œæ³¨æ„25~28è¡Œä»£ç åŠ¨ä½œï¼é¦–å…ˆå¯¹t2è°ƒç”¨defaultæ„é€ ï¼Œ28å·åœ¨è°ƒç”¨å¸¦æœ‰ä¸€ä¸ªintå‚æ•°çš„æ„é€ å‡½æ•°ï¼ï¼ï¼
 #include <iostream>
 #include <string>
 
-#define call_with_max(a, b) 
+#define call_with_max(a, b)
 
-class test2
-{
+class test2 {
 public:
-  test2() {j = 0;}
-  test2(int a) { j = a;}
-  test2& operator=(const test2& t2)
-  {
+  test2() { j = 0; }
+  test2(int a) { j = a; }
+  test2 &operator=(const test2 &t2) {
     this->j = t2.j;
     return *this;
   }
@@ -19,11 +18,9 @@ public:
   int j;
 };
 
-class test1
-{
+class test1 {
 public:
-  test1(test2& t2)
-  {
+  test1(test2 &t2) {
     int i = 0;
     a = t2;
   }
@@ -31,8 +28,7 @@ public:
   test2 a;
 };
 
-int main()
-{
+int main() {
   test2 t2(5);
   test1 t1(t2);
 

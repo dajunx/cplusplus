@@ -1,36 +1,35 @@
-#include<sys/time.h>
-#include<sys/types.h>
-#include<unistd.h>
-#include<string.h>
-#include<stdlib.h>
-#include<stdio.h>
+ï»¿#include <sys/time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
 
-int main()
-{
-  char buf[10]="";
+int main() {
+  char buf[10] = "";
   fd_set rdfds;
   struct timeval tv;
   int ret;
   FD_ZERO(&rdfds);
-  FD_SET(0,&rdfds);   //ÎÄ¼şÃèÊö·û0±íÊ¾stdin¼üÅÌÊäÈë
+  FD_SET(0, &rdfds); //æ–‡ä»¶æè¿°ç¬¦0è¡¨ç¤ºstdiné”®ç›˜è¾“å…¥
   tv.tv_sec = 3;
   tv.tv_usec = 0;
-  ret = select(1,&rdfds,NULL,NULL,&tv);
-  if(ret<0)
+  ret = select(1, &rdfds, NULL, NULL, &tv);
+  if (ret < 0)
     printf("\n selcet");
-  else if(ret == 0)
+  else if (ret == 0)
     printf("\n timeout");
   else
-    printf("\n ret = %d",ret);
+    printf("\n ret = %d", ret);
 
-  if(FD_ISSET(1,&rdfds))  //Èç¹ûÓĞÊäÈë£¬´ÓstdinÖĞ»ñÈ¡ÊäÈë×Ö·û
+  if (FD_ISSET(1, &rdfds)) //å¦‚æœæœ‰è¾“å…¥ï¼Œä»stdinä¸­è·å–è¾“å…¥å­—ç¬¦
   {
     printf("\n reading");
-    fread(buf,9,1,stdin);
+    fread(buf, 9, 1, stdin);
   }
-  printf("\nfd_isset 1:%d\n", FD_ISSET(1,&rdfds));
-  write(1,buf,strlen(buf));
-  printf("\n %d \n",strlen(buf));
+  printf("\nfd_isset 1:%d\n", FD_ISSET(1, &rdfds));
+  write(1, buf, strlen(buf));
+  printf("\n %d \n", strlen(buf));
   return 0;
 }
-//Ö´ĞĞ½á¹ûret = 1.
+//æ‰§è¡Œç»“æœret = 1.

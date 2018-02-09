@@ -1,119 +1,115 @@
-//mysql-connector-c++  Á¬½Ó/²éÑ¯mysql
-//ÔİÊ±ÓÃµÄ3rd¿âÀïÃæµÄ¶¯Ì¬¿â½øĞĞ±àÒë
+ï»¿// mysql-connector-c++  è¿æ¥/æŸ¥è¯¢mysql
+//æš‚æ—¶ç”¨çš„3rdåº“é‡Œé¢çš„åŠ¨æ€åº“è¿›è¡Œç¼–è¯‘
 
-//Ê¹ÓÃlib£º  F:\Work\3rd\mysql-connector-c++\build\driver\Debug
+//ä½¿ç”¨libï¼š  F:\Work\3rd\mysql-connector-c++\build\driver\Debug
 
-#include <driver/mysql_connection.h> 
-#include <cppconn/driver.h> 
-#include <cppconn/exception.h> 
-#include <cppconn/resultset.h> 
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
 #include <cppconn/statement.h>
+#include <driver/mysql_connection.h>
 //#include <cppconn/connection.h>
 #include <cppconn/prepared_statement.h>
 
-#include <iostream>
-#include <string>
-#include <map>
 #include <fstream>
+#include <iostream>
+#include <map>
+#include <string>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/thread.hpp>
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/function.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/thread.hpp>
 
 using namespace std;
 
-void read_sql_from_disk_file(std::string& str_sql)
-{
-  std::ifstream fin("file.txt");  
-  while(getline(fin, str_sql))
-  {    
-    std::cout<<"Read from file into string: "<<str_sql<<std::endl; 
+void read_sql_from_disk_file(std::string &str_sql) {
+  std::ifstream fin("file.txt");
+  while (getline(fin, str_sql)) {
+    std::cout << "Read from file into string: " << str_sql << std::endl;
   }
 }
 
-void write_data_to_disk_file(std::string& save_file_name, std::string& save_data)
-{
-  //std::cout<<cost.total_milliseconds()<<"ms"<<std::endl;
+void write_data_to_disk_file(std::string &save_file_name,
+                             std::string &save_data) {
+  // std::cout<<cost.total_milliseconds()<<"ms"<<std::endl;
   std::fstream file(save_file_name,
-    std::fstream::in | std::fstream::out | std::fstream::app);
-  file<<save_data;
+                    std::fstream::in | std::fstream::out | std::fstream::app);
+  file << save_data;
   file.close();
 }
 
-void insert_data_2_mysql(int i)
-{
+void insert_data_2_mysql(int i) {
   boost::this_thread::sleep(boost::posix_time::seconds(2));
-  try { 
-    sql::Driver *driver; 
-    sql::Connection *con; 
-    sql::Statement *stmt; 
-    //sql::ResultSet *res; 
-    //sql::PreparedStatement *pstmt;
+  try {
+    sql::Driver *driver;
+    sql::Connection *con;
+    sql::Statement *stmt;
+    // sql::ResultSet *res;
+    // sql::PreparedStatement *pstmt;
 
-    driver = get_driver_instance(); 
-    con = driver->connect("192.168.221.133", "linjj", "19900801"); 
-    //Ñ¡ÔñÒªÁ¬½ÓµÄÊı¾İ¿â 
+    driver = get_driver_instance();
+    con = driver->connect("192.168.221.133", "linjj", "19900801");
+    //é€‰æ‹©è¦è¿æ¥çš„æ•°æ®åº“
     con->setSchema("test");
-    //ÉèÖÃ×Ö·û¸ñÊ½
+    //è®¾ç½®å­—ç¬¦æ ¼å¼
     con->setClientOption("characterSetResults", "utf8");
-    stmt = con->createStatement(); 
+    stmt = con->createStatement();
 
     std::string str_sql, str_sql_tmp;
     read_sql_from_disk_file(str_sql);
-    for(int index=0; index < 10000; ++index)
-    {
+    for (int index = 0; index < 10000; ++index) {
       str_sql_tmp = str_sql;
       int iBegin = i * 10000 + index;
       std::stringstream uid;
-      uid<<iBegin;
+      uid << iBegin;
       str_sql_tmp.append(uid.str());
       str_sql_tmp.append(", \"");
       str_sql_tmp.append(uid.str());
       str_sql_tmp.append("\")");
       stmt->execute(str_sql_tmp);
-      //boost::this_thread::sleep(boost::posix_time::millisec(10)); // Ã¿Ìõ¼ÇÂ¼²åÈëÇ°¼ä¸ô10ms£¬²»¼ä¸ô£¬ÊÇ·ñ¶ÔmysqlÓĞ³å»÷
+      // boost::this_thread::sleep(boost::posix_time::millisec(10)); //
+      // æ¯æ¡è®°å½•æ’å…¥å‰é—´éš”10msï¼Œä¸é—´éš”ï¼Œæ˜¯å¦å¯¹mysqlæœ‰å†²å‡»
     }
 
-    std::cout<<"thread: "<<i<<std::endl;
-    //boost::this_thread::sleep(boost::posix_time::seconds(200));
+    std::cout << "thread: " << i << std::endl;
+    // boost::this_thread::sleep(boost::posix_time::seconds(200));
 
-    //delete res; 
+    // delete res;
     delete stmt;
     delete con;
 
-  } catch (sql::SQLException &e) { 
-    //ÓĞÒì³£µÄÇé¿öÏÂ£¬Êä³öÒì³£ 
-    cout << "# ERR: SQLException in " << __FILE__; 
-    cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl; 
-    cout << "# ERR: " << e.what(); 
-    cout << " (MySQL error code: " << e.getErrorCode(); 
-    cout << ", SQLState: " << e.getSQLState() << " )" << endl; 
+  } catch (sql::SQLException &e) {
+    //æœ‰å¼‚å¸¸çš„æƒ…å†µä¸‹ï¼Œè¾“å‡ºå¼‚å¸¸
+    cout << "# ERR: SQLException in " << __FILE__;
+    cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+    cout << "# ERR: " << e.what();
+    cout << " (MySQL error code: " << e.getErrorCode();
+    cout << ", SQLState: " << e.getSQLState() << " )" << endl;
   }
 }
 
-//TODO ¶ÔÓ¦µÄ´æ´¢¹ı³ÌºÍ½á¹û²»Ò»ÖÂ£¬¾ßÌåÊ¹ÓÃĞŞ¸Ä
-void call_procedure(int i)
-{
+// TODO å¯¹åº”çš„å­˜å‚¨è¿‡ç¨‹å’Œç»“æœä¸ä¸€è‡´ï¼Œå…·ä½“ä½¿ç”¨ä¿®æ”¹
+void call_procedure(int i) {
   boost::this_thread::sleep(boost::posix_time::seconds(2));
-  try { 
-    sql::Driver *driver; 
-    sql::Connection *con; 
+  try {
+    sql::Driver *driver;
+    sql::Connection *con;
     sql::PreparedStatement *pstmt;
-    sql::ResultSet * res;  //ÓÃÓÚ´æ´¢¹ı³Ì·µ»Ø½á¹û
+    sql::ResultSet *res; //ç”¨äºå­˜å‚¨è¿‡ç¨‹è¿”å›ç»“æœ
 
-    driver = get_driver_instance(); 
+    driver = get_driver_instance();
     con = driver->connect("192.168.221.136", "linjj", "19900801");
-    //Ñ¡ÔñÒªÁ¬½ÓµÄÊı¾İ¿â 
+    //é€‰æ‹©è¦è¿æ¥çš„æ•°æ®åº“
     con->setSchema("test");
-    //ÉèÖÃ×Ö·û¸ñÊ½
+    //è®¾ç½®å­—ç¬¦æ ¼å¼
     con->setClientOption("characterSetResults", "utf8");
 
-    //Ö´ĞĞ´æ´¢¹ı³Ì
+    //æ‰§è¡Œå­˜å‚¨è¿‡ç¨‹
     std::stringstream str_id;
-    str_id<<i;
+    str_id << i;
     std::string sql_text("call insert_test_data(");
     sql_text.append(str_id.str());
     sql_text.append(")");
@@ -121,83 +117,81 @@ void call_procedure(int i)
     pstmt = con->prepareStatement(sql_text);
     pstmt->execute();
 
-    /*»òÕßÊ¹ÓÃ
+    /*æˆ–è€…ä½¿ç”¨
     std::string sql_text("call insert_test_data(?)");
 
     pstmt = con->prepareStatement(sql_text);
     pstmt->setInt(1, i);
     */
 
-
-    //±éÀú´æ´¢¹ı³ÌµÄ½á¹û(°üÀ¨´æ´¢¹ı³ÌÖĞµÄselect ·µ»Ø»òÕß ´æ´¢¹ı³Ì²úÉúµÄ´íÎó[Ê¹ÓÃ show errors; ])
+    //éå†å­˜å‚¨è¿‡ç¨‹çš„ç»“æœ(åŒ…æ‹¬å­˜å‚¨è¿‡ç¨‹ä¸­çš„select è¿”å›æˆ–è€… å­˜å‚¨è¿‡ç¨‹äº§ç”Ÿçš„é”™è¯¯[ä½¿ç”¨
+    //show errors; ])
     do {
       res = pstmt->getResultSet();
       while (res->next()) {
         std::cout << "id: " << res->getInt("id")
-          << " name: " << res->getString("name") << std::endl;
+                  << " name: " << res->getString("name") << std::endl;
       }
     } while (pstmt->getMoreResults());
 
     delete pstmt;
     delete con;
 
-  } catch (sql::SQLException &e) { 
-    //ÓĞÒì³£µÄÇé¿öÏÂ£¬Êä³öÒì³£ 
-    cout << "# ERR: SQLException in " << __FILE__; 
-    cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl; 
-    cout << "# ERR: " << e.what(); 
-    cout << " (MySQL error code: " << e.getErrorCode(); 
-    cout << ", SQLState: " << e.getSQLState() << " )" << endl; 
+  } catch (sql::SQLException &e) {
+    //æœ‰å¼‚å¸¸çš„æƒ…å†µä¸‹ï¼Œè¾“å‡ºå¼‚å¸¸
+    cout << "# ERR: SQLException in " << __FILE__;
+    cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+    cout << "# ERR: " << e.what();
+    cout << " (MySQL error code: " << e.getErrorCode();
+    cout << ", SQLState: " << e.getSQLState() << " )" << endl;
   }
 }
 
-void get_record_from_mysql()
-{
-  try { 
-    sql::Driver *driver; 
-    sql::Connection *con; 
-    sql::Statement *stmt; 
-    sql::ResultSet *res; 
-    //sql::PreparedStatement *pstmt;
+void get_record_from_mysql() {
+  try {
+    sql::Driver *driver;
+    sql::Connection *con;
+    sql::Statement *stmt;
+    sql::ResultSet *res;
+    // sql::PreparedStatement *pstmt;
     std::map<int, std::string> map_data;
     std::string save_file_name("get_record_from_mysql.192.168.221.135.txt");
     std::stringstream data;
 
-    driver = get_driver_instance(); 
-    con = driver->connect("192.168.221.135", "linjj", "19900801"); 
-    //Ñ¡ÔñÒªÁ¬½ÓµÄÊı¾İ¿â 
+    driver = get_driver_instance();
+    con = driver->connect("192.168.221.135", "linjj", "19900801");
+    //é€‰æ‹©è¦è¿æ¥çš„æ•°æ®åº“
     con->setSchema("test");
-    //ÉèÖÃ×Ö·û¸ñÊ½
+    //è®¾ç½®å­—ç¬¦æ ¼å¼
     con->setClientOption("characterSetResults", "utf8");
-    stmt = con->createStatement(); 
+    stmt = con->createStatement();
     res = stmt->executeQuery("select uid, name from test1");
-    while (res->next()) {//Êı¾İÏÈĞ´ÈëÄÚ´æ£¬ÔÚÒ»´ÎĞÔĞ´Èë´ÅÅÌ
+    while (res->next()) { //æ•°æ®å…ˆå†™å…¥å†…å­˜ï¼Œåœ¨ä¸€æ¬¡æ€§å†™å…¥ç£ç›˜
       int uid = res->getInt("uid");
       std::string name = res->getString("name");
-      data<<uid<<"\n";
-      data<<name<<"\n";
-      //map_data.insert(std::pair<int, std::string>(uid, name));
-      //std::cout<<"record, uid: "<<uid<<", name: "<<name<<std::endl;
+      data << uid << "\n";
+      data << name << "\n";
+      // map_data.insert(std::pair<int, std::string>(uid, name));
+      // std::cout<<"record, uid: "<<uid<<", name: "<<name<<std::endl;
     }
 
     write_data_to_disk_file(save_file_name, data.str());
 
-    delete res; 
+    delete res;
     delete stmt;
     delete con;
 
-  } catch (sql::SQLException &e) { 
-    //ÓĞÒì³£µÄÇé¿öÏÂ£¬Êä³öÒì³£ 
-    cout << "# ERR: SQLException in " << __FILE__; 
-    cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl; 
-    cout << "# ERR: " << e.what(); 
-    cout << " (MySQL error code: " << e.getErrorCode(); 
-    cout << ", SQLState: " << e.getSQLState() << " )" << endl; 
+  } catch (sql::SQLException &e) {
+    //æœ‰å¼‚å¸¸çš„æƒ…å†µä¸‹ï¼Œè¾“å‡ºå¼‚å¸¸
+    cout << "# ERR: SQLException in " << __FILE__;
+    cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+    cout << "# ERR: " << e.what();
+    cout << " (MySQL error code: " << e.getErrorCode();
+    cout << ", SQLState: " << e.getSQLState() << " )" << endl;
   }
 }
 
-class action_record_time
-{
+class action_record_time {
 public:
   action_record_time() {
     start = boost::posix_time::microsec_clock::local_time();
@@ -209,7 +203,7 @@ public:
 
     std::stringstream str_cost_time;
     std::string file_name("cost_time.txt");
-    str_cost_time<<cost.total_milliseconds()<<"ms";
+    str_cost_time << cost.total_milliseconds() << "ms";
     write_data_to_disk_file(file_name, str_cost_time.str());
   }
 
@@ -217,21 +211,19 @@ public:
   boost::posix_time::ptime start, end;
 };
 
-int main()
-{
-  // Ò»²¿·ÖÏß³ÌĞ´ÈëÖ÷¿â¡¢Áí¿ªÏß³Ì¶ÁÈ¡Êı¾İ²¢downloadµ½±¾µØ
+int main() {
+  // ä¸€éƒ¨åˆ†çº¿ç¨‹å†™å…¥ä¸»åº“ã€å¦å¼€çº¿ç¨‹è¯»å–æ•°æ®å¹¶downloadåˆ°æœ¬åœ°
   {
     action_record_time dr;
     boost::thread th_read(boost::bind(get_record_from_mysql));
     th_read.join();
-    //get_record_from_mysql();
+    // get_record_from_mysql();
   }
 
   {
     action_record_time dr;
     boost::thread_group thread_group;
-    for(int i=0; i < 800; ++i)
-    {
+    for (int i = 0; i < 800; ++i) {
       thread_group.create_thread(boost::bind(&call_procedure, i));
       boost::this_thread::sleep(boost::posix_time::milliseconds(50));
     }

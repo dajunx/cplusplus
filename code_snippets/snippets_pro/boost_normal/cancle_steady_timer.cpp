@@ -1,19 +1,19 @@
-//steady_timer ¶¨Ê±Æ÷ cancleÈ¡Ïû
-//steady_timer ¶¨Ê±Æ÷ cancleÈ¡ÏûÊ±£¬»áÁ¢Âíµ÷ÓÃ¶ÔÓ¦°ó¶¨Ê±¼ä£¬Í¨¹ıerror_code ·µ»ØÈ¡ÏûÊÂ¼ş
-#include <iostream>
+ï»¿// steady_timer å®šæ—¶å™¨ cancleå–æ¶ˆ
+// steady_timer å®šæ—¶å™¨ cancleå–æ¶ˆæ—¶ï¼Œä¼šç«‹é©¬è°ƒç”¨å¯¹åº”ç»‘å®šæ—¶é—´ï¼Œé€šè¿‡error_code
+// è¿”å›å–æ¶ˆäº‹ä»¶
+#include <boost/asio.hpp>
 #include <boost/asio/steady_timer.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/asio.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/thread/thread.hpp>
+#include <iostream>
 
 typedef boost::asio::steady_timer asio_timer;
-typedef boost::shared_ptr<asio_timer>  timer_ptr;
+typedef boost::shared_ptr<asio_timer> timer_ptr;
 timer_ptr asio_timer_;
 
-void timer_rsp(const boost::system::error_code& error)
-{
+void timer_rsp(const boost::system::error_code &error) {
   if (error) {
     int i = 0;
   } else {
@@ -21,21 +21,20 @@ void timer_rsp(const boost::system::error_code& error)
   }
 }
 
-int main()
-{
+int main() {
   boost::shared_ptr<boost::asio::io_service> ptr_io_service =
-    boost::make_shared<boost::asio::io_service>();
+      boost::make_shared<boost::asio::io_service>();
   boost::shared_ptr<boost::asio::io_service::work> ptr_work =
-    boost::make_shared<boost::asio::io_service::work>(boost::ref(*ptr_io_service));
-  boost::thread th(boost::bind(&boost::asio::io_service::run,
-    boost::ref(*ptr_io_service)));
+      boost::make_shared<boost::asio::io_service::work>(
+          boost::ref(*ptr_io_service));
+  boost::thread th(
+      boost::bind(&boost::asio::io_service::run, boost::ref(*ptr_io_service)));
   th.detach();
 
-  asio_timer_ = boost::make_shared<asio_timer>
-    (boost::ref(*ptr_io_service),
-    boost::chrono::seconds(10));
+  asio_timer_ = boost::make_shared<asio_timer>(boost::ref(*ptr_io_service),
+                                               boost::chrono::seconds(10));
   asio_timer_->async_wait(
-    boost::bind(&timer_rsp, boost::asio::placeholders::error));
+      boost::bind(&timer_rsp, boost::asio::placeholders::error));
 
   boost::this_thread::sleep(boost::posix_time::seconds(4));
 

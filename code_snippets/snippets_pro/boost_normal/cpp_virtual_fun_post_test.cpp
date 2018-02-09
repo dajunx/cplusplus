@@ -1,60 +1,50 @@
-// ²âÊÔc++ÖÐ virtual function ¹¦ÄÜ£¬Ê¹ÓÃboostÍ¶µÝ
+ï»¿// æµ‹è¯•c++ä¸­ virtual function åŠŸèƒ½ï¼Œä½¿ç”¨boostæŠ•é€’
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/chrono/chrono.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/ref.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
 #include <iostream>
 #include <vector>
-#include <boost/thread/thread.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/chrono/chrono.hpp>
-#include <boost/asio.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/ref.hpp>
 
 using namespace boost;
 typedef boost::shared_ptr<boost::asio::io_service> io_service_ptr;
 typedef boost::shared_ptr<boost::asio::io_service::work> io_work_ptr;
 
-void fun1()
-{
-  int i = 0;
-}
+void fun1() { int i = 0; }
 
 class test1 {
 public:
   test1() {}
   ~test1() {}
-  virtual void show() {
-    int i = 0;
-  }
+  virtual void show() { int i = 0; }
 };
 
 class test2 : public test1 {
 public:
   test2() {}
   ~test2() {}
-  void show() {
-    int i = 0;
-  }
+  void show() { int i = 0; }
 };
 
 class test3 : public test1 {
 public:
   test3() {}
   ~test3() {}
-  void show() {
-    int i = 0;
-  }
+  void show() { int i = 0; }
 };
 
-int main()
-{
+int main() {
   io_service_ptr ptr_io_service = boost::make_shared<boost::asio::io_service>();
-  io_work_ptr ptr_io_work = boost::make_shared<boost::asio::io_service::work>
-    (boost::ref(*ptr_io_service));
+  io_work_ptr ptr_io_work = boost::make_shared<boost::asio::io_service::work>(
+      boost::ref(*ptr_io_service));
 
-  //boost::thread th(work_fun, ptr_io_service);
+  // boost::thread th(work_fun, ptr_io_service);
   boost::thread th(boost::bind(&boost::asio::io_service::run, ptr_io_service));
   th.detach();
 

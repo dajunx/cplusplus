@@ -1,25 +1,22 @@
-//Ä£·ÂbindÀı×Ó(·ÇÄ£°å)
-#include <vector>
+ï»¿//æ¨¡ä»¿bindä¾‹å­(éæ¨¡æ¿)
 #include <algorithm>
-#include <iterator>
-#include <iostream>
 #include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
-namespace
-{
-  class placeholder {};
-  placeholder _1;
-}
+#include <boost/shared_ptr.hpp>
+#include <iostream>
+#include <iterator>
+#include <vector>
+namespace {
+class placeholder {};
+placeholder _1;
+} // namespace
 
-class Test
-{
+class Test {
 public:
   Test() {}
-  Test(const Test& p) {}
+  Test(const Test &p) {}
   ~Test() {}
-  void do_stuff(const std::vector<int>& v)
-  {
+  void do_stuff(const std::vector<int> &v) {
     std::vector<int>::const_iterator it = v.begin();
     for (; it != v.end(); ++it) {
       std::cout << *it << std::endl;
@@ -27,42 +24,31 @@ public:
   }
 };
 
-class simple_bind_t
-{
-  typedef void(Test::*fn)(const std::vector<int>&);
+class simple_bind_t {
+  typedef void (Test::*fn)(const std::vector<int> &);
   fn fn_;
   Test t_;
-public:
-  simple_bind_t(fn f, const Test& t): fn_(f), t_(t)
-  {
-    int i = 0;
-  }
-  ~simple_bind_t()
-  {
-    int i = 0;
-  }
 
-  void operator()(const std::vector<int>& a)
-  {
-    return (t_.*fn_)(a);
-  }
+public:
+  simple_bind_t(fn f, const Test &t) : fn_(f), t_(t) { int i = 0; }
+  ~simple_bind_t() { int i = 0; }
+
+  void operator()(const std::vector<int> &a) { return (t_.*fn_)(a); }
 };
 
-simple_bind_t simple_bind(void(Test::*fn)(const std::vector<int>&),
-  const Test& t/*, const placeholder&*/)
-{
+simple_bind_t simple_bind(void (Test::*fn)(const std::vector<int> &),
+                          const Test &t /*, const placeholder&*/) {
   return simple_bind_t(fn, t);
 }
 
-int main()
-{
+int main() {
   Test t;
-  //boost::shared_ptr<Test> ptr_test = boost::make_shared<Test>();
+  // boost::shared_ptr<Test> ptr_test = boost::make_shared<Test>();
   std::vector<int> vec;
   vec.push_back(42);
-  simple_bind(&Test::do_stuff, t/*, _1*/)(vec); //µÈÍ¬ÓÚÏÂÃæ2ĞĞ´úÂëÂß¼­
-  //boost::function<void(const std::vector<int>&)> f(simple_bind(&Test::do_stuff, *ptr_test, _1));
-  //ptr_test.reset(); //°ó¶¨Íêºó ¾ÍËã¶ÔÏóÎö¹¹µôºó£¬fµ÷ÓÃÒ²Ã»ÎÊÌâ¡£
-  //f(vec);
+  simple_bind(&Test::do_stuff, t /*, _1*/)(vec); //ç­‰åŒäºä¸‹é¢2è¡Œä»£ç é€»è¾‘
+  // boost::function<void(const std::vector<int>&)>
+  // f(simple_bind(&Test::do_stuff, *ptr_test, _1)); ptr_test.reset(); //ç»‘å®šå®Œå
+  // å°±ç®—å¯¹è±¡ææ„æ‰åï¼Œfè°ƒç”¨ä¹Ÿæ²¡é—®é¢˜ã€‚ f(vec);
   return 0;
 }

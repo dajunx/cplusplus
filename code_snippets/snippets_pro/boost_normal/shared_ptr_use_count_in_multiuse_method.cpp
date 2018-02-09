@@ -1,69 +1,63 @@
-//shared_ptr ÒıÓÃ¼ÆÊıuse_count_
+ï»¿// shared_ptr å¼•ç”¨è®¡æ•°use_count_
 /*
-1¡¢fun1 º¯Êı´«µİ·½Ê½£¬ÔÚº¯ÊıÄÚ²¿use_count_Îª2£¬´«ÒıÓÃÊÇ1£»  
-2¡¢Ê¹ÓÃ io_service post µ½º¯ÊıÄÚ²¿ÊÇ4£¬ÒıÓÃÊÇ3£»   
-3¡¢Ê¹ÓÃÏß³ÌÈ¥Ö´ĞĞ£¬µ½º¯ÊıÄÚ²¿ÊÇ 3£¬ÒıÓÃÊÇ2¡£
-4¡¢´«µİº¯Êı const& ²»»áÔö¼Óuse_count£¬¶øbind const&²ÎÊı »áÔö¼Óuse_count 
-  (ps:ÈôÓÃboost::ref°ü¹üÕâ¸öconst&²ÎÊı Ôò²»»áÔö¼Óuse_count)
+1ã€fun1 å‡½æ•°ä¼ é€’æ–¹å¼ï¼Œåœ¨å‡½æ•°å†…éƒ¨use_count_ä¸º2ï¼Œä¼ å¼•ç”¨æ˜¯1ï¼›
+2ã€ä½¿ç”¨ io_service post åˆ°å‡½æ•°å†…éƒ¨æ˜¯4ï¼Œå¼•ç”¨æ˜¯3ï¼›
+3ã€ä½¿ç”¨çº¿ç¨‹å»æ‰§è¡Œï¼Œåˆ°å‡½æ•°å†…éƒ¨æ˜¯ 3ï¼Œå¼•ç”¨æ˜¯2ã€‚
+4ã€ä¼ é€’å‡½æ•° const& ä¸ä¼šå¢åŠ use_countï¼Œè€Œbind const&å‚æ•° ä¼šå¢åŠ use_count
+  (ps:è‹¥ç”¨boost::refåŒ…è£¹è¿™ä¸ªconst&å‚æ•° åˆ™ä¸ä¼šå¢åŠ use_count)
 */
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/chrono/chrono.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/function.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/ref.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
 #include <iostream>
 #include <vector>
-#include <boost/thread/thread.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/chrono/chrono.hpp>
-#include <boost/asio.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/ref.hpp>
 
 using namespace boost;
 typedef boost::shared_ptr<boost::asio::io_service> io_service_ptr;
 typedef boost::shared_ptr<boost::asio::io_service::work> io_work_ptr;
 
-struct test1
-{
+struct test1 {
   test1() {}
   ~test1() {}
 };
 
-struct test2
-{
+struct test2 {
   test2() {}
   ~test2() {}
 };
 
-boost::function<void(boost::shared_ptr<test1> const&)> f;
-void fun2(boost::shared_ptr<test1> const& ptr_test1)
-{
-  int i = 0;
-}
+boost::function<void(boost::shared_ptr<test1> const &)> f;
+void fun2(boost::shared_ptr<test1> const &ptr_test1) { int i = 0; }
 
-void fun1(boost::shared_ptr<test1> const& ptr_test1)
-{
-  // µÚ4µã£ºº¯Êı²ÎÊıÎª const& ²»»áÔö¼Óuse_count£¬¶øbind const&²ÎÊı »áÔö¼Óuse_count
+void fun1(boost::shared_ptr<test1> const &ptr_test1) {
+  // ç¬¬4ç‚¹ï¼šå‡½æ•°å‚æ•°ä¸º const& ä¸ä¼šå¢åŠ use_countï¼Œè€Œbind const&å‚æ•°
+  // ä¼šå¢åŠ use_count
   boost::shared_ptr<test2> ptr_temp = boost::make_shared<test2>();
   int i = 0;
   f = boost::bind(&fun2, ptr_test1);
   i = 1;
 }
 
-int main()
-{
+int main() {
   io_service_ptr ptr_io_service = boost::make_shared<boost::asio::io_service>();
-  io_work_ptr ptr_io_work = boost::make_shared<boost::asio::io_service::work>
-    (boost::ref(*ptr_io_service));
+  io_work_ptr ptr_io_work = boost::make_shared<boost::asio::io_service::work>(
+      boost::ref(*ptr_io_service));
 
   boost::thread th(boost::bind(&boost::asio::io_service::run, ptr_io_service));
   th.detach();
 
   boost::shared_ptr<test1> ptr_test1 = boost::make_shared<test1>();
   fun1(ptr_test1);
-  //ptr_io_service->post(boost::bind(&fun1, ptr_test1));
-  //boost::thread th1(boost::bind(&fun1, ptr_test1));
+  // ptr_io_service->post(boost::bind(&fun1, ptr_test1));
+  // boost::thread th1(boost::bind(&fun1, ptr_test1));
 
   boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 

@@ -1,29 +1,23 @@
-//Ä£°å ¹Ø¼ü×Ö typename
+ï»¿//æ¨¡æ¿ å…³é”®å­— typename
 #include <iostream>
 #include <vector>
 
-template <typename T>
-void print(T& coll)
-{
+template <typename T> void print(T &coll) {
   typename T::iterator begin_pos;
-  for (begin_pos = coll.begin(); begin_pos != coll.end(); ++begin_pos)
-  {
-    std::cout<<"data : " << *begin_pos<<std::endl;
+  for (begin_pos = coll.begin(); begin_pos != coll.end(); ++begin_pos) {
+    std::cout << "data : " << *begin_pos << std::endl;
   }
 }
 
-void print1(std::vector<int> const& coll)
-{
-  // coll´«²ÎÎªconstÒıÓÃ£¬¶ÔÓ¦´Ë´¦µÃÊ¹ÓÃ const_iterator
+void print1(std::vector<int> const &coll) {
+  // collä¼ å‚ä¸ºconstå¼•ç”¨ï¼Œå¯¹åº”æ­¤å¤„å¾—ä½¿ç”¨ const_iterator
   std::vector<int>::const_iterator begin_pos;
-  for (begin_pos = coll.begin(); begin_pos != coll.end(); ++begin_pos)
-  {
-    std::cout<<"data : " << *begin_pos<<std::endl;
+  for (begin_pos = coll.begin(); begin_pos != coll.end(); ++begin_pos) {
+    std::cout << "data : " << *begin_pos << std::endl;
   }
 }
 
-int main()
-{
+int main() {
   std::vector<int> vec_int;
   vec_int.push_back(1);
   vec_int.push_back(2);

@@ -1,15 +1,15 @@
-//linux»ñÈ¡ÎÄ¼şÊôĞÔ
+ï»¿// linuxè·å–æ–‡ä»¶å±æ€§
 /*
 How to get file permissions with c++ boost library?
-º¯ÊıÔ­ĞÍ£ºperms      permissions() const                { return m_perms; } 
+å‡½æ•°åŸå‹ï¼šperms      permissions() const                { return m_perms; }
 defined in boost/filesystem/v3/operations.hpp
 */
-//link:http://stackoverflow.com/questions/9776050/how-to-get-file-permissions-with-c-boost-library
-#include <boost/filesystem.hpp> 
-#include <stdio.h> 
-namespace fs=boost::filesystem;
-int main(int argc,char * argv[]){
+// link:http://stackoverflow.com/questions/9776050/how-to-get-file-permissions-with-c-boost-library
+#include <boost/filesystem.hpp>
+#include <stdio.h>
+namespace fs = boost::filesystem;
+int main(int argc, char *argv[]) {
   fs::path p(argv[1]);
   fs::file_status s = status(p);
-  printf("%o\n",s.permissions());
+  printf("%o\n", s.permissions());
 }

@@ -1,27 +1,23 @@
-//¼òµ¥Î¯ÍĞ
+ï»¿//ç®€å•å§”æ‰˜
 
-#include <iostream>
-#include <string>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
+#include <iostream>
+#include <string>
 
-void englishgreeting(std::string name)
-{
-  std::cout<<"Morning, "<<name<<std::endl;
+void englishgreeting(std::string name) {
+  std::cout << "Morning, " << name << std::endl;
 }
 
-void chinesegreeting(std::string name)
-{
-  std::cout<<"ÔçÉÏºÃ, "<<name<<std::endl;
+void chinesegreeting(std::string name) {
+  std::cout << "æ—©ä¸Šå¥½, " << name << std::endl;
 }
 
-void GreetPople(std::string name, boost::function<void(std::string)> fun)
-{
+void GreetPople(std::string name, boost::function<void(std::string)> fun) {
   fun(name);
 }
 
-int main()
-{
+int main() {
   GreetPople("lin", boost::bind(chinesegreeting, _1));
   GreetPople("xxx", boost::bind(chinesegreeting, _1));
   return 0;

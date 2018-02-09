@@ -1,17 +1,16 @@
-//vector µü´úÆ÷Ê§Ğ§Àı×Ó
-//´ÓvectorÖĞÉ¾³ıÄ³¸öÔªËØ²¢°ÑÔªËØinsertµ½Ä©Î²£¬¶ÔÓ¦µÄµü´úÆ÷»áÊ§Ğ§
+ï»¿// vector è¿­ä»£å™¨å¤±æ•ˆä¾‹å­
+//ä»vectorä¸­åˆ é™¤æŸä¸ªå…ƒç´ å¹¶æŠŠå…ƒç´ insertåˆ°æœ«å°¾ï¼Œå¯¹åº”çš„è¿­ä»£å™¨ä¼šå¤±æ•ˆ
 
+#include <boost/property_tree/ini_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/typeof/typeof.hpp>
 #include <iostream>
 #include <map>
-#include <vector>
-#include <string>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/ini_parser.hpp>
-#include <boost/typeof/typeof.hpp>
 #include <stdlib.h>
+#include <string>
+#include <vector>
 
-int main()
-{
+int main() {
   std::vector<int> test;
   test.push_back(1);
   test.push_back(2);
@@ -21,17 +20,13 @@ int main()
 
   BOOST_AUTO(it, test.begin());
   int times = 1, size = test.size();
-  for (;it!=test.end() && times <= size;++times )
-  {
-    if(*it == 5)
-    {
+  for (; it != test.end() && times <= size; ++times) {
+    if (*it == 5) {
       int temp = *it;
       it = test.erase(it);
       test.insert(test.end(), temp);
-    }
-    else
-    {
-      std::cout<<*it++<<std::endl;
+    } else {
+      std::cout << *it++ << std::endl;
     }
   }
   return 0;

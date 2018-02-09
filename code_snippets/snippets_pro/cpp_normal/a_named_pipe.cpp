@@ -1,18 +1,20 @@
-/*
-A regular pipe can only connect two related processes. It is created by a process and will vanish when the last process closes it.
-A named pipe, also called a FIFO for its behavior, can be used to connect two unrelated processes and exists independently of the processes; meaning it can exist even if no one is using it. A FIFO is created using the mkfifo() library function.
+﻿/*
+A regular pipe can only connect two related processes. It is created by a
+process and will vanish when the last process closes it. A named pipe, also
+called a FIFO for its behavior, can be used to connect two unrelated processes
+and exists independently of the processes; meaning it can exist even if no one
+is using it. A FIFO is created using the mkfifo() library function.
 */
-//writer.c
+// writer.c
 
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-int main()
-{
+int main() {
   int fd;
-  char * myfifo = "/tmp/myfifo";
+  char *myfifo = "/tmp/myfifo";
 
   /* create the FIFO (named pipe) */
   mkfifo(myfifo, 0666);
@@ -30,7 +32,7 @@ int main()
 
 //---------------------------------------------------------
 
-  //reader.c
+// reader.c
 #include <fcntl.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -38,10 +40,9 @@ int main()
 
 #define MAX_BUF 1024
 
-  int main()
-{
+int main() {
   int fd;
-  char * myfifo = "/tmp/myfifo";
+  char *myfifo = "/tmp/myfifo";
   char buf[MAX_BUF];
 
   /* open, read, and display the message from the FIFO */

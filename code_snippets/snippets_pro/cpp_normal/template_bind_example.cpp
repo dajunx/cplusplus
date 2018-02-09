@@ -1,98 +1,88 @@
-//Ä£·ÂbindÀı×Ó(Ä£°å·½Ê½)
-#include <vector>
+ï»¿//æ¨¡ä»¿bindä¾‹å­(æ¨¡æ¿æ–¹å¼)
 #include <algorithm>
-#include <iterator>
-#include <iostream>
 #include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
-#include <typeinfo>
+#include <boost/shared_ptr.hpp>
+#include <iostream>
+#include <iterator>
 #include <string>
-namespace
-{
-  class placeholder {};
-  placeholder _1;
-  placeholder _2;
-}
+#include <typeinfo>
+#include <vector>
+namespace {
+class placeholder {};
+placeholder _1;
+placeholder _2;
+} // namespace
 
-class Test
-{
+class Test {
 public:
   Test() {}
-  Test(const Test& p) {}
+  Test(const Test &p) {}
   ~Test() {}
-  void do_stuff(const std::vector<int>& v)
-  {
+  void do_stuff(const std::vector<int> &v) {
     std::vector<int>::const_iterator it = v.begin();
     for (; it != v.end(); ++it) {
       std::cout << *it << std::endl;
     }
   }
-  void do_something(int& i, int& j)
-  {
+  void do_something(int &i, int &j) {
     i = 9;
     j = 11;
   }
 };
-// 1 class ²ÎÊı´«µİÊÇÍ¨¹ıconstÒıÓÃ·½Ê½
-template <typename R, typename T, typename Arg>
-class simple_bind_t
-{
-  typedef R(T::*fn)(Arg);
+// 1 class å‚æ•°ä¼ é€’æ˜¯é€šè¿‡constå¼•ç”¨æ–¹å¼
+template <typename R, typename T, typename Arg> class simple_bind_t {
+  typedef R (T::*fn)(Arg);
   fn fn_;
   T t_;
-public:
-  simple_bind_t(fn f, const T& t): fn_(f), t_(t) {}
 
-  R operator()(Arg& a)
-  {
-    return (t_.*fn_)(a);
-  }
+public:
+  simple_bind_t(fn f, const T &t) : fn_(f), t_(t) {}
+
+  R operator()(Arg &a) { return (t_.*fn_)(a); }
 };
 
 template <typename R, typename T, typename Arg>
-simple_bind_t<R, T, Arg> simple_bind(
-  R(T::*fn)(Arg), const T& t/*, const placeholder&*/)
-{
+simple_bind_t<R, T, Arg> simple_bind(R (T::*fn)(Arg),
+                                     const T &t /*, const placeholder&*/) {
   return simple_bind_t<R, T, Arg>(fn, t);
 }
-// 2 class ²ÎÊıÊ¹ÓÃ Ö¸Õë·½Ê½
+// 2 class å‚æ•°ä½¿ç”¨ æŒ‡é’ˆæ–¹å¼
 template <typename R, typename T, typename Arg1, typename Arg2>
-class simple_bind_t2
-{
-  typedef R(T::*fn)(Arg1, Arg2);
+class simple_bind_t2 {
+  typedef R (T::*fn)(Arg1, Arg2);
   fn fn_;
-  T* t_;
+  T *t_;
+
 public:
-  simple_bind_t2(fn f, const T* t): fn_(f), t_(const_cast<T*>(t)) {
+  simple_bind_t2(fn f, const T *t) : fn_(f), t_(const_cast<T *>(t)) {
     int i = 0;
   }
 
-  R operator()(Arg1& a, Arg2& b)
-  {
-    return (t_->*fn_)(a, b);
-  }
+  R operator()(Arg1 &a, Arg2 &b) { return (t_->*fn_)(a, b); }
 };
 
 template <typename R, typename T, typename Arg1, typename Arg2>
-simple_bind_t2<R, T, Arg1, Arg2> simple_bind(
-  R(T::*fn)(Arg1, Arg2), const T* t, const placeholder&, const placeholder&)
-{
+simple_bind_t2<R, T, Arg1, Arg2> simple_bind(R (T::*fn)(Arg1, Arg2), const T *t,
+                                             const placeholder &,
+                                             const placeholder &) {
   return simple_bind_t2<R, T, Arg1, Arg2>(fn, t);
 }
 
-int main()
-{
+int main() {
   Test t;
-  Test* p_t = new Test();
+  Test *p_t = new Test();
   boost::shared_ptr<Test> ptr_test = boost::make_shared<Test>();
   std::vector<int> vec;
   vec.push_back(42);
-  simple_bind(&Test::do_stuff, t/*, _1*/)(vec); //µÈÍ¬ÓÚÏÂÃæ2ĞĞ´úÂëÂß¼­, _1¿ÉÒÔ²»ĞèÒª
+  simple_bind(&Test::do_stuff,
+              t /*, _1*/)(vec); //ç­‰åŒäºä¸‹é¢2è¡Œä»£ç é€»è¾‘, _1å¯ä»¥ä¸éœ€è¦
   int x = 0, y = 0;
-  //simple_bind(&Test::do_something, p_t, _1, _2)(x, y); //µÈÍ¬ÓÚÏÂÃæ2ĞĞ´úÂëÂß¼­
-  boost::function<void(int&, int&)> f(simple_bind(&Test::do_something, &(*ptr_test), _1, _2));
-  ptr_test.reset(); //°ó¶¨Íêºó ¾ÍËã¶ÔÏóÎö¹¹µôºó£¬fµ÷ÓÃÒ²Ã»ÎÊÌâ¡£class Ö¸ÕëÏàÍ¬
+  // simple_bind(&Test::do_something, p_t, _1, _2)(x, y);
+  // //ç­‰åŒäºä¸‹é¢2è¡Œä»£ç é€»è¾‘
+  boost::function<void(int &, int &)> f(
+      simple_bind(&Test::do_something, &(*ptr_test), _1, _2));
+  ptr_test.reset(); //ç»‘å®šå®Œå å°±ç®—å¯¹è±¡ææ„æ‰åï¼Œfè°ƒç”¨ä¹Ÿæ²¡é—®é¢˜ã€‚class æŒ‡é’ˆç›¸åŒ
   f(x, y);
 
   std::string s = typeid(p_t).name();

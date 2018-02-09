@@ -1,37 +1,28 @@
-//c++ ÀàÄ£°å
+ï»¿// c++ ç±»æ¨¡æ¿
 /*
-Ä£°å±»ÊµÀı»¯2´Î£¬1´ÎÊÇÊµÀı»¯Ç°ÏÈ¼ì²éÄ£°å´úÂë±¾Éí£¬Óï·¨ÊÇ·ñÕıÈ·£»2´ÎÊÇÔÚÊµÀı»¯ÆÚ¼ä£¬¼ì²éÄ£°å´úÂë£¬²é¿´ÊÇ·ñËùÓĞµÄµ÷ÓÃ¶¼ÓĞĞ§¡£
-¶ÔÓÚÀàÄ£°å£¬³ÉÔ±º¯ÊıÖ»ÓĞÔÚ±»Ê¹ÓÃµÄÊ±ºò²Å»á±»ÊµÀı»¯£¬¼È½ÚÔ¼ÁË¿Õ¼äºÍÊ±¼ä£¬ÓĞÄÜ±£Ö¤¶ÔÓÚ¡°Î´ÄÜÌá¹©ËùÓĞ³ÉÔ±º¯ÊıÖĞËùÓĞ²Ù×÷µÄ¡±ÀàĞÍµÄ°²È«
+æ¨¡æ¿è¢«å®ä¾‹åŒ–2æ¬¡ï¼Œ1æ¬¡æ˜¯å®ä¾‹åŒ–å‰å…ˆæ£€æŸ¥æ¨¡æ¿ä»£ç æœ¬èº«ï¼Œè¯­æ³•æ˜¯å¦æ­£ç¡®ï¼›2æ¬¡æ˜¯åœ¨å®ä¾‹åŒ–æœŸé—´ï¼Œæ£€æŸ¥æ¨¡æ¿ä»£ç ï¼ŒæŸ¥çœ‹æ˜¯å¦æ‰€æœ‰çš„è°ƒç”¨éƒ½æœ‰æ•ˆã€‚
+å¯¹äºç±»æ¨¡æ¿ï¼Œæˆå‘˜å‡½æ•°åªæœ‰åœ¨è¢«ä½¿ç”¨çš„æ—¶å€™æ‰ä¼šè¢«å®ä¾‹åŒ–ï¼Œæ—¢èŠ‚çº¦äº†ç©ºé—´å’Œæ—¶é—´ï¼Œæœ‰èƒ½ä¿è¯å¯¹äºâ€œæœªèƒ½æä¾›æ‰€æœ‰æˆå‘˜å‡½æ•°ä¸­æ‰€æœ‰æ“ä½œçš„â€ç±»å‹çš„å®‰å…¨
 */
 #include <iostream>
 #include <string>
 #include <vector>
 
-template <typename T>
-class stack
-{
+template <typename T> class stack {
 private:
   std::vector<T> elems;
 
 public:
-  void push(T const&);
+  void push(T const &);
   T pop();
   T top() const;
-  bool empty()
-  {
-    return elems.empty();
-  }
+  bool empty() { return elems.empty(); }
 };
 
-template <typename T>
-void stack<T>::push(T const& add_elems)
-{
+template <typename T> void stack<T>::push(T const &add_elems) {
   elems.push_back(add_elems);
 }
 
-template <typename T>
-T stack<T>::pop()
-{
+template <typename T> T stack<T>::pop() {
   if (elems.empty()) {
     return;
   }
@@ -41,9 +32,7 @@ T stack<T>::pop()
   return tmp;
 }
 
-template <typename T>
-T stack<T>::top() const
-{
+template <typename T> T stack<T>::top() const {
   if (elems.empty()) {
     return;
   }
@@ -51,8 +40,7 @@ T stack<T>::top() const
   return elems.back();
 }
 
-int main()
-{
+int main() {
   stack<int> sta_int;
   stack<std::string> str_string;
 

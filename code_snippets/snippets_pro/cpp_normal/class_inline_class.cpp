@@ -1,111 +1,90 @@
-//ÀàÖĞÀà
+ï»¿//ç±»ä¸­ç±»
 
 #include <iostream>
 
-class test1
-{
+class test1 {
 public:
-  test1() {
-    impl_ptr = new impl();
-  }
+  test1() { impl_ptr = new impl(); }
   ~test1() {}
 
-  class impl
-  {
+  class impl {
   public:
     impl() {}
     ~impl() {}
     int b;
   };
-  impl* impl_ptr;
+  impl *impl_ptr;
 
-  void set_impl_value()
-  {
-    impl_ptr->b = 9;
-  }
+  void set_impl_value() { impl_ptr->b = 9; }
   int a;
 };
 
-int main()
-{
+int main() {
   test1 t1;
   t1.set_impl_value();
   return 0;
 }
 
 //------------------------------------------------
-  //2¸öÀà·Ö¿ªÉùÃ÷£¬¶¨Òå·ÅÔÚcppÖĞ:
-//test.cpp:
+// 2ä¸ªç±»åˆ†å¼€å£°æ˜ï¼Œå®šä¹‰æ”¾åœ¨cppä¸­:
+// test.cpp:
 
-#include <iostream>
-#include "test.h"
 #include "impl.h"
+#include "test.h"
+#include <iostream>
 
-test1::test1() {
-  impl_ptr = new impl();
-}
+test1::test1() { impl_ptr = new impl(); }
 
-void test1::set_impl_value()
-{
-  impl_ptr->b = 9;
-}
+void test1::set_impl_value() { impl_ptr->b = 9; }
 
-int main()
-{
+int main() {
   test1 t1;
   t1.set_impl_value();
   return 0;
 }
 //-----------------------
 
-  //impl.h:
+// impl.h:
 
-class impl
-{
+class impl {
 public:
-  impl(){}
+  impl() {}
   ~impl() {}
   int b;
 };
 //-----------------------
 
-  //test.h:
+// test.h:
 
 class impl;
-class test1
-{
+class test1 {
 public:
   test1();
   ~test1() {}
 
   void set_impl_value();
 
-  impl* impl_ptr;
+  impl *impl_ptr;
   int a;
 };
 
 //------------------------------------------------
-//ÀàÖĞÀà£¬test1ÀàÖĞ¶¨ÒåimplÀà£¬implÀà¶¨ÒåÔÚÆäËûµØ·½:
-//test.cpp:
+//ç±»ä¸­ç±»ï¼Œtest1ç±»ä¸­å®šä¹‰implç±»ï¼Œimplç±»å®šä¹‰åœ¨å…¶ä»–åœ°æ–¹:
+// test.cpp:
 
-#include <iostream>
-#include "common1.h"
 #include "common.h"
+#include "common1.h"
+#include <iostream>
 
-test1::test1(impl* ptr)
-  :impl_ptr(ptr) 
-{
-}
+test1::test1(impl *ptr) : impl_ptr(ptr) {}
 
-void test1::set_impl_value()
-{
+void test1::set_impl_value() {
   impl_ptr->b = 9;
   a = 9;
 }
 
-int main()
-{
-  test1::impl* p = new test1::impl();
+int main() {
+  test1::impl *p = new test1::impl();
   test1 t1(p);
   // here accept "test1::impl *" input
   t1.set_impl_value();
@@ -113,31 +92,27 @@ int main()
 }
 
 //--------------------------------
-  //impl.h:
+// impl.h:
 
-class test1::impl
-{
-  //friend class test1;
+class test1::impl {
+  // friend class test1;
 public:
-  impl(){
-    b = 9;
-  }
+  impl() { b = 9; }
   ~impl() {}
   int b;
 };
 
 //-------------------------------
-  //test.h:
+// test.h:
 
-class test1
-{
+class test1 {
 public:
   class impl;
-  test1(impl* p);
+  test1(impl *p);
   ~test1() {}
 
   void set_impl_value();
 
-  impl* impl_ptr;
+  impl *impl_ptr;
   int a;
 };

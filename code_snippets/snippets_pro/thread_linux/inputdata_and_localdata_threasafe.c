@@ -1,38 +1,36 @@
-/*
-  ÑéÖ¤Ïß³Ìº¯Êı´«ÈëµÄ ±äÁ¿ºÍÏß³Ìº¯ÊıµÄ¾Ö²¿±äÁ¿ÊÇ·ñÊÇ Ïß³Ì°²È«£¨·Ç¹²Ïí±äÁ¿£©
-  TODO ÔÙ¶àË¼¿¼ÕâÁ½ÖÖÊı¾İ
+ï»¿/*
+  éªŒè¯çº¿ç¨‹å‡½æ•°ä¼ å…¥çš„ å˜é‡å’Œçº¿ç¨‹å‡½æ•°çš„å±€éƒ¨å˜é‡æ˜¯å¦æ˜¯ çº¿ç¨‹å®‰å…¨ï¼ˆéå…±äº«å˜é‡ï¼‰
+  TODO å†å¤šæ€è€ƒè¿™ä¸¤ç§æ•°æ®
 */
 #include <pthread.h>
-#include <time.h>
 #include <stdio.h>
+#include <time.h>
 
-  void* fun1(void* arg)
-{
-  int* tmp = (int*)arg;
+void *fun1(void *arg) {
+  int *tmp = (int *)arg;
   int step = 0;
   printf("input data address:%ld\n", *tmp);
-  for(int i=0;i<100000000;++i) {
+  for (int i = 0; i < 100000000; ++i) {
     //(*tmp)++;
     step = *tmp;
     step++;
     *tmp = step;
-  }   
+  }
   return 0;
 }
 
-int main()
-{
-  pthread_t t1, t2; 
-  void* res;
+int main() {
+  pthread_t t1, t2;
+  void *res;
   int s;
 
   int data1 = 1;
   s = pthread_create(&t1, NULL, fun1, &data1);
-  printf("create thread1, result: %d\n", s); 
+  printf("create thread1, result: %d\n", s);
 
   int data2 = 2;
   s = pthread_create(&t2, NULL, fun1, &data2);
-  printf("create thread2, result: %d\n", s); 
+  printf("create thread2, result: %d\n", s);
 
   s = pthread_join(t1, NULL);
   printf("join thread1, result: %d, data1:%d\n", s, data1);

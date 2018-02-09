@@ -1,52 +1,48 @@
-//mysql-connector-c++  Á¬½Ó/²éÑ¯mysql
-//ÔİÊ±ÓÃµÄ3rd¿âÀïÃæµÄ¶¯Ì¬¿â½øĞĞ±àÒë
+ï»¿// mysql-connector-c++  è¿æ¥/æŸ¥è¯¢mysql
+//æš‚æ—¶ç”¨çš„3rdåº“é‡Œé¢çš„åŠ¨æ€åº“è¿›è¡Œç¼–è¯‘
 
-//Ê¹ÓÃlib£º  F:\Work\3rd\mysql-connector-c++\build\driver\Debug
+//ä½¿ç”¨libï¼š  F:\Work\3rd\mysql-connector-c++\build\driver\Debug
 
-#include <driver/mysql_connection.h> 
-#include <cppconn/driver.h> 
-#include <cppconn/exception.h> 
-#include <cppconn/resultset.h> 
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
 #include <cppconn/statement.h>
+#include <driver/mysql_connection.h>
 using namespace std;
 
-int main()
-{
-  // TODO Ö¸Õë¶¼Ã»ÓĞÉèÖÃ³õÖµ£¡£¡£¡
-  try { 
-    sql::Driver *driver; 
-    sql::Connection *con; 
-    sql::Statement *stmt; 
-    sql::ResultSet *res; 
+int main() {
+  // TODO æŒ‡é’ˆéƒ½æ²¡æœ‰è®¾ç½®åˆå€¼ï¼ï¼ï¼
+  try {
+    sql::Driver *driver;
+    sql::Connection *con;
+    sql::Statement *stmt;
+    sql::ResultSet *res;
     sql::PreparedStatement *pstmt;
 
-    driver = get_driver_instance(); 
-    con = driver->connect("localhost", "root", ""); 
-    //Ñ¡ÔñÒªÁ¬½ÓµÄÊı¾İ¿â 
+    driver = get_driver_instance();
+    con = driver->connect("localhost", "root", "");
+    //é€‰æ‹©è¦è¿æ¥çš„æ•°æ®åº“
     con->setSchema("test");
-    //ÉèÖÃ×Ö·û¸ñÊ½
+    //è®¾ç½®å­—ç¬¦æ ¼å¼
     con->setClientOption("characterSetResults", "utf8");
-    stmt = con->createStatement(); 
-    res = stmt->executeQuery("SELECT * from test1"); 
-    //±éÀú½á¹û¼¯ 
-    while (res->next())  
-    { 
-      //ÕâÀïµÄIDÊÇuser±íÖĞµÄ×Ö¶ÎÃû
+    stmt = con->createStatement();
+    res = stmt->executeQuery("SELECT * from test1");
+    //éå†ç»“æœé›†
+    while (res->next()) {
+      //è¿™é‡Œçš„IDæ˜¯userè¡¨ä¸­çš„å­—æ®µå
       int id = res->getInt("ID");
-      cout<<id<<endl;
-
-
+      cout << id << endl;
     }
-    delete res; 
+    delete res;
     delete stmt;
-    delete con; 
-  } catch (sql::SQLException &e) { 
-    //ÓĞÒì³£µÄÇé¿öÏÂ£¬Êä³öÒì³£ 
-    cout << "# ERR: SQLException in " << __FILE__; 
-    cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl; 
-    cout << "# ERR: " << e.what(); 
-    cout << " (MySQL error code: " << e.getErrorCode(); 
-    cout << ", SQLState: " << e.getSQLState() << " )" << endl; 
+    delete con;
+  } catch (sql::SQLException &e) {
+    //æœ‰å¼‚å¸¸çš„æƒ…å†µä¸‹ï¼Œè¾“å‡ºå¼‚å¸¸
+    cout << "# ERR: SQLException in " << __FILE__;
+    cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+    cout << "# ERR: " << e.what();
+    cout << " (MySQL error code: " << e.getErrorCode();
+    cout << ", SQLState: " << e.getSQLState() << " )" << endl;
   }
 
   return 0;

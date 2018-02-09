@@ -1,15 +1,13 @@
-#include <iostream>
-#include <string>
+﻿#include <iostream>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <string>
 
-class test1
-{
+class test1 {
 public:
-  void fun1()
-  {
+  void fun1() {
     std::string cache_dir_temp("c:");
     std::string cache_dir_;
     boost::filesystem::path udp_path(cache_dir_temp);
@@ -26,8 +24,7 @@ public:
     std::cout << "file path:" << cache_dir_.c_str() << std::endl;
   }
 
-  void fun2()
-  {
+  void fun2() {
     boost::filesystem::path udp_path("C:\\Users\\Administrator");
     boost::filesystem::path root_path = udp_path.root_path();
     boost::filesystem::path root_name = udp_path.root_name();
@@ -40,8 +37,7 @@ public:
     }
   }
 
-  void fun3()
-  {
+  void fun3() {
     boost::filesystem::path p(__FILE__);
     boost::filesystem::path parent_path(p.parent_path().string());
 
@@ -51,19 +47,17 @@ public:
     std::cout << parent_path.string() << '\n';
   }
 
-  void set_cache_dir(std::string const& cache_dir_temp)
-  {
+  void set_cache_dir(std::string const &cache_dir_temp) {
     udp_disk_cache_path_ = cache_dir_temp;
-    if (!cache_dir_temp.empty()
-      && cache_dir_temp[cache_dir_temp.size() - 1] != '/'
-      && cache_dir_temp[cache_dir_temp.size() - 1] != '\\') {
-        udp_disk_cache_path_ += '/';
+    if (!cache_dir_temp.empty() &&
+        cache_dir_temp[cache_dir_temp.size() - 1] != '/' &&
+        cache_dir_temp[cache_dir_temp.size() - 1] != '\\') {
+      udp_disk_cache_path_ += '/';
     }
     udp_disk_cache_path_ += "UDP_info.ini";
   }
 
-  void save_to_disk()
-  {
+  void save_to_disk() {
     boost::property_tree::ptree pt;
     std::string first = "test1", second = "1";
 
@@ -71,15 +65,14 @@ public:
       pt.add(first + ".name1", second);
 
       boost::property_tree::ini_parser::write_ini(udp_disk_cache_path_, pt);
-    } catch (std::exception& e) {
-      std::cout<<"err:"<<e.what()<<std::endl;
+    } catch (std::exception &e) {
+      std::cout << "err:" << e.what() << std::endl;
     }
   }
   std::string udp_disk_cache_path_;
 };
 
-int main()
-{
+int main() {
   test1 t1;
   t1.fun1();
   t1.fun2();

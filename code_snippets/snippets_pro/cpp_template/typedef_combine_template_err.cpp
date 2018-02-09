@@ -1,23 +1,21 @@
-//typedef Óë Ä£°åº¯Êı ½áºÏ²úÉúµÄ¿Ó£¬Ô­Òò´ı·ÖÎö
+ï»¿// typedef ä¸ æ¨¡æ¿å‡½æ•° ç»“åˆäº§ç”Ÿçš„å‘ï¼ŒåŸå› å¾…åˆ†æ
 /*
-typedef Óë Ä£°åº¯Êı½áºÏÊ¹ÓÃµÄÊ±ºò£¨typedef ±ğÃûÔÂÄ£°å²ÎÊıÃûÏàÍ¬£©£¬
-  Èô2¸ö¶¨Òå¶¼·ÅÔÚÍ·ÎÄ¼şÖĞ£¬ÔÚÊ¹ÓÃµÄÊ±ºò »áÔì³ÉÊ¹ÓÃ´ï²»µ½Ô¤ÏëµÄĞ§¹û¡£
+typedef ä¸ æ¨¡æ¿å‡½æ•°ç»“åˆä½¿ç”¨çš„æ—¶å€™ï¼ˆtypedef åˆ«åæœˆæ¨¡æ¿å‚æ•°åç›¸åŒï¼‰ï¼Œ
+  è‹¥2ä¸ªå®šä¹‰éƒ½æ”¾åœ¨å¤´æ–‡ä»¶ä¸­ï¼Œåœ¨ä½¿ç”¨çš„æ—¶å€™ ä¼šé€ æˆä½¿ç”¨è¾¾ä¸åˆ°é¢„æƒ³çš„æ•ˆæœã€‚
 */
-#include <iostream>
-#include <boost/shared_ptr.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/typeof/typeof.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <iostream>
 
 #include "common.h"
 
 template <typename des>
-void test1::fun1(boost::shared_ptr<base>const& ptr_base)
-{
-  boost::shared_ptr<des> ptr_ch
-    = boost::dynamic_pointer_cast<des>(ptr_base);
+void test1::fun1(boost::shared_ptr<base> const &ptr_base) {
+  boost::shared_ptr<des> ptr_ch = boost::dynamic_pointer_cast<des>(ptr_base);
   if (ptr_ch) {
     ptr_ch->show();
   } else {
@@ -25,8 +23,7 @@ void test1::fun1(boost::shared_ptr<base>const& ptr_base)
   }
 }
 
-int main()
-{
+int main() {
   boost::shared_ptr<child1> ptr_ch1 = boost::make_shared<child1>();
   boost::shared_ptr<child2> ptr_ch2 = boost::make_shared<child2>();
 
@@ -37,44 +34,37 @@ int main()
   return 0;
 }
 
-
 //---------------------------------------------------------------------------
-  //common.h file:
+// common.h file:
 
-class base{
+class base {
 public:
   base() {}
   virtual ~base() {}
 };
 
-class child1 : public base{
+class child1 : public base {
 public:
   child1() {}
   ~child1() {}
-  void show(){
-    std::cout<<"child1"<<std::endl;
-  }
+  void show() { std::cout << "child1" << std::endl; }
 };
 
-class child2 : public base{
+class child2 : public base {
 public:
   child2() {}
   ~child2() {}
-  void show(){
-    std::cout<<"child2"<<std::endl;
-  }
+  void show() { std::cout << "child2" << std::endl; }
 };
 
-class test1{
+class test1 {
 public:
   test1() {}
   ~test1() {}
 
-  // ÔÚÀàÀïÃæ£¬Õâ¸ö typedef »áÔì³Éfun1º¯ÊıÕë¶ÔÖ÷º¯ÊıµÄµÚ¶ş´Îµ÷ÓÃ<child2> ²úÉúÎÊÌâ£¡
-  // ½â¾ö°ì·¨£ºtypedef child1 des; ·ÅÔÚcppÖĞ¼´¿É
+  // åœ¨ç±»é‡Œé¢ï¼Œè¿™ä¸ª typedef ä¼šé€ æˆfun1å‡½æ•°é’ˆå¯¹ä¸»å‡½æ•°çš„ç¬¬äºŒæ¬¡è°ƒç”¨<child2>
+  // äº§ç”Ÿé—®é¢˜ï¼ è§£å†³åŠæ³•ï¼štypedef child1 des; æ”¾åœ¨cppä¸­å³å¯
   typedef child1 des;
 
-  template <typename des>
-  void fun1(boost::shared_ptr<base>const& ptr_base);
+  template <typename des> void fun1(boost::shared_ptr<base> const &ptr_base);
 };
-

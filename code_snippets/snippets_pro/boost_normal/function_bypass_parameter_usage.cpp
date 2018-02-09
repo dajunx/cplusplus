@@ -1,30 +1,25 @@
-//boost function  Ê¡ÂÔ²ÎÊıµÄÊ¹ÓÃ·½·¨
+ï»¿// boost function  çœç•¥å‚æ•°çš„ä½¿ç”¨æ–¹æ³•
 
+#include <boost/algorithm/string.hpp>
+#include <boost/cstdint.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/shared_ptr.hpp>
 #include <iostream>
 #include <string>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/cstdint.hpp>
-#include <boost/algorithm/string.hpp>
 
-#include <boost/function.hpp>
 #include <boost/bind.hpp>
+#include <boost/function.hpp>
 #include <boost/lambda/lambda.hpp>
 
-void fun2(int a)
-{
-  int i = 0;
-}
+void fun2(int a) { int i = 0; }
 
-void fun1(boost::function<void()> p_fun)
-{
+void fun1(boost::function<void()> p_fun) {
   if (p_fun) {
     p_fun();
   }
 }
 
-int main()
-{
+int main() {
   boost::function<void()> fun_ = boost::bind(&fun2, 5);
   boost::function<void()> nullfun;
   fun1(nullfun);
