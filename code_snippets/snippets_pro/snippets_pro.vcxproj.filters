@@ -486,6 +486,12 @@
     <ClCompile Include="cpp_normal\template_err_case1.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
+    <ClCompile Include="cpp_normal\compare_files_contents.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_interface\mysql_connector_direct.cpp">
+      <Filter>normal_cplusplus\interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash_test\md5.h">
