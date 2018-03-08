@@ -8,11 +8,55 @@
 #include <sstream>
 #include <string>
 
+class DB_managment;
+class IO;
+class worker;
+
+//=============================IO===============================================
+
+class IO {
+public:
+  IO() {
+    readFileContent("test.log");
+  }
+  ~IO() {}
+
+  void wrapSave(MYSQL_ROW *pRes, int column) {
+    std::stringstream data;
+    for (int i = 0; i < column; ++i) {
+      data << (*pRes)[i] << " ";
+    }
+    data << std::endl;
+    saveContentToFile("test.log", data.str());
+    data.str("");
+  }
+
+  void readFileContent(const std::string fileName) {
+    return;
+    ///TODO 没想好这点要做什么
+    std::ifstream file(fileName);
+    std::string s;
+    while (file >> s) {
+      std::cout << "ch : " << s << std::endl;
+    }
+  }
+
+  void saveContentToFile(const std::string fileName,
+                         const std::string inputData) {
+    std::fstream file(fileName,
+                      std::fstream::in | std::fstream::out | std::fstream::app);
+    file << inputData;
+    file.close();
+  }
+};
+
 //=============================DB管理===========================================
 
 class DB_managment {
 public:
-  DB_managment() : conn(NULL), res(NULL) { databaseName.append("test"); }
+  DB_managment() : conn(NULL), res(NULL), p_io(new IO()) {
+    databaseName.append("test");
+  }
   ~DB_managment() {}
 
   int init(std::string userName, std::string pwd, std::string loginIp,
@@ -47,27 +91,27 @@ public:
     }
 
     //执行查询
-    if (mysql_real_query(conn, strSql.c_str(), strSql.size())) {///TODO偶尔崩溃
+    if (mysql_real_query(conn, strSql.c_str(),
+                         strSql.size())) { /// TODO偶尔崩溃
       // 查询出错
       return -1;
     }
 
-    ///TODO 完善mysql查询内容处理
     //获取返回结果
-    res = mysql_store_result(conn); ///TODO 偶尔崩溃
-
-    while(row = mysql_fetch_row(res)) {
-      std::cout<<"一行记录: ";
-      for(unsigned int j=0; j < mysql_num_fields(res); ++j)  
-      {  
-        std::cout << row[j] << " ";
-      }
-      std::cout<<"down."<<std::endl;
+    res = mysql_store_result(conn); /// TODO 偶尔崩溃
+    std::cout << "number of rows is :" << mysql_num_rows(res) << std::endl;
+    while (row = mysql_fetch_row(res)) {
+      //       std::cout << "一行记录: ";
+      //       for (unsigned int j = 0; j < mysql_num_fields(res); ++j) {
+      //         std::cout << row[j] << " ";
+      //       }
+      //       std::cout << "down." << std::endl;
+      p_io->wrapSave(&row, mysql_num_fields(res)); //保存到文本文件中
       Sleep(20);
     }
 
     mysql_free_result(res);
-    std::cout<<"search table down."<<std::endl<<std::endl;
+    std::cout << "search table down." << std::endl << std::endl;
     return 0;
   }
 
@@ -86,13 +130,15 @@ public:
 
   void print_errcode() {
     //?如何让错误码显示对于中文含义
-    std::cout << "handle execute err,err_code:" << mysql_errno(conn) << std::endl;
+    std::cout << "handle execute err,err_code:" << mysql_errno(conn)
+              << std::endl;
   }
 
   MYSQL *conn;
   MYSQL_RES *res;
   MYSQL_ROW row;
   std::string databaseName;
+  IO *p_io;
 };
 
 //=============================线程函数==========================================
@@ -126,29 +172,6 @@ DWORD WINAPI getDatas(LPVOID lpParameter) {
   }
   return 0L;
 }
-
-//=============================IO===============================================
-
-class IO {
-public:
-  IO() {}
-  ~IO() {}
-
-  void readFileContent(const std::string fileName) {
-    std::ifstream file(fileName);
-    std::string s;
-    while (file >> s) {
-      std::cout << "ch : " << s << std::endl;
-    }
-  }
-
-  void saveContentToFile(const std::string fileName) {
-    std::fstream file(fileName,
-                      std::fstream::in | std::fstream::out | std::fstream::app);
-    file << "lin";
-    file.close();
-  }
-};
 
 //=============================工作==========================================
 
