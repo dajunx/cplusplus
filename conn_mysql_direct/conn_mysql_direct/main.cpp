@@ -6,7 +6,7 @@
 int main() {
   worker w;
   w.chooseDatabase();
-  w.run_thread();
+  w.execute_sql();
 
   return 0;
 }

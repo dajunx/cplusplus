@@ -7,6 +7,7 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <vector>
 
 class DB_managment;
 class IO;
@@ -16,24 +17,16 @@ class worker;
 
 class IO {
 public:
-  IO() {
-    readFileContent("test.log");
-  }
+  IO() { readFileContent("test.log"); }
   ~IO() {}
 
-  void wrapSave(MYSQL_ROW *pRes, int column) {
-    std::stringstream data;
-    for (int i = 0; i < column; ++i) {
-      data << (*pRes)[i] << " ";
-    }
-    data << std::endl;
-    saveContentToFile("test.log", data.str());
-    data.str("");
+  void wrapSave(const std::string &data) {
+    saveContentToFile("test.log", data);
   }
 
   void readFileContent(const std::string fileName) {
     return;
-    ///TODO 没想好这点要做什么
+    /// TODO 没想好这点要做什么
     std::ifstream file(fileName);
     std::string s;
     while (file >> s) {
@@ -41,8 +34,8 @@ public:
     }
   }
 
-  void saveContentToFile(const std::string fileName,
-                         const std::string inputData) {
+  void saveContentToFile(const std::string &fileName,
+                         const std::string &inputData) {
     std::fstream file(fileName,
                       std::fstream::in | std::fstream::out | std::fstream::app);
     file << inputData;
@@ -55,11 +48,11 @@ public:
 class DB_managment {
 public:
   DB_managment() : conn(NULL), res(NULL), p_io(new IO()) {
-    databaseName.append("test");
+    dbName.append("test");
   }
   ~DB_managment() {}
 
-  int init(std::string userName, std::string pwd, std::string loginIp,
+  int init(std::string userName, std::string pwd, std::string ip,
            int loginPort) {
     //初始化
     conn = mysql_init(0);
@@ -69,9 +62,8 @@ public:
     }
 
     //连接数据库
-    if (!mysql_real_connect(conn, loginIp.c_str(), userName.c_str(),
-                            pwd.c_str(), databaseName.c_str(), loginPort, NULL,
-                            0)) {
+    if (!mysql_real_connect(conn, ip.c_str(), userName.c_str(), pwd.c_str(),
+                            dbName.c_str(), loginPort, NULL, 0)) {
       return -1;
     }
     conn->reconnect = 1;
@@ -79,40 +71,59 @@ public:
   }
 
   int choose_database() {
-    if (mysql_select_db(conn, databaseName.c_str())) {
+    if (mysql_select_db(conn, dbName.c_str())) {
       return -1;
     }
     return 0;
   }
 
+  // mysql api位置处偶尔崩溃，极可能是 db操作在多线程环境下造成。
   int run_search(const std::string &strSql) {
     if (conn == NULL) {
       return -1;
     }
 
     //执行查询
-    if (mysql_real_query(conn, strSql.c_str(),
-                         strSql.size())) { /// TODO偶尔崩溃
+    if (mysql_real_query(conn, strSql.c_str(), strSql.size())) {
       // 查询出错
       return -1;
     }
 
     //获取返回结果
-    res = mysql_store_result(conn); /// TODO 偶尔崩溃
-    std::cout << "number of rows is :" << mysql_num_rows(res) << std::endl;
+    res = mysql_store_result(conn);
+    // mysql_num_rows 字段数(列)
+    std::stringstream data;
+    int column = mysql_num_fields(res);
     while (row = mysql_fetch_row(res)) {
-      //       std::cout << "一行记录: ";
-      //       for (unsigned int j = 0; j < mysql_num_fields(res); ++j) {
-      //         std::cout << row[j] << " ";
-      //       }
-      //       std::cout << "down." << std::endl;
-      p_io->wrapSave(&row, mysql_num_fields(res)); //保存到文本文件中
-      Sleep(20);
+      for (int i = 0; i < column; ++i) {
+        // std::cout << (*row)[i] << " "; 读取第二个元素出错，移动步长错误
+        data << row[i] << " ";
+      }
+      data << std::endl;
+    }
+    p_io->wrapSave(data.str());
+
+    mysql_free_result(res);
+    return 0;
+  }
+
+  int run_getTableRecordCount(const std::string &strSql) {
+    if (conn == NULL) {
+      return -1;
+    }
+
+    if (mysql_real_query(conn, strSql.c_str(), strSql.size())) {
+      return -1;
+    }
+
+    res = mysql_store_result(conn);
+    int column = mysql_num_fields(res), recordCount = 0;
+    while (row = mysql_fetch_row(res)) {
+      recordCount = atoi(row[0]);
     }
 
     mysql_free_result(res);
-    std::cout << "search table down." << std::endl << std::endl;
-    return 0;
+    return recordCount;
   }
 
   int run_insert(const std::string &strSql) {
@@ -128,48 +139,99 @@ public:
     return 0;
   }
 
-  void print_errcode() {
+  void print_errcode(long iLine = -1) {
     //?如何让错误码显示对于中文含义
-    std::cout << "handle execute err,err_code:" << mysql_errno(conn)
-              << std::endl;
+    std::cout << "err ,err_code:" << mysql_errno(conn)
+              << ", line number: " << iLine << std::endl;
   }
 
   MYSQL *conn;
   MYSQL_RES *res;
   MYSQL_ROW row;
-  std::string databaseName;
+  std::string dbName;
   IO *p_io;
 };
 
 //=============================线程函数==========================================
 
-DWORD WINAPI addSomeDatas(LPVOID lpParameter) {
-  DB_managment *p_db_3306 = static_cast<DB_managment *>(lpParameter);
+struct strMultiThread {
+  strMultiThread() : pConnDb_3306(NULL), pConnDb_3307(NULL), mutex(NULL) {}
+  ~strMultiThread() {
+    if (pConnDb_3306) {
+      delete pConnDb_3306;
+      pConnDb_3306 = NULL;
+    }
 
+    if (pConnDb_3307) {
+      delete pConnDb_3307;
+      pConnDb_3307 = NULL;
+    }
+  }
+  DB_managment *pConnDb_3306;
+  DB_managment *pConnDb_3307;
+  HANDLE mutex;
+
+  /// TODO 设想的是只启动一个执行线程用来执行如下给予的
+  /// sql语句。在建一个线程来接应请求。
+  std::string strSql;
+};
+
+DWORD WINAPI addSomeDatas(LPVOID lpParameter) {
+  strMultiThread *pMultiThread = static_cast<strMultiThread *>(lpParameter);
+
+  return 0L;
   std::stringstream strSql;
   for (int i = 0; i < 1000; i++) {
     strSql << "insert into test values(" << i << ", " << i << i << i << ")";
-    if (p_db_3306->run_insert(strSql.str())) {
-      p_db_3306->print_errcode();
+    WaitForSingleObject(pMultiThread->mutex, INFINITE);
+    if (pMultiThread->pConnDb_3306->run_insert(strSql.str())) {
+      pMultiThread->pConnDb_3306->print_errcode(__LINE__);
     }
     strSql.str("");
+    ReleaseMutex(pMultiThread->mutex);
+    Sleep(1);
   }
+
+  std::cout << "add some datas into mysql finished." << std::endl;
   return 0L;
 }
 
 DWORD WINAPI getDatas(LPVOID lpParameter) {
-  DB_managment *p_db_3306 = static_cast<DB_managment *>(lpParameter);
+  strMultiThread *pMultiThread = static_cast<strMultiThread *>(lpParameter);
 
   std::stringstream strSql;
   while (true) {
     strSql << "select * from test";
-    if (p_db_3306->run_search(strSql.str())) {
-      p_db_3306->print_errcode();
+    WaitForSingleObject(pMultiThread->mutex, INFINITE);
+    if (pMultiThread->pConnDb_3307->run_search(strSql.str())) {
+      pMultiThread->pConnDb_3307->print_errcode(__LINE__);
     }
     strSql.str("");
-
+    ReleaseMutex(pMultiThread->mutex);
     Sleep(1000);
   }
+
+  std::cout << "search mysql finished." << std::endl;
+  return 0L;
+}
+
+DWORD WINAPI getDataCount(LPVOID lpParameter) {
+  strMultiThread *pMultiThread = static_cast<strMultiThread *>(lpParameter);
+
+  return 0L;
+  std::stringstream strSql;
+  {
+    strSql << "select count(*) record_count from test";
+    WaitForSingleObject(pMultiThread->mutex, INFINITE);
+    int ret = pMultiThread->pConnDb_3306->run_getTableRecordCount(strSql.str());
+    if (ret) {
+      pMultiThread->pConnDb_3306->print_errcode(__LINE__);
+    }
+    strSql.str("");
+    ReleaseMutex(pMultiThread->mutex);
+  }
+
+  std::cout << "get mysql table count finished." << std::endl;
   return 0L;
 }
 
@@ -177,35 +239,72 @@ DWORD WINAPI getDatas(LPVOID lpParameter) {
 
 class worker {
 public:
-  worker() : bInitRes(false) {
-    if (db_3306.init("root", "", "127.0.0.1", 3306)) {
-      db_3306.print_errcode();
+  worker() : bInitRes_(false) {
+    multiThread_.pConnDb_3306 = new DB_managment;
+    multiThread_.pConnDb_3307 = new DB_managment;
+    multiThread_.mutex = CreateMutex(NULL, false, NULL);
+
+    int res_init_two_db_point = 0;
+    if (multiThread_.pConnDb_3306) {
+      res_init_two_db_point += init_db(multiThread_.pConnDb_3306, 3306);
     }
-    bInitRes = true;
+
+    if (multiThread_.pConnDb_3307) {
+      res_init_two_db_point += init_db(multiThread_.pConnDb_3307, 3307);
+    }
+
+    if (2 == res_init_two_db_point) {
+      bInitRes_ = true;
+    } else {
+      std::cout << "init mysql connect failed." << std::endl;
+    }
   }
   ~worker() {}
 
-  void chooseDatabase() {
-    if (bInitRes && db_3306.choose_database()) {
-      db_3306.print_errcode();
+private:
+  int init_db(DB_managment *pdb, int port) {
+    if (pdb->init("kaka", "", "192.168.221.138", port)) {
+      pdb->print_errcode(__LINE__);
+      return 0;
     }
+    return 1;
   }
 
-  void run_thread() {
-    if (!bInitRes) {
+public:
+  void chooseDatabase() {
+    if (!bInitRes_) {
       return;
     }
 
-    HANDLE thread1 = CreateThread(NULL, 0, addSomeDatas, &db_3306, 0, NULL);
-    HANDLE thread2 = CreateThread(NULL, 0, getDatas, &db_3306, 0, NULL);
+    if (multiThread_.pConnDb_3306->choose_database() &&
+        multiThread_.pConnDb_3307->choose_database()) {
+      multiThread_.pConnDb_3306->print_errcode(__LINE__);
+    }
+  }
+
+  void execute_sql() {
+    if (!bInitRes_) {
+      return;
+    }
+
+    std::cout << "start two thread, one for addData, one for getData."
+              << std::endl;
+    HANDLE thread1 =
+        CreateThread(NULL, 0, addSomeDatas, &multiThread_, 0, NULL);
+    HANDLE thread2 = CreateThread(NULL, 0, getDatas, &multiThread_, 0, NULL);
+    HANDLE thread3 =
+        CreateThread(NULL, 0, getDataCount, &multiThread_, 0, NULL);
     WaitForSingleObject(thread1, INFINITE);
     WaitForSingleObject(thread2, INFINITE);
+    WaitForSingleObject(thread3, INFINITE);
 
+    std::cout << "begin close threads." << std::endl;
     CloseHandle(thread1);
     CloseHandle(thread2);
+    CloseHandle(thread3);
   }
 
 private:
-  DB_managment db_3306;
-  bool bInitRes;
+  bool bInitRes_;
+  strMultiThread multiThread_;
 };
