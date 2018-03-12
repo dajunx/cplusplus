@@ -4,10 +4,10 @@
 
 #include <fstream>
 #include <iostream>
+#include <list>
 #include <map>
 #include <sstream>
 #include <string>
-#include <vector>
 
 class DB_managment;
 class IO;
@@ -20,8 +20,8 @@ public:
   IO() { readFileContent("test.log"); }
   ~IO() {}
 
-  void wrapSave(const std::string &data) {
-    saveContentToFile("test.log", data);
+  void wrapSave(const std::string &fileName, const std::string &data) {
+    saveContentToFile(fileName, data);
   }
 
   void readFileContent(const std::string fileName) {
@@ -101,13 +101,13 @@ public:
       }
       data << std::endl;
     }
-    p_io->wrapSave(data.str());
+    p_io->wrapSave("test.log", data.str());
 
     mysql_free_result(res);
     return 0;
   }
 
-  int run_getTableRecordCount(const std::string &strSql) {
+  int run_getTableRecordCount(const std::string &strSql, int &recordCount) {
     if (conn == NULL) {
       return -1;
     }
@@ -117,13 +117,14 @@ public:
     }
 
     res = mysql_store_result(conn);
-    int column = mysql_num_fields(res), recordCount = 0;
+    int column = mysql_num_fields(res);
     while (row = mysql_fetch_row(res)) {
       recordCount = atoi(row[0]);
     }
 
+    std::cout << "table record count: " << recordCount << std::endl;
     mysql_free_result(res);
-    return recordCount;
+    return 0;
   }
 
   int run_insert(const std::string &strSql) {
@@ -131,6 +132,7 @@ public:
       return -1;
     }
 
+    // p_io->wrapSave("insertSql.log", strSql);
     //执行查询
     if (mysql_real_query(conn, strSql.c_str(), strSql.size())) {
       // 查询出错
@@ -151,6 +153,41 @@ public:
   std::string dbName;
   IO *p_io;
 };
+
+//=============================消息容器==========================================
+
+struct strRequest {
+  strRequest(const std::string &sql, int type) : strSql(sql), iSqlType(type) {}
+  ~strRequest() {}
+  std::string strSql;
+  int iSqlType;
+};
+
+enum enumIOType { tIOERR, tINPUT, tGET };
+enum enumSqlType { tSqlERR, tInsert, tGetRecordCount, tSimpleSearch };
+static std::list<strRequest> slist_str;
+static HANDLE mutex_data_box = CreateMutex(NULL, false, NULL);
+void data_box(int ioType, int &SqlType, std::string &str_data) {
+  WaitForSingleObject(mutex_data_box, INFINITE);
+  switch (ioType) {
+  case tINPUT: {
+    strRequest req(str_data, SqlType);
+    slist_str.insert(slist_str.end(), req);
+  } break;
+  case tGET: {
+    if (slist_str.empty()) {
+      ReleaseMutex(mutex_data_box);
+      return;
+    }
+
+    str_data.swap(slist_str.front().strSql);
+    SqlType = slist_str.front().iSqlType;
+    slist_str.pop_front();
+  } break;
+  default: { std::cout << "" << std::endl; } break;
+  }
+  ReleaseMutex(mutex_data_box);
+}
 
 //=============================线程函数==========================================
 
@@ -173,65 +210,80 @@ struct strMultiThread {
 
   /// TODO 设想的是只启动一个执行线程用来执行如下给予的
   /// sql语句。在建一个线程来接应请求。
-  std::string strSql;
+  // std::string strSql;
 };
 
-DWORD WINAPI addSomeDatas(LPVOID lpParameter) {
-  strMultiThread *pMultiThread = static_cast<strMultiThread *>(lpParameter);
+DWORD WINAPI AddRequest(LPVOID lpParameter) {
+  strRequest *pRequest = static_cast<strRequest *>(lpParameter);
 
-  return 0L;
-  std::stringstream strSql;
+  /// TODO  模拟请求,暂时写死，有更好的方案再修改;
+  std::stringstream ssSql;
+  std::string strSql;
+  int iSqlType = 0;
+
+  //插入数据
+  ssSql << "insert into test.test values";
   for (int i = 0; i < 1000; i++) {
-    strSql << "insert into test values(" << i << ", " << i << i << i << ")";
-    WaitForSingleObject(pMultiThread->mutex, INFINITE);
-    if (pMultiThread->pConnDb_3306->run_insert(strSql.str())) {
-      pMultiThread->pConnDb_3306->print_errcode(__LINE__);
-    }
-    strSql.str("");
-    ReleaseMutex(pMultiThread->mutex);
-    Sleep(1);
+    ssSql << "(" << i << ", " << i << i << "),";
   }
+  strSql = ssSql.str();
+  strSql.pop_back();
+  iSqlType = tInsert;
+  data_box(tINPUT, iSqlType, strSql);
 
-  std::cout << "add some datas into mysql finished." << std::endl;
+  //查询数据条目
+  ssSql.str("");
+  strSql.clear();
+  ssSql << "select count(*) from test.test";
+  iSqlType = tGetRecordCount;
+  data_box(tINPUT, iSqlType, ssSql.str());
+
+  //普通查询
+  ssSql.str("");
+  ssSql << "select * from test.test";
+  iSqlType = tSimpleSearch;
+  data_box(tINPUT, iSqlType, ssSql.str());
+
+  std::cout << "add request finished." << std::endl;
   return 0L;
 }
 
-DWORD WINAPI getDatas(LPVOID lpParameter) {
+DWORD WINAPI HandleReq(LPVOID lpParameter) {
   strMultiThread *pMultiThread = static_cast<strMultiThread *>(lpParameter);
 
-  std::stringstream strSql;
+  std::string strSql;
+  int iSqlType = 0;
   while (true) {
-    strSql << "select * from test";
-    WaitForSingleObject(pMultiThread->mutex, INFINITE);
-    if (pMultiThread->pConnDb_3307->run_search(strSql.str())) {
-      pMultiThread->pConnDb_3307->print_errcode(__LINE__);
+    data_box(tGET, iSqlType, strSql);
+    DB_managment *pdb = pMultiThread->pConnDb_3306;
+
+    /// TODo 插入数据使用3306实例，查询类使用3307
+    switch (iSqlType) {
+    case tInsert: {
+      if (pdb->run_insert(strSql)) {
+        pdb->print_errcode(__LINE__);
+      }
+    } break;
+    case tGetRecordCount: {
+      int recordCount = 0;
+      if (pdb->run_getTableRecordCount(strSql, recordCount)) {
+        pdb->print_errcode(__LINE__);
+      }
+    } break;
+    case tSimpleSearch: {
+      if (pdb->run_search(strSql)) {
+        pdb->print_errcode(__LINE__);
+      }
+    } break;
+    default:
+      break;
     }
-    strSql.str("");
-    ReleaseMutex(pMultiThread->mutex);
+
+    iSqlType = 0;
     Sleep(1000);
   }
 
-  std::cout << "search mysql finished." << std::endl;
-  return 0L;
-}
-
-DWORD WINAPI getDataCount(LPVOID lpParameter) {
-  strMultiThread *pMultiThread = static_cast<strMultiThread *>(lpParameter);
-
-  return 0L;
-  std::stringstream strSql;
-  {
-    strSql << "select count(*) record_count from test";
-    WaitForSingleObject(pMultiThread->mutex, INFINITE);
-    int ret = pMultiThread->pConnDb_3306->run_getTableRecordCount(strSql.str());
-    if (ret) {
-      pMultiThread->pConnDb_3306->print_errcode(__LINE__);
-    }
-    strSql.str("");
-    ReleaseMutex(pMultiThread->mutex);
-  }
-
-  std::cout << "get mysql table count finished." << std::endl;
+  std::cout << "handle request finished." << std::endl;
   return 0L;
 }
 
@@ -289,19 +341,14 @@ public:
 
     std::cout << "start two thread, one for addData, one for getData."
               << std::endl;
-    HANDLE thread1 =
-        CreateThread(NULL, 0, addSomeDatas, &multiThread_, 0, NULL);
-    HANDLE thread2 = CreateThread(NULL, 0, getDatas, &multiThread_, 0, NULL);
-    HANDLE thread3 =
-        CreateThread(NULL, 0, getDataCount, &multiThread_, 0, NULL);
+    HANDLE thread1 = CreateThread(NULL, 0, HandleReq, &multiThread_, 0, NULL);
+    HANDLE thread2 = CreateThread(NULL, 0, AddRequest, &multiThread_, 0, NULL);
     WaitForSingleObject(thread1, INFINITE);
     WaitForSingleObject(thread2, INFINITE);
-    WaitForSingleObject(thread3, INFINITE);
 
     std::cout << "begin close threads." << std::endl;
     CloseHandle(thread1);
     CloseHandle(thread2);
-    CloseHandle(thread3);
   }
 
 private:
