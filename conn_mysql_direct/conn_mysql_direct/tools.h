@@ -13,7 +13,12 @@ class DB_managment;
 class IO;
 class worker;
 
-//=============================IO===============================================
+//=============================数据定义=========================================
+
+enum enumIOType { tIOERR, tINPUT, tGET };
+enum enumSqlType { tSqlERR, tInsert, tGetRecordCount, tSimpleSearch };
+
+//=============================IO=============================================
 
 class IO {
 public:
@@ -77,74 +82,60 @@ public:
     return 0;
   }
 
-  // mysql api位置处偶尔崩溃，极可能是 db操作在多线程环境下造成。
-  int run_search(const std::string &strSql) {
-    if (conn == NULL) {
-      return -1;
-    }
-
-    //执行查询
-    if (mysql_real_query(conn, strSql.c_str(), strSql.size())) {
-      // 查询出错
-      return -1;
-    }
-
-    //获取返回结果
-    res = mysql_store_result(conn);
-    // mysql_num_rows 字段数(列)
-    std::stringstream data;
-    int column = mysql_num_fields(res);
-    while (row = mysql_fetch_row(res)) {
-      for (int i = 0; i < column; ++i) {
-        // std::cout << (*row)[i] << " "; 读取第二个元素出错，移动步长错误
-        data << row[i] << " ";
-      }
-      data << std::endl;
-    }
-    p_io->wrapSave("test.log", data.str());
-
-    mysql_free_result(res);
-    return 0;
-  }
-
-  int run_getTableRecordCount(const std::string &strSql, int &recordCount) {
-    if (conn == NULL) {
-      return -1;
-    }
-
-    if (mysql_real_query(conn, strSql.c_str(), strSql.size())) {
-      return -1;
-    }
-
-    res = mysql_store_result(conn);
-    int column = mysql_num_fields(res);
-    while (row = mysql_fetch_row(res)) {
-      recordCount = atoi(row[0]);
-    }
-
-    std::cout << "table record count: " << recordCount << std::endl;
-    mysql_free_result(res);
-    return 0;
-  }
-
-  int run_insert(const std::string &strSql) {
+  void doSql(const std::string &strSql, int iSqlType) {
     if (conn == NULL || strSql.empty()) {
-      return -1;
+      return;
     }
 
-    // p_io->wrapSave("insertSql.log", strSql);
-    //执行查询
     if (mysql_real_query(conn, strSql.c_str(), strSql.size())) {
-      // 查询出错
-      return -1;
+      return;
     }
-    return 0;
+
+    res = mysql_store_result(conn);
+    if (res == NULL) {
+      print_errcode(__LINE__);
+      return;
+    }
+
+    // 结果处理
+    switch (iSqlType) {
+    case tInsert: {
+      // 插入数据类型 sql无返回值
+    } break;
+    case tGetRecordCount: {
+      int recordCount = 0;
+      while (row = mysql_fetch_row(res)) {
+        recordCount = atoi(row[0]);
+      }
+      std::cout << "table record count: " << recordCount << std::endl;
+    } break;
+    case tSimpleSearch: {
+      std::stringstream data;
+      int column = mysql_num_fields(res);
+      while (row = mysql_fetch_row(res)) {
+        for (int i = 0; i < column; ++i) {
+          data << row[i] << " ";
+        }
+        data << std::endl;
+      }
+      p_io->wrapSave("test.log", data.str());
+    } break;
+    default:
+      break;
+    }
+
+    mysql_free_result(res);
+    std::cout << "execute sql done." << std::endl;
   }
 
-  void print_errcode(long iLine = -1) {
+  void logSqlContent(const std::string &sql) {
+    p_io->wrapSave("execute_sql.log", sql);
+  }
+
+  void print_errcode(long lineNumber = -1) {
     //?如何让错误码显示对于中文含义
     std::cout << "err ,err_code:" << mysql_errno(conn)
-              << ", line number: " << iLine << std::endl;
+              << ", line number: " << lineNumber << std::endl;
   }
 
   MYSQL *conn;
@@ -163,8 +154,6 @@ struct strRequest {
   int iSqlType;
 };
 
-enum enumIOType { tIOERR, tINPUT, tGET };
-enum enumSqlType { tSqlERR, tInsert, tGetRecordCount, tSimpleSearch };
 static std::list<strRequest> slist_str;
 static HANDLE mutex_data_box = CreateMutex(NULL, false, NULL);
 void data_box(int ioType, int &SqlType, std::string &str_data) {
@@ -252,34 +241,15 @@ DWORD WINAPI HandleReq(LPVOID lpParameter) {
   strMultiThread *pMultiThread = static_cast<strMultiThread *>(lpParameter);
 
   std::string strSql;
-  int iSqlType = 0;
   while (true) {
+    int iSqlType = tSqlERR;
     data_box(tGET, iSqlType, strSql);
     DB_managment *pdb = pMultiThread->pConnDb_3306;
 
     /// TODo 插入数据使用3306实例，查询类使用3307
-    switch (iSqlType) {
-    case tInsert: {
-      if (pdb->run_insert(strSql)) {
-        pdb->print_errcode(__LINE__);
-      }
-    } break;
-    case tGetRecordCount: {
-      int recordCount = 0;
-      if (pdb->run_getTableRecordCount(strSql, recordCount)) {
-        pdb->print_errcode(__LINE__);
-      }
-    } break;
-    case tSimpleSearch: {
-      if (pdb->run_search(strSql)) {
-        pdb->print_errcode(__LINE__);
-      }
-    } break;
-    default:
-      break;
+    if (iSqlType != tSqlERR) {
+      pdb->doSql(strSql, iSqlType);
     }
-
-    iSqlType = 0;
     Sleep(1000);
   }
 
@@ -297,19 +267,15 @@ public:
     multiThread_.mutex = CreateMutex(NULL, false, NULL);
 
     int res_init_two_db_point = 0;
-    if (multiThread_.pConnDb_3306) {
-      res_init_two_db_point += init_db(multiThread_.pConnDb_3306, 3306);
-    }
 
-    if (multiThread_.pConnDb_3307) {
-      res_init_two_db_point += init_db(multiThread_.pConnDb_3307, 3307);
-    }
-
-    if (2 == res_init_two_db_point) {
-      bInitRes_ = true;
-    } else {
+    if (!multiThread_.pConnDb_3306 || !multiThread_.pConnDb_3307) {
       std::cout << "init mysql connect failed." << std::endl;
+      return;
     }
+
+    init_db(multiThread_.pConnDb_3306, 3306);
+    init_db(multiThread_.pConnDb_3307, 3307);
+    bInitRes_ = true;
   }
   ~worker() {}
 
