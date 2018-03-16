@@ -133,7 +133,6 @@ public:
   }
 
   void print_errcode(long lineNumber = -1) {
-    //?如何让错误码显示对于中文含义
     std::cout << "err ,err_code:" << mysql_errno(conn)
               << ", line number: " << lineNumber << std::endl;
   }
@@ -181,7 +180,37 @@ void data_box(int ioType, int &SqlType, std::string &str_data) {
 //=============================线程函数==========================================
 
 struct strMultiThread {
-  strMultiThread() : pConnDb_3306(NULL), pConnDb_3307(NULL), mutex(NULL) {}
+  strMultiThread()
+      : pConnDb_3306(new DB_managment), pConnDb_3307(new DB_managment),
+        mutex(NULL) {}
+
+  int init() {
+    int ret = 1;
+    do {
+      if (init_db(pConnDb_3306, 3306) || init_db(pConnDb_3307, 3307)) {
+        break;
+      }
+      mutex = CreateMutex(NULL, false, NULL);
+      ret = 0;
+    } while (false);
+
+    return ret;
+  }
+
+  int init_db(DB_managment *pdb, int port) {
+    if (pdb->init("kaka", "kaka", "172.20.24.190", port)) {
+      pdb->print_errcode(__LINE__);
+      return 1;
+    }
+    return 0;
+  }
+
+  void chooseDatabase() {
+    if (pConnDb_3306->choose_database() && pConnDb_3307->choose_database()) {
+      pConnDb_3306->print_errcode(__LINE__);
+    }
+  }
+
   ~strMultiThread() {
     if (pConnDb_3306) {
       delete pConnDb_3306;
@@ -196,10 +225,6 @@ struct strMultiThread {
   DB_managment *pConnDb_3306;
   DB_managment *pConnDb_3307;
   HANDLE mutex;
-
-  /// TODO 设想的是只启动一个执行线程用来执行如下给予的
-  /// sql语句。在建一个线程来接应请求。
-  // std::string strSql;
 };
 
 DWORD WINAPI AddRequest(LPVOID lpParameter) {
@@ -262,31 +287,11 @@ DWORD WINAPI HandleReq(LPVOID lpParameter) {
 class worker {
 public:
   worker() : bInitRes_(false) {
-    multiThread_.pConnDb_3306 = new DB_managment;
-    multiThread_.pConnDb_3307 = new DB_managment;
-    multiThread_.mutex = CreateMutex(NULL, false, NULL);
-
-    int res_init_two_db_point = 0;
-
-    if (!multiThread_.pConnDb_3306 || !multiThread_.pConnDb_3307) {
-      std::cout << "init mysql connect failed." << std::endl;
-      return;
+    if (!multiThread_.init()) {
+      bInitRes_ = true;
     }
-
-    init_db(multiThread_.pConnDb_3306, 3306);
-    init_db(multiThread_.pConnDb_3307, 3307);
-    bInitRes_ = true;
   }
   ~worker() {}
-
-private:
-  int init_db(DB_managment *pdb, int port) {
-    if (pdb->init("kaka", "", "192.168.221.138", port)) {
-      pdb->print_errcode(__LINE__);
-      return 0;
-    }
-    return 1;
-  }
 
 public:
   void chooseDatabase() {
@@ -294,10 +299,7 @@ public:
       return;
     }
 
-    if (multiThread_.pConnDb_3306->choose_database() &&
-        multiThread_.pConnDb_3307->choose_database()) {
-      multiThread_.pConnDb_3306->print_errcode(__LINE__);
-    }
+    multiThread_.chooseDatabase();
   }
 
   void execute_sql() {
