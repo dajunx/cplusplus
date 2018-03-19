@@ -1,6 +1,8 @@
+#ifndef DB_H
+#define DB_H
+
 #include <Windows.h>
 #include <mysql.h>
-#include <winsock.h>
 
 #include <fstream>
 #include <iostream>
@@ -323,3 +325,5 @@ private:
   bool bInitRes_;
   strMultiThread multiThread_;
 };
+
+#endif
