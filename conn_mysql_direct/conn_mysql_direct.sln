@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "conn_mysql_direct", "conn_mysql_direct\conn_mysql_direct.vcxproj", "{EE3E89DC-C4DA-4665-A75D-CF1A69984000}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client", "client\client.vcxproj", "{A96D33E2-E778-4103-AC3F-BD0F4CDA903C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,12 @@ Global
 		{EE3E89DC-C4DA-4665-A75D-CF1A69984000}.Release|Win32.Build.0 = Release|Win32
 		{EE3E89DC-C4DA-4665-A75D-CF1A69984000}.Release|x64.ActiveCfg = Release|x64
 		{EE3E89DC-C4DA-4665-A75D-CF1A69984000}.Release|x64.Build.0 = Release|x64
+		{A96D33E2-E778-4103-AC3F-BD0F4CDA903C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A96D33E2-E778-4103-AC3F-BD0F4CDA903C}.Debug|Win32.Build.0 = Debug|Win32
+		{A96D33E2-E778-4103-AC3F-BD0F4CDA903C}.Debug|x64.ActiveCfg = Debug|Win32
+		{A96D33E2-E778-4103-AC3F-BD0F4CDA903C}.Release|Win32.ActiveCfg = Release|Win32
+		{A96D33E2-E778-4103-AC3F-BD0F4CDA903C}.Release|Win32.Build.0 = Release|Win32
+		{A96D33E2-E778-4103-AC3F-BD0F4CDA903C}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,24 +9,31 @@ enum enumNetType { tNetServer, tNetClient };
 
 class net_manage {
 public:
-  net_manage(enumNetType netType) {
+  net_manage(enumNetType nt) : netType_(nt) {
+    int ret = -2;
     init_net_lib();
 
-    switch (netType) {
+    switch (netType_) {
     case tNetClient:
-      init_net_client("127.0.0.1", 9998);
+      ret = init_net_client("127.0.0.1", 9999);
       break;
     case tNetServer:
-      init_net_server(9999);
+      ret = init_net_server(9998);
       break;
     default:
       break;
     }
-    std::cout << "init net err, net type is:" << netType << std::endl;
+
+    if (-1 == ret) {
+      std::cout << "init net err, net type is:" << netType_ << std::endl;
+    }
   }
   ~net_manage() {
-    closesocket(socket_server_);
-    closesocket(socket_client_);
+    if (tNetClient == netType_) {
+      closesocket(socket_client_);
+    } else {
+      closesocket(socket_server_);
+    }
   }
 
 private:
@@ -38,12 +45,11 @@ private:
     }
   }
 
-  //===============================服务端======================================
-  void init_net_server(int port) {
+  int init_net_server(int port) {
     socket_server_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (socket_server_ == INVALID_SOCKET) {
       printf("socket error !");
-      return;
+      return -1;
     }
 
     sin_server_.sin_family = AF_INET;
@@ -56,12 +62,29 @@ private:
 
     if (listen(socket_server_, 5) == SOCKET_ERROR) {
       printf("listen error !");
-      return;
+      return -1;
     }
+
+    return 0;
   }
 
+  int init_net_client(const std::string &ip, int port) {
+    socket_client_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (socket_client_ == INVALID_SOCKET) {
+      printf("invalid socket !");
+      return -1;
+    }
+
+    sin_client_.sin_family = AF_INET;
+    sin_client_.sin_port = htons(port);
+    sin_client_.sin_addr.S_un.S_addr = inet_addr(ip.c_str());
+    return 0;
+  }
+
+public:
   void accept_new_conn() {
     printf("等待连接...\n");
+    remotAddrlen_ = sizeof(remoteAddr_);
     accept_socket_ =
         accept(socket_server_, (SOCKADDR *)&remoteAddr_, &remotAddrlen_);
     if (accept_socket_ == INVALID_SOCKET) {
@@ -72,40 +95,40 @@ private:
     printf("接受到一个连接：%s \r\n", inet_ntoa(remoteAddr_.sin_addr));
   }
 
-  //===============================客户端======================================
-  void init_net_client(const std::string &ip, int port) {
-    socket_client_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (socket_client_ == INVALID_SOCKET) {
-      printf("invalid socket !");
-      return;
-    }
-
-    sin_client_.sin_family = AF_INET;
-    sin_client_.sin_port = htons(port);
-    sin_client_.sin_addr.S_un.S_addr = inet_addr(ip.c_str());
-  }
-
   int conn_server() {
-    if (connect(socket_client_, (sockaddr *)&sin_client_,
-                sizeof(sin_client_)) != SOCKET_ERROR) {
-      return 1;
+    int ret =
+        connect(socket_client_, (sockaddr *)&sin_client_, sizeof(sin_client_));
+    if (SOCKET_ERROR == ret) {
+      int err_code = WSAGetLastError();
+      return err_code;
     }
     return 0;
   }
 
 public:
   //===============================收发数据=====================================
-  ///TODO 有了数据，但是得把数据结构化 --add by ljj 2018-03-19
-  void receive_data(SOCKET target_socket) {
-    int ret = recv(target_socket, receive_data_, 255, 0);
+  /// TODO 有了数据，但是得把数据结构化 --add by ljj 2018-03-19
+  int receive_data(std::string &strReceiveData) {
+    int ret = recv(accept_socket_, receive_data_, 255, 0);
     if (ret > 0) {
       receive_data_[ret] = 0x00;
-      printf(receive_data_);
+    } else {
+      int err_code = WSAGetLastError();
+      return err_code;
     }
+
+    return 0;
   }
 
-  void send_data(SOCKET target_socket, const std::string &strSendData) {
-    send(target_socket, strSendData.c_str(), strSendData.size(), 0);
+  int send_data(const std::string &strSendData) {
+    int ret = send(socket_client_, strSendData.c_str(), strSendData.size(), 0);
+    if (SOCKET_ERROR == ret) {
+      int err_code = WSAGetLastError();
+      return err_code;
+    } else {
+    }
+
+    return 0;
   }
 
 private:
@@ -122,6 +145,7 @@ private:
 
   // data.
   char receive_data_[255];
+  enumNetType netType_;
 };
 
 #endif

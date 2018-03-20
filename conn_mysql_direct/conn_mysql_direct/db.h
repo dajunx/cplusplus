@@ -7,13 +7,18 @@
 #include <fstream>
 #include <iostream>
 #include <list>
-#include <map>
 #include <sstream>
 #include <string>
+#include <vector>
 
 class DB_managment;
 class IO;
 class worker;
+
+#define LogErrorSql(lineNumber)                                                \
+  std::stringstream ssErrContent;                                              \
+  ssErrContent << strSql << ", line:" << (lineNumber) << "\n";                 \
+  p_io->wrapSave("err_sql.log", ssErrContent.str());
 
 //=============================数据定义=========================================
 
@@ -62,7 +67,14 @@ public:
   int init(std::string userName, std::string pwd, std::string ip,
            int loginPort) {
     //初始化
-    conn = mysql_init(0);
+    try {
+      //如下api使用出现问题，调用直接程序退出??? Release 没有问题
+      //原因 运行时使用 libmysqld.dll 会有问题，使用 libmysql.dll则没问题？？？
+      conn = mysql_init(NULL);
+    } catch (int e) {
+      int i = 0;
+    }
+    // conn = mysql_init(0);
 
     if (conn == NULL) {
       return -1;
@@ -85,17 +97,21 @@ public:
   }
 
   void doSql(const std::string &strSql, int iSqlType) {
+    p_io->wrapSave("doSql.log", strSql + "\n");
     if (conn == NULL || strSql.empty()) {
+      LogErrorSql(__LINE__);
       return;
     }
 
     if (mysql_real_query(conn, strSql.c_str(), strSql.size())) {
+      LogErrorSql(__LINE__);
       return;
     }
 
     res = mysql_store_result(conn);
-    if (res == NULL) {
+    if (res == NULL && iSqlType != iSqlType) {
       print_errcode(__LINE__);
+      LogErrorSql(__LINE__);
       return;
     }
 
@@ -127,7 +143,6 @@ public:
     }
 
     mysql_free_result(res);
-    std::cout << "execute sql done." << std::endl;
   }
 
   void logSqlContent(const std::string &sql) {
@@ -149,20 +164,39 @@ public:
 //=============================消息容器==========================================
 
 struct strRequest {
-  strRequest(const std::string &sql, int type) : strSql(sql), iSqlType(type) {}
+  strRequest(const std::string &sql, enumSqlType type)
+      : strSql(sql), iSqlType(type) {}
   ~strRequest() {}
   std::string strSql;
-  int iSqlType;
+  enumSqlType iSqlType;
 };
 
 static std::list<strRequest> slist_str;
+std::vector<std::string> vecInsertSql;
 static HANDLE mutex_data_box = CreateMutex(NULL, false, NULL);
-void data_box(int ioType, int &SqlType, std::string &str_data) {
+void data_box(enumIOType ioType, enumSqlType &SqlType, std::string &str_data) {
   WaitForSingleObject(mutex_data_box, INFINITE);
   switch (ioType) {
   case tINPUT: {
-    strRequest req(str_data, SqlType);
-    slist_str.insert(slist_str.end(), req);
+    //拆分裹在一起的
+    // insert语句，原因：mysql_real_query只能一条一条的执行插入语句;
+    if (tInsert == SqlType) {
+      while (!str_data.empty() &&
+             str_data.find_first_of(';') != std::string::npos) {
+        std::string::size_type pos_begin = 0, pos_end = 0;
+        pos_end = str_data.find_first_of(';');
+        strRequest req(str_data.substr(pos_begin, pos_end - pos_begin + 1),
+                       SqlType);
+        slist_str.insert(slist_str.end(), req);
+        str_data.erase(pos_begin, pos_end - pos_begin + 1);
+      }
+    } else {
+      strRequest req(str_data, SqlType);
+      slist_str.insert(slist_str.end(), req);
+    }
+
+    // strRequest req(str_data, SqlType);
+    // slist_str.insert(slist_str.end(), req);
   } break;
   case tGET: {
     if (slist_str.empty()) {
@@ -229,47 +263,12 @@ struct strMultiThread {
   HANDLE mutex;
 };
 
-DWORD WINAPI AddRequest(LPVOID lpParameter) {
-  strRequest *pRequest = static_cast<strRequest *>(lpParameter);
-
-  /// TODO  模拟请求,暂时写死，有更好的方案再修改;
-  std::stringstream ssSql;
-  std::string strSql;
-  int iSqlType = 0;
-
-  //插入数据
-  ssSql << "insert into test.test values";
-  for (int i = 0; i < 1000; i++) {
-    ssSql << "(" << i << ", " << i << i << "),";
-  }
-  strSql = ssSql.str();
-  strSql.pop_back();
-  iSqlType = tInsert;
-  data_box(tINPUT, iSqlType, strSql);
-
-  //查询数据条目
-  ssSql.str("");
-  strSql.clear();
-  ssSql << "select count(*) from test.test";
-  iSqlType = tGetRecordCount;
-  data_box(tINPUT, iSqlType, ssSql.str());
-
-  //普通查询
-  ssSql.str("");
-  ssSql << "select * from test.test";
-  iSqlType = tSimpleSearch;
-  data_box(tINPUT, iSqlType, ssSql.str());
-
-  std::cout << "add request finished." << std::endl;
-  return 0L;
-}
-
 DWORD WINAPI HandleReq(LPVOID lpParameter) {
   strMultiThread *pMultiThread = static_cast<strMultiThread *>(lpParameter);
 
   std::string strSql;
   while (true) {
-    int iSqlType = tSqlERR;
+    enumSqlType iSqlType = tSqlERR;
     data_box(tGET, iSqlType, strSql);
     DB_managment *pdb = pMultiThread->pConnDb_3306;
 
@@ -277,7 +276,8 @@ DWORD WINAPI HandleReq(LPVOID lpParameter) {
     if (iSqlType != tSqlERR) {
       pdb->doSql(strSql, iSqlType);
     }
-    Sleep(1000);
+    Sleep(10);
+    strSql.clear();
   }
 
   std::cout << "handle request finished." << std::endl;
@@ -293,7 +293,11 @@ public:
       bInitRes_ = true;
     }
   }
-  ~worker() {}
+  ~worker() {
+    std::cout << "begin close threads." << std::endl;
+    WaitForSingleObject(thread_handler, INFINITE);
+    CloseHandle(thread_handler);
+  }
 
 public:
   void chooseDatabase() {
@@ -304,24 +308,15 @@ public:
     multiThread_.chooseDatabase();
   }
 
-  void execute_sql() {
+  void start_handle_request() {
     if (!bInitRes_) {
       return;
     }
-
-    std::cout << "start two thread, one for addData, one for getData."
-              << std::endl;
-    HANDLE thread1 = CreateThread(NULL, 0, HandleReq, &multiThread_, 0, NULL);
-    HANDLE thread2 = CreateThread(NULL, 0, AddRequest, &multiThread_, 0, NULL);
-    WaitForSingleObject(thread1, INFINITE);
-    WaitForSingleObject(thread2, INFINITE);
-
-    std::cout << "begin close threads." << std::endl;
-    CloseHandle(thread1);
-    CloseHandle(thread2);
+    thread_handler = CreateThread(NULL, 0, HandleReq, &multiThread_, 0, NULL);
   }
 
 private:
+  HANDLE thread_handler;
   bool bInitRes_;
   strMultiThread multiThread_;
 };
