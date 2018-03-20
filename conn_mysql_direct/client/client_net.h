@@ -109,9 +109,10 @@ public:
   //===============================收发数据=====================================
   /// TODO 有了数据，但是得把数据结构化 --add by ljj 2018-03-19
   int receive_data(std::string &strReceiveData) {
-    int ret = recv(accept_socket_, receive_data_, 255, 0);
+    int ret = recv(socket_client_, receive_data_, 255, 0);
     if (ret > 0) {
       receive_data_[ret] = 0x00;
+      strReceiveData.append(receive_data_);
     } else {
       int err_code = WSAGetLastError();
       return err_code;

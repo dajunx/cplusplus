@@ -26,7 +26,7 @@ int main() {
     enumSqlType iSqlType = tInsert;
     data_box(tINPUT, iSqlType, strReceiveData);
     strReceiveData.clear();
-    //net.send_data("OK"); //Response
+    net.send_data("OK"); //Response
     //Sleep(1000);
   } while (true);
 
