@@ -1,6 +1,7 @@
 ﻿
 //32位版本 直接连接 mysql，不使用 第三方库测试
 #include <Windows.h>
+#include <iostream>
 #include <mysql.h>
 #include <string>
 #include <winsock.h>
@@ -11,9 +12,11 @@ int main() {
   MYSQL_ROW row;
 
   // database configuartion
-  std::string userName("root"), pwd(""), loginIp("127.0.0.1");
+  std::string userName("kaka"), pwd(""), loginIp("192.168.221.138");
   std::string databaseName("test"), tablename("test");
+  int loginPort = 3306;
   char *query = NULL;
+  bool err = true;
 
   //初始化
   conn = mysql_init(0);
@@ -24,8 +27,9 @@ int main() {
     }
 
     //连接数据库
-    if (!mysql_real_connect(conn, loginIp.c_str(), userName.c_str(), pwd.c_str(),
-      databaseName.c_str(), 3306, NULL, 0)) {
+    if (!mysql_real_connect(conn, loginIp.c_str(), userName.c_str(),
+      pwd.c_str(), databaseName.c_str(), loginPort, NULL,
+      0)) {
         break;
     }
 
@@ -53,7 +57,13 @@ int main() {
     }
 
     mysql_free_result(res);
+    err = false;
   } while (false);
+
+  if (err) {
+    //?如何让错误码显示对于中文含义
+    std::cout << "handle query err,err_code:" << mysql_errno(conn) << std::endl;
+  }
 
   return 0;
 }

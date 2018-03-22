@@ -200,6 +200,7 @@
     <ClCompile Include="hash_test\md5test.cpp" />
     <ClCompile Include="others\map_erase_element_effective.cpp" />
     <ClCompile Include="others\rapidjson_test.cpp" />
+    <ClCompile Include="others\test_execute_3rd_process.cpp" />
     <ClCompile Include="thread\ChangeUnThreadSafeFun.c" />
     <ClCompile Include="thread\inputdata_and_localdata_threasafe.c" />
     <ClCompile Include="thread\postFun2Thread.c" />

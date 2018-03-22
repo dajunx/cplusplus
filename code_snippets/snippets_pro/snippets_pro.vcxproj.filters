@@ -492,6 +492,9 @@
     <ClCompile Include="cpp_interface\mysql_connector_direct.cpp">
       <Filter>normal_cplusplus\interface</Filter>
     </ClCompile>
+    <ClCompile Include="others\test_execute_3rd_process.cpp">
+      <Filter>others</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash_test\md5.h">
