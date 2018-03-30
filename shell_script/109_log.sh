@@ -17,11 +17,13 @@ mkdir $destDirectory;
 for day in ${logDays[@]}; do
     #把每天的日志压缩包解压到各自日期目录中
     mkdir $day;
-#tar xf `echo "*$day*.tar.gz"` -C $day;
-    for file in *.tar.gz; do tar -zxf $file -C $day; done
-        #第二种实现方式
-        #dailyLog=$(find . -name "*$day*.tar.gz");
-        #tar xf ${dailyLog:2:58} -C $day;
+
+    for file in "*$day*.tar.gz"; do 
+        #由于主备切换原因，可能某一天的日志有两个ip开头的文件，故在for循环中分批解压同一天的日志
+        for singleFileOfday in ${file[@]};do
+            tar -zxf $singleFileOfday -C $day; 
+        done
+    done
     cd $day;
 
     #汇总文本为每天两个文件 (sort目的: 按照小时排序grep出来的文件 便于汇总，使最终文件内容是按照时间排序)
