@@ -1,7 +1,49 @@
 #include <stdio.h>
 #include <winsock2.h>
+#include <string>
+#include <vector>
 
 #pragma comment(lib,"ws2_32.lib")
+
+DWORD WINAPI HandleClientMsg(LPVOID lpParameter) {
+  SOCKET* pAcceptClientSocket = static_cast<SOCKET*>(lpParameter);
+
+  //使用数字，为了查看使用clumsy工具下各种网络条件的数据阐述情况
+  std::vector<std::string> strvec;
+  strvec.push_back("1");
+  strvec.push_back("22");
+  strvec.push_back("333");
+  strvec.push_back("4444");
+  strvec.push_back("55555");
+  strvec.push_back("666666");
+  strvec.push_back("7777777");
+
+  int index = 0;
+  while (true) {
+    std::string strSrcData;
+    if (7 == index) {
+      index = 0;
+    }
+    strSrcData.append(strvec[index]);
+    strSrcData.append("\n");
+    send(*pAcceptClientSocket, strSrcData.c_str(), strSrcData.size(), 0);
+    index++;
+    Sleep(10);
+  }
+
+  //std::string strSrcData;
+  //while (true) {
+  //  if (strSrcData.compare("----------") == 0) {
+  //    strSrcData.clear();
+  //  }
+  //  send(*pAcceptClientSocket, strSrcData.c_str(), strSrcData.size(), 0);
+  //  strSrcData.append("-");
+  //  Sleep(50);
+  //}  
+
+  closesocket(*pAcceptClientSocket);
+  return 0L;
+}
 
 int main(int argc, char* argv[])
 {
@@ -42,7 +84,6 @@ int main(int argc, char* argv[])
   SOCKET sClient;
   sockaddr_in remoteAddr;
   int nAddrlen = sizeof(remoteAddr);
-  char revData[255]; 
   while (true)
   {
     printf("等待连接...\n");
@@ -54,18 +95,8 @@ int main(int argc, char* argv[])
     }
     printf("接受到一个连接：%s \r\n", inet_ntoa(remoteAddr.sin_addr));
 
-    //接收数据
-    int ret = recv(sClient, revData, 255, 0);        
-    if(ret > 0)
-    {
-      revData[ret] = 0x00;
-      printf(revData);
-    }
-
-    //发送数据
-    char * sendData = "你好，TCP客户端！\n";
-    send(sClient, sendData, strlen(sendData), 0);
-    closesocket(sClient);
+    //另起线程 交互数据
+    HANDLE thread_handler = CreateThread(NULL, 0, HandleClientMsg, &sClient, 0, NULL);
   }
 
   closesocket(slisten);

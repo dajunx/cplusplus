@@ -15,10 +15,10 @@ void showSubNetErr(bool& continueConn)
       break;
     }
   default:
-    std::cout<<"unknow err."<<std::endl;
+    ;
+    //std::cout<<"unknow err."<<std::endl;
   }
 }
-
 
 int main(int argc, char* argv[])
 {
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
   serAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
   while(true)
   {
-    if (connect(sclient, (sockaddr *)&serAddr, sizeof(serAddr)) != SOCKET_ERROR) {
+    if (connect(sclient, (sockaddr *)&serAddr, sizeof(serAddr)) == SOCKET_ERROR) {
       break;
     }
 
@@ -52,21 +52,20 @@ int main(int argc, char* argv[])
       Sleep(1000);
       continue;
     } else {
-      closesocket(sclient);
-      return 0;
-    }  
+      //接收客户端发送的数据并打印
+      while (true) {
+        char recData[255];
+        int ret = recv(sclient, recData, 255, 0);
+        if(ret > 0)
+        {
+          recData[ret] = 0x00;
+          std::cout<<recData/*<<std::endl*/;
+        }
+      }
+      //
+    }
   }
 
-  char * sendData = "你好，TCP服务端，我是客户端!\n";
-  send(sclient, sendData, strlen(sendData), 0);
-
-  char recData[255];
-  int ret = recv(sclient, recData, 255, 0);
-  if(ret > 0)
-  {
-    recData[ret] = 0x00;
-    printf(recData);
-  }
   closesocket(sclient);
   WSACleanup();
   return 0;
