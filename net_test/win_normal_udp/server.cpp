@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <winsock2.h>
+#include <iostream>
 
 #pragma comment(lib, "ws2_32.lib") 
 
@@ -39,12 +40,13 @@ int main(int argc, char* argv[])
     if (ret > 0)
     {
       recvData[ret] = 0x00;
-      printf("接受到一个连接：%s \r\n", inet_ntoa(remoteAddr.sin_addr));
-      printf(recvData);            
+      //printf("接受到一个连接：%s \r\n", inet_ntoa(remoteAddr.sin_addr));
+      std::cout<<recvData<<std::endl;
     }
 
-    char * sendData = "一个来自服务端的UDP数据包\n";
-    sendto(serSocket, sendData, strlen(sendData), 0, (sockaddr *)&remoteAddr, nAddrLen);    
+    //发送数据
+    //char * sendData = "一个来自服务端的UDP数据包\n";
+    //sendto(serSocket, sendData, strlen(sendData), 0, (sockaddr *)&remoteAddr, nAddrLen);    
 
   }
   closesocket(serSocket); 
