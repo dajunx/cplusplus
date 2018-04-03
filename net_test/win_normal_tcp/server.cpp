@@ -2,6 +2,7 @@
 #include <winsock2.h>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #pragma comment(lib,"ws2_32.lib")
 
@@ -9,37 +10,48 @@ DWORD WINAPI HandleClientMsg(LPVOID lpParameter) {
   SOCKET* pAcceptClientSocket = static_cast<SOCKET*>(lpParameter);
 
   //使用数字，为了查看使用clumsy工具下各种网络条件的数据阐述情况
-  std::vector<std::string> strvec;
-  strvec.push_back("1");
-  strvec.push_back("22");
-  strvec.push_back("333");
-  strvec.push_back("4444");
-  strvec.push_back("55555");
-  strvec.push_back("666666");
-  strvec.push_back("7777777");
-
-  int index = 0;
-  while (true) {
-    std::string strSrcData;
-    if (7 == index) {
-      index = 0;
-    }
-    strSrcData.append(strvec[index]);
-    strSrcData.append("\n");
-    send(*pAcceptClientSocket, strSrcData.c_str(), strSrcData.size(), 0);
-    index++;
-    Sleep(10);
-  }
-
-  //std::string strSrcData;
+  //std::vector<std::string> strvec;
+  //strvec.push_back("1");
+  //strvec.push_back("22");
+  //strvec.push_back("333");
+  //strvec.push_back("4444");
+  //strvec.push_back("55555");
+  //strvec.push_back("666666");
+  //strvec.push_back("7777777");
+  //
+  //int index = 0;
+  //int ret_send = 0;
   //while (true) {
-  //  if (strSrcData.compare("----------") == 0) {
-  //    strSrcData.clear();
+  //  std::string strSrcData;
+  //  if (7 == index) {
+  //    index = 0;
   //  }
-  //  send(*pAcceptClientSocket, strSrcData.c_str(), strSrcData.size(), 0);
-  //  strSrcData.append("-");
-  //  Sleep(50);
-  //}  
+  //  strSrcData.append(strvec[index]);
+  //  strSrcData.append("\n");
+  //  ret_send = send(*pAcceptClientSocket, strSrcData.c_str(), strSrcData.size(), 0);
+  //  if (ret_send < 0) {
+  //    std::cout<<"server child err:"<<WSAGetLastError()<<std::endl;
+  //    break;
+  //  }
+  //  index++;
+  //  Sleep(200);
+  //}
+
+  std::string strSrcData, strSend;
+  int ret_send = 0;
+  while (true) {
+    if (strSrcData.compare("----------") == 0) {
+      strSrcData.clear();
+    }
+    strSend = strSrcData + "\n";
+    ret_send = send(*pAcceptClientSocket, strSend.c_str(), strSend.size(), 0);
+    if (ret_send < 0) {
+      std::cout<<"server child err:"<<WSAGetLastError()<<std::endl;
+      break;
+    }
+    strSrcData.append("-");
+    Sleep(50);
+  }  
 
   closesocket(*pAcceptClientSocket);
   return 0L;
@@ -93,7 +105,7 @@ int main(int argc, char* argv[])
       printf("accept error !");
       continue;
     }
-    printf("接受到一个连接：%s \r\n", inet_ntoa(remoteAddr.sin_addr));
+    printf("接受到一个连接：%s, port:%d \r\n", inet_ntoa(remoteAddr.sin_addr), remoteAddr.sin_port);
 
     //另起线程 交互数据
     HANDLE thread_handler = CreateThread(NULL, 0, HandleClientMsg, &sClient, 0, NULL);

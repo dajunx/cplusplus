@@ -42,7 +42,9 @@ int main(int argc, char* argv[])
   serAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
   while(true)
   {
-    if (connect(sclient, (sockaddr *)&serAddr, sizeof(serAddr)) == SOCKET_ERROR) {
+    int ret_conn = connect(sclient, (sockaddr *)&serAddr, sizeof(serAddr));
+    if (ret_conn == SOCKET_ERROR) {
+      std::cout<<"connect server err:"<<WSAGetLastError()<<std::endl;
       break;
     }
 
@@ -51,18 +53,20 @@ int main(int argc, char* argv[])
     if (continueConn) {
       Sleep(1000);
       continue;
-    } else {
-      //接收客户端发送的数据并打印
-      while (true) {
-        char recData[255];
-        int ret = recv(sclient, recData, 255, 0);
-        if(ret > 0)
-        {
-          recData[ret] = 0x00;
-          std::cout<<recData/*<<std::endl*/;
-        }
+    }
+
+    //接收客户端发送的数据并打印
+    while (true) {
+      char recData[255];
+      int ret = recv(sclient, recData, 255, 0);
+      if(ret > 0)
+      {
+        recData[ret] = 0x00;
+        std::cout<<recData/*<<std::endl*/;
+      } else {
+        std::cout<<"recv server data err:"<<WSAGetLastError()<<std::endl;
+        break;
       }
-      //
     }
   }
 
