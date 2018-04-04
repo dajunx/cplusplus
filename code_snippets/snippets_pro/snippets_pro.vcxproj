@@ -188,6 +188,7 @@
     <ClCompile Include="cpp_normal\virtual_usage.cpp" />
     <ClCompile Include="cpp_normal\visit_class_fun_and_normal_fun.cpp" />
     <ClCompile Include="cpp_normal\win_calculate_costs_time.cpp" />
+    <ClCompile Include="cpp_stl\test_map_userdef_sort.cpp" />
     <ClCompile Include="cpp_stl\vector_iterator_err.cpp" />
     <ClCompile Include="cpp_stl\vector_speed_by_set_capacity.cpp" />
     <ClCompile Include="cpp_stl\vector_test.cpp" />

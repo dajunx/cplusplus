@@ -501,6 +501,9 @@
     <ClCompile Include="process_linux\simple_process.c">
       <Filter>normal_cplusplus\process_linux</Filter>
     </ClCompile>
+    <ClCompile Include="cpp_stl\test_map_userdef_sort.cpp">
+      <Filter>normal_cplusplus\stl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash_test\md5.h">
