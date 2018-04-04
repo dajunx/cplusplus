@@ -64,6 +64,9 @@
     <Filter Include="boost\multiple_thread">
       <UniqueIdentifier>{23111761-5001-4f63-9d3a-210aa443737d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="normal_cplusplus\process_linux">
+      <UniqueIdentifier>{0fe3d39c-b344-49b3-9e7f-47e8bf96e435}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="others\map_erase_element_effective.cpp">
@@ -426,39 +429,6 @@
     <ClCompile Include="boost_normal\string_split_test.cpp">
       <Filter>boost\boost</Filter>
     </ClCompile>
-    <ClCompile Include="thread\prod_no_condvar.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
-    <ClCompile Include="thread\simple_thread.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
-    <ClCompile Include="thread\thread_1w_multiR.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
-    <ClCompile Include="thread\thread_incr.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
-    <ClCompile Include="thread\thread_incr_mutex.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
-    <ClCompile Include="thread\thread_multijoin.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
-    <ClCompile Include="thread\ChangeUnThreadSafeFun.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
-    <ClCompile Include="thread\inputdata_and_localdata_threasafe.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
-    <ClCompile Include="thread\postFun2Thread.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
-    <ClCompile Include="thread\prod_condvar.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
-    <ClCompile Include="thread\thread_call_classFun.c">
-      <Filter>normal_cplusplus\thread_linux</Filter>
-    </ClCompile>
     <ClCompile Include="thread_win\simple_thread_create_close.cpp">
       <Filter>normal_cplusplus\thread_win</Filter>
     </ClCompile>
@@ -494,6 +464,42 @@
     </ClCompile>
     <ClCompile Include="others\test_execute_3rd_process.cpp">
       <Filter>others</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\prod_no_condvar.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\simple_thread.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\thread_1w_multiR.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\thread_call_classFun.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\thread_incr.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\thread_incr_mutex.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\thread_multijoin.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\ChangeUnThreadSafeFun.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\inputdata_and_localdata_threasafe.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\postFun2Thread.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="thread_linux\prod_condvar.c">
+      <Filter>normal_cplusplus\thread_linux</Filter>
+    </ClCompile>
+    <ClCompile Include="process_linux\simple_process.c">
+      <Filter>normal_cplusplus\process_linux</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
