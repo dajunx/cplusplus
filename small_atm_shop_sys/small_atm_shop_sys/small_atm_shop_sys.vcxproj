@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClInclude Include="bank.h" />
     <ClInclude Include="db_manage.h" />
+    <ClInclude Include="object_mgr.h" />
     <ClInclude Include="shop.h" />
     <ClInclude Include="terminal.h" />
     <ClInclude Include="users.h" />

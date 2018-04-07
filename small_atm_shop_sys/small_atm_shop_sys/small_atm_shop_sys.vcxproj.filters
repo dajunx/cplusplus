@@ -35,5 +35,8 @@
     <ClInclude Include="db_manage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="object_mgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

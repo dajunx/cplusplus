@@ -1,6 +1,8 @@
 #ifndef H_USER_h
 #define H_USER_h
 
+#include <vector>
+
 enum em_user_type{normal_user, admin};
 enum em_card_type{bank_card, credit_card};
 
@@ -12,8 +14,7 @@ public:
      utype(type)
   {}
   ~user() {}
-
-private:
+//private:
   int uid;
   em_user_type utype;
 };
@@ -23,37 +24,60 @@ public:
   user_manage() { }
   ~user_manage() { }
 
-  // 购买商品 (买东西暂时做成固定扣款，每次扣一百吧！)
-  static int buy_something_from_shop(user* pUser);
-
-  // 转账给其他用户
-  static int exchange_money(user* pUserSrc, user* pUserDes);
-
-  // 提现
-  static int borrow_money(user* pUser);
-
-  // 还款
-  static int giveBack_money(user* pUser);
-
-  // 存钱
-  static int stone_money(user* pUser, int money);
-
-  // 余额查询
-  static int scan_personal_money(user* pUser, em_card_type type);
-
-  // 查看个人银行流水
-  static int scan_personal_bank_detail(user* pUser);
-
   // 登录(普通用户登录，管理员登录)
-  static int login(user* pUser);
+  int login(user* pUser);
 
-  //用户管理 （诸如：添加用户、用户额度设置、冻结用户、提现费率调整）
-  static int add_user(user* pUser, em_user_type type){
+  //添加用户 （诸如：添加用户、用户额度设置、冻结用户、提现费率调整）
+  int add_user(user* pUser, em_user_type type)
+  {
+    if (NULL == pUser) {
+      return -1; //待添加用户指针不能为空
+    }
 
+    switch(type) {
+    case normal_user:
+      {
+        vec_normal_users_.push_back(pUser);
+      }
+      break;
+    case admin:
+      {
+        pAdmin_ = pUser;
+      }
+      break;
+    default:
+      break;
+    }
+
+    return 0;
   }
 
-  static int set_user_credit_card_max(user* pUser);
-  static int freeze_user(user* pUser);
+  // 冻结用户
+  int freeze_user(user* pUser);
+
+  // 校验用户
+  bool exist_pointed_user(user* pUser)
+  {
+    if (NULL == pUser) {
+      return false; //待添加用户指针不能为空
+    }
+
+    bool exist_pointed_user = false;
+    std::vector<user*>::iterator it = vec_normal_users_.begin();
+    for (; it!= vec_normal_users_.end(); ++it)
+    {
+      if (pUser == *it) {
+        exist_pointed_user = true;
+        break;
+      }
+    }
+
+    return exist_pointed_user;
+  }
+
+//private:
+  std::vector<user*> vec_normal_users_;
+  user* pAdmin_;
 };
 
 #endif
