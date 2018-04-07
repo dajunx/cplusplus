@@ -10,13 +10,14 @@ public:
   ~shop() {}
 
   //购物 (购物只实现扣款，不对购买实物做处理);
-  int doShopping(user* pUser)
+  int doShopping(user* pUser, bank& bk)
   {
     if (NULL == pUser) {
       return -1;
     }
 
-
+    //每次消费暂时定位 10 个单位
+    return bk.reduce_money(pUser, 10);
   }
 };
 

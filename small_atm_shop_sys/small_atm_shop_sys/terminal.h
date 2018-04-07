@@ -1,13 +1,6 @@
 #ifndef H_TERMINAL_H
 #define H_TERMINAL_H
 
-///TODO(linjianjun) 2018.04.05 终端如何抽象，后续再来思考，手机终端和ATM终端先各自实现
-//class terminal {
-//public:
-//  terminal() {}
-//  ~terminal() {}
-//};
-
 #include "users.h"
 #include "bank.h"
 
@@ -40,10 +33,33 @@ public:
   static int buy_something_from_shop(user* pUser);
 
   // 转账给其他用户
-  static int exchange_money(user* pUserSrc, user* pUserDes);
+  int borrow_money(user* pUserSrc, user* pUserDes, bank& bk, int money)
+  {
+    //参数校验
+    if(NULL == pUserSrc || NULL == pUserDes || money < 0) {
+      std::cout<<"parameter is not allow!"<<std::endl;
+    }
+
+    //查看被借钱的人钱够不够
+    int left_money = 0;
+    bk.scan_user_leave_money(pUserSrc, left_money);
+    if (left_money < money) {
+      std::cout<<"user has not enough to borrow to others."<<std::endl;
+    }
+
+    //借钱
+    bk.reduce_money(pUserSrc, money);
+    bk.stone_money(pUserDes, money);
+    std::cout<<"user: "<<pUserSrc->uid
+            <<"borrow "<<money
+            <<" money to user: "<<pUserDes->uid
+            <<" success."<<std::endl;
+
+    return 0;
+  }
 
   // 存钱
-  int stone_money(user_manage& mgr, user* pUser, int money)
+  int stone_money(user_manage& mgr, user* pUser, bank& bk, int money)
   {
     if (NULL == pUser) {
       return -1; //待添加用户指针不能为空
@@ -53,24 +69,23 @@ public:
       return -1; // 要存钱的用户不存在，请对该用户开户
     }
 
-    return bank_.stone_money(pUser, money);
+    return bk.stone_money(pUser, money);
   }
 
   // 余额查询
-  int scan_personal_money(user* pUser, em_card_type type)
+  int scan_personal_money(user* pUser, em_card_type type, bank& bk)
   {
     if (NULL == pUser) {
       return -1; //待添加用户指针不能为空
     }
 
-    bank_.scan_user_leave_money(pUser);
+    ///TODO. 这个地方有点蹩脚，再改改
+    int left_money = 0;
+    return bk.scan_user_leave_money(pUser, left_money);
   }
 
   // 查看个人银行流水
   static int scan_personal_bank_detail(user* pUser);
-
-private:
-  bank bank_;
 };
 
 #endif

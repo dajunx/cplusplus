@@ -37,13 +37,40 @@ public:
   }
 
   //”‡∂Ó≤È—Ø
-  int scan_money(int uid) {
+  int scan_money(int uid, int& left_money) {
     std::map<int, user_with_money>::iterator it = map_dbs_.find(uid);
     if(it == map_dbs_.end()) {
       return -1;
     } else {
+      left_money = it->second.money_;
       std::cout<<"left money total is:"<<it->second.money_<<std::endl;
     }
+
+    return 0;
+  }
+
+  //ø€«Æ
+  int reduce_money(int uid, int money) {
+    if (money <= 0) {
+      return -1;
+    }
+
+    //Œ¥’“µΩ”√ªß
+    std::map<int, user_with_money>::iterator it = map_dbs_.find(uid);
+    if(it == map_dbs_.end()) {
+      std::cout<<"user not found in system, uid:"<<uid<<std::endl;
+      return -1;
+    }
+    
+    //”‡∂Ó≤ª◊„
+    if (it->second.money_ < money)
+    {
+      std::cout<<"user bank saving is not enough!"<<std::endl;
+      return -1;
+    }
+
+    it->second.money_ -= money;
+    std::cout<<"after shopping, left money total is:"<<it->second.money_<<std::endl;
 
     return 0;
   }

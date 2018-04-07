@@ -13,7 +13,14 @@ public:
   ~bank() {}
 
   //消费
-  int decrease_money();
+  int reduce_money(user* pUser, int money)
+  {
+    if (NULL == pUser) {
+      return -1;
+    }
+
+    return db_.reduce_money(pUser->uid, money);
+  }
 
   //取现
   int borrow_money_to_users();
@@ -22,13 +29,13 @@ public:
   int get_giveback();
 
   //查询用户余额
-  int scan_user_leave_money(user* pUser)
+  int scan_user_leave_money(user* pUser, int& left_money)
   {
     if (NULL == pUser) {
       return -1; //待添加用户指针不能为空
     }
 
-    db_.scan_money(pUser->uid);
+    return db_.scan_money(pUser->uid, left_money);
   }
 
   //查询用户提现数目
