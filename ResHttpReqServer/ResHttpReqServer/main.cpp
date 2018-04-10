@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     //解析和打包 http
     Http h;
     std::string targetContent, targetRsp;
-    h.getTargetContent(revData, targetContent);
+    h.getRequestContent(revData, targetContent);
     h.produceResponse(targetContent, targetRsp);
 
     send(sClient, targetRsp.c_str(), targetRsp.size(), 0);

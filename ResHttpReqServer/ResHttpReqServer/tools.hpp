@@ -53,7 +53,7 @@ public:
   Http() {}
   ~Http() {}
 
-  void getTargetContent(char* receiveContent, std::string& targetContent) {
+  void getRequestContent(char* receiveContent, std::string& targetContent) {
     std::string content(receiveContent);
     std::string::size_type target_begin = content.find_first_of(" ");
     std::string::size_type target_end = content.find(" ", target_begin+1);
