@@ -9,7 +9,6 @@
 */
 #include <iostream>
 #include <string>
-#include <map>
 
 int main(int argc, char* argv[])
 {
@@ -19,11 +18,7 @@ int main(int argc, char* argv[])
         str_src.append(str_tmp);
     }
     
-    char target_char;
-    std::map<char, int> map_char_counts;
-    std::map<char, int>::iterator it_map;
-    std::pair<std::map<char, int>::iterator, bool> ret;
-    
+    int char_array[123] = {0};    
     std::string::iterator it_char = str_src.begin();
     for(; it_char != str_src.end(); it_char++)
     {
@@ -33,19 +28,13 @@ int main(int argc, char* argv[])
           continue;
         }
         
-        ret = map_char_counts.insert(std::pair<char, int>(*it_char, 1));
-        if(false == ret.second) {
-            ret.first->second++;
-        } else {
-            continue;
-        }
+        char_array[*it_char]++;
         
-        if(ret.first->second >= 3) {
-            target_char = ret.first->first;
+        if(char_array[*it_char] >= 3) {
+            std::cout<<*it_char<<std::endl;
             break;
         }
     }
     
-    std::cout<<target_char<<std::endl;
     return 0;
 }
