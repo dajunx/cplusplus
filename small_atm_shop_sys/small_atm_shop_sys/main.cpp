@@ -1,42 +1,51 @@
 #include <iostream>
 
 //user defined headers
-#include "users.h"
-#include "terminal.h"
+#include "object_manage.h"
+#include "bank.h"
 #include "shop.h"
+#include "terminal.h"
+#include "users.h"
+#include "db_manage.h"
 
 int main() 
 {
-  //初始状态，构造出用户、管理员 实体
-  user lin001(661, normal_user), lin002(662, normal_user), lin_admin(991, admin);
-  
-  //添加到银行系统中
-  user_manage ugr;
-  ugr.add_user(&lin001, normal_user);
-  ugr.add_user(&lin002, normal_user);
-  ugr.add_user(&lin_admin, admin);
+  object_manage* p_object_manage = object_manage::get_instance();
+  //注册测试用户
+  p_object_manage->add_template_users();
 
-  bank bk;
-  
-  // -.- 存钱(哈哈)
-  phone ph;
-  ph.stone_money(ugr, &lin001, bk, 10);
-  ph.stone_money(ugr, &lin002, bk, 1000);
+  user& test_user1 = p_object_manage->get_user(661);
+  user& test_user2 = p_object_manage->get_user(662);
+  user& test_admin = p_object_manage->get_user(991);
 
-  //存完钱当然是看看存好了没！！！
-  ph.scan_personal_money(&lin001, bank_card, bk);
-  ph.scan_personal_money(&lin002, bank_card, bk);
+  //初始化信用卡额度（增加15000)
+  terminal& ter = p_object_manage->get_terminal();
+  ter.init_credit_card(&test_user1,  15000);
+  ter.init_credit_card(&test_user2,  15000);
 
-  //接下来就可以买买买了！！！
-  shop sh;
-  sh.doShopping(&lin001, bk);
-  sh.doShopping(&lin001, bk);
+  //商店购买流程
+  shop& sh = p_object_manage->get_shop();
+  sh.doShopping(&test_user1, 15000);
+  sh.doShopping(&test_user2, 100);
 
   //用户1银行存款不够，向用户2借钱 100
-  if ( 0 == ph.borrow_money(&lin002, &lin001, bk, 100)) {
+  if ( 0 == ter.borrow_money_from_user(&test_user2, &test_user1, 100)) {
     //借到了钱，继续消费
-    sh.doShopping(&lin001, bk);
+    sh.doShopping(&test_user1);
   }
+
+  //还钱
+  ter.return_money(&test_user1, 15000);
+
+  //提现
+  ter.borrow_money_from_bank(&test_user1, 100);
+
+  /*
+  ** 管理用户
+  */
+  //冻结用户
+  user_manage& ugr = p_object_manage->get_user_manage();
+  ugr.freeze_user(&test_user1, test_admin.utype);
 
   return 0;
 }

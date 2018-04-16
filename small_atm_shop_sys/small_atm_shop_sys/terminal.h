@@ -1,47 +1,37 @@
 #ifndef H_TERMINAL_H
 #define H_TERMINAL_H
 
-#include "users.h"
-#include "bank.h"
+#include "object_manage.h"
 
 class user;
 class user_manage;
 
-class ATM{
+class terminal{
 public:
-  ATM() {}
-  ~ATM() {}
+  terminal() {}
+  ~terminal() {}
 
-  // 提现
-  int borrow_money(user* pUser);
+  int init_credit_card(user* pUser, float money)
+  {
+    bank& bk = object_manage::get_instance()->get_bank();
+    if (NULL == pUser || money < 0) {
+      return -1; //待添加用户指针不能为空
+    }
 
-  // 还款
-  int giveBack_money(user* pUser);
-
-  // 用户信用额度设置
-  static int set_user_credit_card_max(user* pUser);
-};
-
-//手机终端暂时不支持：1、信用卡借钱；2、还信用卡借款； 先简化终端功能，做出来再思考扩展；
-class phone
-{
-public:
-  phone() {}
-  ~phone() {}
-
-  // 购买商品 (买东西暂时做成固定扣款，每次扣一百吧！)
-  static int buy_something_from_shop(user* pUser);
+    return bk.increase_money(pUser, money);
+  }
 
   // 转账给其他用户
-  int borrow_money(user* pUserSrc, user* pUserDes, bank& bk, int money)
+  int borrow_money_from_user(user* pUserSrc, user* pUserDes, float money)
   {
+    bank& bk = object_manage::get_instance()->get_bank();
     //参数校验
     if(NULL == pUserSrc || NULL == pUserDes || money < 0) {
       std::cout<<"parameter is not allow!"<<std::endl;
     }
 
     //查看被借钱的人钱够不够
-    int left_money = 0;
+    float left_money = 0;
     bk.scan_user_leave_money(pUserSrc, left_money);
     if (left_money < money) {
       std::cout<<"user has not enough to borrow to others."<<std::endl;
@@ -49,39 +39,53 @@ public:
 
     //借钱
     bk.reduce_money(pUserSrc, money);
-    bk.stone_money(pUserDes, money);
+    bk.increase_money(pUserDes, money);
     std::cout<<"user: "<<pUserSrc->uid
-            <<"borrow "<<money
-            <<" money to user: "<<pUserDes->uid
-            <<" success."<<std::endl;
+      <<"borrow "<<money
+      <<" money to user: "<<pUserDes->uid
+      <<" success."<<std::endl;
 
     return 0;
   }
 
-  // 存钱
-  int stone_money(user_manage& mgr, user* pUser, bank& bk, int money)
+  // 还掉信用卡钱
+  int return_money(user* pUser, float money)
   {
+    user_manage& mgr = object_manage::get_instance()->get_user_manage();
+    bank& bk = object_manage::get_instance()->get_bank();
     if (NULL == pUser) {
       return -1; //待添加用户指针不能为空
     }
 
-    if (!mgr.exist_pointed_user(pUser)) {
+    if (!mgr.active_user(pUser)) {
       return -1; // 要存钱的用户不存在，请对该用户开户
     }
 
-    return bk.stone_money(pUser, money);
+    return bk.increase_money(pUser, money);
   }
 
   // 余额查询
-  int scan_personal_money(user* pUser, em_card_type type, bank& bk)
+  int scan_personal_money(user* pUser)
   {
+    bank& bk = object_manage::get_instance()->get_bank();
     if (NULL == pUser) {
       return -1; //待添加用户指针不能为空
     }
 
     ///TODO. 这个地方有点蹩脚，再改改
-    int left_money = 0;
+    float left_money = 0;
     return bk.scan_user_leave_money(pUser, left_money);
+  }
+
+  int borrow_money_from_bank(user* pUser, float money)
+  {
+    bank& bk = object_manage::get_instance()->get_bank();
+    if (NULL == pUser) {
+      return -1;
+    }
+
+    //每次消费暂时定位 10 个单位
+    return bk.reduce_money(pUser, money * 1.05);
   }
 
   // 查看个人银行流水

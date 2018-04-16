@@ -18,6 +18,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="object_manage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="users.h">
@@ -35,8 +38,16 @@
     <ClInclude Include="db_manage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="object_mgr.h">
+    <ClInclude Include="tools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="object_manage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -50,6 +50,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -75,14 +76,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="object_manage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bank.h" />
     <ClInclude Include="db_manage.h" />
-    <ClInclude Include="object_mgr.h" />
+    <ClInclude Include="object_manage.h" />
     <ClInclude Include="shop.h" />
     <ClInclude Include="terminal.h" />
+    <ClInclude Include="tools.h" />
     <ClInclude Include="users.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

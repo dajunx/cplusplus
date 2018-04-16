@@ -4,12 +4,14 @@
 #include <iostream>
 #include <map>
 
+#include "object_manage.h"
+
 struct user_with_money {
-  user_with_money(int uid, int money, int credit_money = 0)
-    :uid_(uid), money_(money), credit_money_(credit_money) {}
+  user_with_money(int uid, float money, int credit_money = 0)
+    :uid_(uid), money_(money)/*, credit_money_(credit_money)*/ {}
   int uid_;
-  int money_;
-  int credit_money_;
+  float money_;
+  //int credit_money_;
 };
 
 class db {
@@ -17,8 +19,8 @@ public:
   db() {}
   ~db() {}
 
-  //存钱
-  int stone_money(int uid, int money) {
+  //初始化信用卡额度
+  int increase_money(int uid, float money) {
     std::map<int, user_with_money>::iterator it = map_dbs_.find(uid);
     if(it == map_dbs_.end()) {
       // 默认自动开户 (先做完储蓄卡的交易）
@@ -37,7 +39,7 @@ public:
   }
 
   //余额查询
-  int scan_money(int uid, int& left_money) {
+  int scan_money(int uid, float& left_money) {
     std::map<int, user_with_money>::iterator it = map_dbs_.find(uid);
     if(it == map_dbs_.end()) {
       return -1;
@@ -50,7 +52,7 @@ public:
   }
 
   //扣钱
-  int reduce_money(int uid, int money) {
+  int reduce_money(int uid, float money) {
     if (money <= 0) {
       return -1;
     }

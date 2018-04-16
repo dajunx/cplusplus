@@ -1,25 +1,28 @@
 #ifndef H_BANK_H
 #define H_BANK_H
 
+#include "object_manage.h"
 #include "db_manage.h"
 #include "users.h"
 
 class user;
 class db;
+class object_manage;
 
 class bank{
 public:
   bank() {}
   ~bank() {}
 
-  //消费
-  int reduce_money(user* pUser, int money)
+  //消费 or 提现
+  int reduce_money(user* pUser, float money)
   {
+    db& db_temp = object_manage::get_instance()->get_db();
     if (NULL == pUser) {
       return -1;
     }
 
-    return db_.reduce_money(pUser->uid, money);
+    return db_temp.reduce_money(pUser->uid, money);
   }
 
   //取现
@@ -29,13 +32,14 @@ public:
   int get_giveback();
 
   //查询用户余额
-  int scan_user_leave_money(user* pUser, int& left_money)
+  int scan_user_leave_money(user* pUser, float& left_money)
   {
+    db& db_temp = object_manage::get_instance()->get_db();
     if (NULL == pUser) {
       return -1; //待添加用户指针不能为空
     }
 
-    return db_.scan_money(pUser->uid, left_money);
+    return db_temp.scan_money(pUser->uid, left_money);
   }
 
   //查询用户提现数目
@@ -48,13 +52,14 @@ public:
   int add_user_account();
 
   //存钱
-  int stone_money(user* pUser, int money)
+  int increase_money(user* pUser, float money)
   {
+    db& db_temp = object_manage::get_instance()->get_db();
     if (NULL == pUser) {
       return -1; //待添加用户指针不能为空
     }
 
-    db_.stone_money(pUser->uid, money);
+    db_temp.increase_money(pUser->uid, money);
 
     return 0;
   }
@@ -64,9 +69,6 @@ public:
 
   //冻结用户账号
   int freeze_user_account();
-
-private:
-  db db_;
 };
 
 #endif
