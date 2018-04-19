@@ -504,6 +504,9 @@
     <ClCompile Include="cpp_stl\test_map_userdef_sort.cpp">
       <Filter>normal_cplusplus\stl</Filter>
     </ClCompile>
+    <ClCompile Include="others\parse_json_contents_to_simple_text.cpp">
+      <Filter>others</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash_test\md5.h">

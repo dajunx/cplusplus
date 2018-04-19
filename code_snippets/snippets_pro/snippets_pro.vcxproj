@@ -200,6 +200,7 @@
     <ClCompile Include="hash_test\md5.cpp" />
     <ClCompile Include="hash_test\md5test.cpp" />
     <ClCompile Include="others\map_erase_element_effective.cpp" />
+    <ClCompile Include="others\parse_json_contents_to_simple_text.cpp" />
     <ClCompile Include="others\rapidjson_test.cpp" />
     <ClCompile Include="others\test_execute_3rd_process.cpp" />
     <ClCompile Include="process_linux\simple_process.c" />

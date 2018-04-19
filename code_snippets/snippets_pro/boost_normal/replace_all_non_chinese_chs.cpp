@@ -1,5 +1,7 @@
 ﻿//替换掉内容中所有非中文字符，正则表达式为
 //[^\u4e00-\u9fa5]+，替换掉中文字符类似表达式为 [\u4e00-\u9fa5]+
+//keep_only_english_and_number 保留英文和数组，参照如下连接 的 unicode码
+//https://unicode-table.com/cn/#005A  基本拉丁字母
 
 #include <boost/locale.hpp>
 #include <fstream>
@@ -62,6 +64,18 @@ void fun1() {
   write(s3);
 
   int i = 0;
+}
+
+void keep_only_english_and_number()
+{
+  std::wstring s1 = L"Boost Libraries的经32415&*)(^)";
+  std::wstring s2 = L"林机 拉风的经 适房fasdf";
+
+  boost::wregex reg1(L"[^\x30-\x39\x41-\x5A\x61-\x7A]+",
+    boost::regex::icase | boost::regex::perl);
+  std::wstring res;
+  res = boost::regex_replace(s1, reg1, "$1");
+  res = boost::regex_replace(s2, reg1, "$1");
 }
 
 int main(int argc, char **argv) {
