@@ -31,6 +31,11 @@ public:
   /// Handle a request and produce a reply.
   void handle_request(const request& req, reply& rep);
 
+  // 对于web请求拆分：1、简单拉取磁盘文件； 2、命令请求
+  void request_dispatcher(const request& req, reply& rep);
+
+  void encode_rsp(std::string& content, reply& rep, std::string& extension);
+
 private:
   /// The directory containing the files to be served.
   std::string doc_root_;

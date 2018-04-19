@@ -25,6 +25,30 @@ request_handler::request_handler(const std::string& doc_root)
 {
 }
 
+void request_handler::request_dispatcher(const request& req, reply& rep)
+{
+  // Decode url.
+  std::string request_content;
+  if (!url_decode(req.uri, request_content))
+  {
+    rep = reply::stock_reply(reply::bad_request);
+    return;
+  }
+  std::cout<<"req content:"<<request_content<<std::endl;
+
+  /*分发web请求：
+    1、cmd； 
+    2、单纯获取文本内容；
+  */
+  if (request_content.compare(0, 4, "/cmd") == 0) {
+    std::cout<<"cmd req content:"<<request_content<<std::endl;
+    std::string content_temp = "ok", extension;
+    encode_rsp(content_temp, rep, extension);
+  } else {
+    handle_request(req, rep);
+  }  
+}
+
 void request_handler::handle_request(const request& req, reply& rep)
 {
   // Decode url to path.
@@ -68,10 +92,17 @@ void request_handler::handle_request(const request& req, reply& rep)
   }
 
   // Fill out the reply to be sent to the client.
-  rep.status = reply::ok;
   char buf[512];
+  std::string content_temp;
   while (is.read(buf, sizeof(buf)).gcount() > 0)
-    rep.content.append(buf, is.gcount());
+    content_temp.append(buf, is.gcount());
+  encode_rsp(content_temp, rep, extension);
+}
+
+void request_handler::encode_rsp(std::string& content, reply& rep, std::string& extension)
+{
+  rep.status = reply::ok;
+  rep.content.append(content);
   rep.headers.resize(2);
   rep.headers[0].name = "Content-Length";
   rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());

@@ -366,7 +366,7 @@ bool CIOCPModel::DoAccpet(PER_SOCKET_CONTEXT *pSocketContext,
   // 新建一个PER_SOCKET_CONTEXT用以接受客户端数据交互
   PER_SOCKET_CONTEXT *pNewSocketContext = new PER_SOCKET_CONTEXT;
   pNewSocketContext->m_Socket = pIoContext->m_sockAccept;
-  // ??? 如下的 ClientAddr 可去掉么？作用是？
+  // 唯一获取客户端IP port信息渠道
   memcpy(&(pNewSocketContext->m_ClientAddr), ClientAddr, sizeof(SOCKADDR_IN));
 
   // 3.参数设置完毕，将这个Socket和完成端口绑定(这也是一个关键步骤)
