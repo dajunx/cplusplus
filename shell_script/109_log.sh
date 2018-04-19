@@ -1,9 +1,10 @@
 #获取download下来的109组日志
 cd 'C:\Users\Administrator\Desktop\109_log'
-#如下有个问题，当find 未查到文件时，${#findTextReocordRes[@]} 非 0而为1，费解
-#TODO
-findTextReocordRes=$(find 'C:\Users\Administrator\Downloads' -name "*text_reocord*")
-if [ ${#findTextReocordRes[@]} -ne 0 ]; then
+findTextReocordRes=$(find 'C:\Users\Administrator\Downloads' -name "*text_reocord*" | wc -l);
+if [ $findTextReocordRes -eq 0 ]; then
+    echo "[ERROR] 目录: C:\Users\Administrator\Downloads 没有找到任何东西，跳过[移动压缩包步骤]";
+else
+    findTextReocordRes=$(find 'C:\Users\Administrator\Downloads' -name "*text_reocord*");
     mv $findTextReocordRes .;
     echo "move text reocord";
 fi
@@ -19,12 +20,23 @@ for day in ${logDays[@]}; do
     mkdir $day;
 
     for file in "*$day*.tar.gz"; do 
-        #由于主备切换原因，可能某一天的日志有两个ip开头的文件，故在for循环中分批解压同一天的日志
-        for singleFileOfday in ${file[@]};do
-            tar -zxf $singleFileOfday -C $day; 
+        #由于主备切换原因，可能某一天的日志有两个ip开头的文件，故在for循环中分批加压同一天的日志
+        for single_day in ${file[@]};do
+            tar -zxf $single_day -C $day; 
         done
     done
     cd $day;
+
+    #校验文件是否有24个，没有退出程序并提示错误
+    everyDayFilesCount=$(ls | wc -l);
+    if [ $everyDayFilesCount -ne 24 ]; then
+        echo "[ERROR] 压缩包文件内容并没有包含完整一天的日志量，请检查... exit...";
+
+        #测试用，退出程序前的清理工作
+        cd ..;
+        rm $day -rf;
+        exit;
+    fi
 
     #汇总文本为每天两个文件 (sort目的: 按照小时排序grep出来的文件 便于汇总，使最终文件内容是按照时间排序)
 #hourLogs=$(find . -name "*text_reocord*");
