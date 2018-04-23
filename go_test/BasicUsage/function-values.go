@@ -14,16 +14,16 @@ func adder() func(int) int {
 }
 
 func main() {
-	//º¯ÊıÒ²ÊÇÖµ
+	//å‡½æ•°ä¹Ÿæ˜¯å€¼
 	hypot := func(x, y float64) float64 {
 		return math.Sqrt(x*x + y*y)
 	}
 
 	fmt.Println(hypot(3, 4))
 	
-	// º¯ÊıµÄ±Õ°ü
-	//TODO º¯ÊıµÄ±Õ°üµÄÀí½â
-	fmt.Println(" function-value ±Õ°ü")
+	// å‡½æ•°çš„é—­åŒ…
+	//TODO å‡½æ•°çš„é—­åŒ…çš„ç†è§£
+	fmt.Println(" function-value é—­åŒ…")
 	pos, neg := adder(), adder()
 	for i := 0; i < 10; i++ {
 		fmt.Println(

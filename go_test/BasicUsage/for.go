@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-//常规for的使用，类似c
+//甯歌for鐨勪娇鐢紝绫讳技c
 func normalCalcTotalNum1(sum int) {
 	for i := 0; i < 10; i++ {
 		sum += i
@@ -10,7 +10,7 @@ func normalCalcTotalNum1(sum int) {
 	fmt.Println(sum)
 }
 
-//只包含判断条件的 for循环
+//鍙寘鍚垽鏂潯浠剁殑 for寰幆
 func normalCalcTotalNum2(sum int) {
 	i := 0
 	for i < 10 {
@@ -20,7 +20,7 @@ func normalCalcTotalNum2(sum int) {
 	fmt.Println(sum)
 }
 
-//无判断条件的 for循环
+//鏃犲垽鏂潯浠剁殑 for寰幆
 func normalCalcTotalNum3(sum int) {
 	i := 0
 	for {

@@ -5,13 +5,13 @@ import (
 	"math/cmplx"
 	)
 
-//`var` Óï¾ä¿ÉÒÔ¶¨ÒåÔÚ°ü»òº¯Êý¼¶±ð£¬
-// ×¢Òâº¯ÊýÄÚÓë°üÌåÄÚº¯Êý³õÊ¼»¯ ²îÒì
-// º¯ÊýÍâ¶¨Òå±äÁ¿±ØÐëÒÔ var¿ªÍ·£¬ÇÒ²»ÄÜÊ¹ÓÃ := ½á¹¹
+//`var` è¯­å¥å¯ä»¥å®šä¹‰åœ¨åŒ…æˆ–å‡½æ•°çº§åˆ«ï¼Œ
+// æ³¨æ„å‡½æ•°å†…ä¸ŽåŒ…ä½“å†…å‡½æ•°åˆå§‹åŒ– å·®å¼‚
+// å‡½æ•°å¤–å®šä¹‰å˜é‡å¿…é¡»ä»¥ varå¼€å¤´ï¼Œä¸”ä¸èƒ½ä½¿ç”¨ := ç»“æž„
 //var c, python, java bool
 var c, python, java bool = true, false, false
 
-//¶¨Òå²¢³õÊ¼»¯¶à¸ö±äÁ¿
+//å®šä¹‰å¹¶åˆå§‹åŒ–å¤šä¸ªå˜é‡
 var (
 	ToBe   bool       = false
 	MaxInt uint64     = 1<<64 - 1
@@ -20,7 +20,7 @@ var (
 
 func main() {
 	//var i int
-	//i := 999 //¶ÌÉùÃ÷±äÁ¿£¬ÓÃÔÚÃ÷È·±äÁ¿ÀàÐÍµÄµØ·½
+	//i := 999 //çŸ­å£°æ˜Žå˜é‡ï¼Œç”¨åœ¨æ˜Žç¡®å˜é‡ç±»åž‹çš„åœ°æ–¹
 	var i int = 999
 	fmt.Println(i, c, python, java)
 	const f = "%T(%v)\n"

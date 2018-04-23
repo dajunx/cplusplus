@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-//½Ó¿ÚÀàĞÍÊÇÓÉÒ»×é·½·¨¶¨ÒåµÄ¼¯ºÏ£¬½Ó¿ÚÀàĞÍµÄÖµ¿ÉÒÔ´æ·ÅÊµÏÖÕâĞ©·½·¨µÄÈÎºÎÖµ
+//æ¥å£ç±»å‹æ˜¯ç”±ä¸€ç»„æ–¹æ³•å®šä¹‰çš„é›†åˆï¼Œæ¥å£ç±»å‹çš„å€¼å¯ä»¥å­˜æ”¾å®ç°è¿™äº›æ–¹æ³•çš„ä»»ä½•å€¼
 type Abser interface {
 	Abs() float64
 }
@@ -15,11 +15,11 @@ func main() {
 	f := MyFloat(-math.Sqrt2)
 	v := Vertex{3, 4}
 
-	a = f  // a MyFloat ÊµÏÖÁË Abser
-	a = &v // a *Vertex ÊµÏÖÁË Abser
+	a = f  // a MyFloat å®ç°äº† Abser
+	a = &v // a *Vertex å®ç°äº† Abser
 
-	// ÏÂÃæÒ»ĞĞ£¬v ÊÇÒ»¸ö Vertex£¨¶ø²»ÊÇ *Vertex£©
-	// ËùÒÔÃ»ÓĞÊµÏÖ Abser¡£
+	// ä¸‹é¢ä¸€è¡Œï¼Œv æ˜¯ä¸€ä¸ª Vertexï¼ˆè€Œä¸æ˜¯ *Vertexï¼‰
+	// æ‰€ä»¥æ²¡æœ‰å®ç° Abserã€‚
 	a = v
 
 	fmt.Println(a.Abs())

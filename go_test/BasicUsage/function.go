@@ -2,22 +2,22 @@ package main
 
 import "fmt"
 
-//³£¹æº¯Êı
+//å¸¸è§„å‡½æ•°
 func add1(x int, y int) int {
 	return x + y
 }
 
-//Ê¡ÂÔº¯Êı²ÎÊıÀàĞÍ
+//çœç•¥å‡½æ•°å‚æ•°ç±»å‹
 func add2(x, y int) int {
 	return x - y
 }
 
-//¶à·µ»ØÖµ
+//å¤šè¿”å›å€¼
 func swap(x, y string) (string, string) {
 	return y, x
 }
 
-//ÃüÃû·µ»Ø£¬return Óï¾ä·µ»Ø½á¹ûµÄµ±Ç°Öµ
+//å‘½åè¿”å›ï¼Œreturn è¯­å¥è¿”å›ç»“æœçš„å½“å‰å€¼
 func split(sum int) (x, y int) {
 	x = sum * 4 / 9
 	y = sum - x

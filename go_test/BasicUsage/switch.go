@@ -7,8 +7,8 @@ import (
 )
 
 func testSwitch1() {
-    // switch ÆäÊµ¾ÍÊÇÒ»¸ö×Ö¶ÎµÄ¼¯ºÏ
-    // Ö´ĞĞË³ĞòÊÇ´ÓÉÏµ½ÏÂµÄÖ´ĞĞ£¬µ±Æ¥Åä³É¹¦µÄÊ±ºòÍ£Ö¹
+    // switch å…¶å®å°±æ˜¯ä¸€ä¸ªå­—æ®µçš„é›†åˆ
+    // æ‰§è¡Œé¡ºåºæ˜¯ä»ä¸Šåˆ°ä¸‹çš„æ‰§è¡Œï¼Œå½“åŒ¹é…æˆåŠŸçš„æ—¶å€™åœæ­¢
     switch os := runtime.GOOS; os {
     case "darwin":
         fmt.Println("OS X.")
@@ -16,7 +16,7 @@ func testSwitch1() {
         fmt.Println("Linux.")
     case "windows":
         fmt.Println("windows.")
-	fallthrough //×èÖ¹·ÖÖ§×Ô¶¯½áÊø
+	fallthrough //é˜»æ­¢åˆ†æ”¯è‡ªåŠ¨ç»“æŸ
     default:
         // freebsd, openbsd,
         // plan9, windows...
@@ -25,8 +25,8 @@ func testSwitch1() {
     }  
 }
 
-//Ã»ÓĞÌõ¼şµÄ switch Í¬ `switch true` Ò»Ñù£¬
-// ÓÃÀ´±È¶ÔËùÓĞcaseµÄÌõ¼ş, cµ±ÖĞÓ¦¸ÃÃ»Ã»ÓĞÈç´ËÊ¹ÓÃ·½Ê½
+//æ²¡æœ‰æ¡ä»¶çš„ switch åŒ `switch true` ä¸€æ ·ï¼Œ
+// ç”¨æ¥æ¯”å¯¹æ‰€æœ‰caseçš„æ¡ä»¶, cå½“ä¸­åº”è¯¥æ²¡æ²¡æœ‰å¦‚æ­¤ä½¿ç”¨æ–¹å¼
 func noInputSwitchTest() {
 	t := time.Now()
 	switch {

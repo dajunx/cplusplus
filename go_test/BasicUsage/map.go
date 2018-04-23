@@ -5,7 +5,7 @@ import "fmt"
 type Vertex struct {
     Lat, Long float64
 }
-//map ¶¨Òå
+//map å®šä¹‰
 var m map[string]Vertex
 
 var n = map[string]Vertex{
@@ -17,16 +17,16 @@ var n = map[string]Vertex{
     },  
 }
 
-//ĞŞ¸ÄmapÖĞµÄÖµ
+//ä¿®æ”¹mapä¸­çš„å€¼
 func modifyMapItem(m map[string]Vertex) {
     m["Answer"] = Vertex{42,0}
     fmt.Println("The value:", m["Answer"])
 
-    //³ÖĞøĞŞ¸ÄÖµ
+    //æŒç»­ä¿®æ”¹å€¼
     m["Answer"] = Vertex{48,0}
     fmt.Println("The value:", m["Answer"])
 
-    //É¾³ı
+    //åˆ é™¤
     delete(m, "Answer")
     fmt.Println("The value:", m["Answer"])
 
@@ -35,14 +35,14 @@ func modifyMapItem(m map[string]Vertex) {
 }
 
 func main() {
-    //map ÔÚÊ¹ÓÃÖ®Ç°±ØĞëÓÃ make ¶ø²»ÊÇ new À´´´½¨£»ÖµÎª nil µÄ map ÊÇ¿ÕµÄ£¬²¢ÇÒ²»ÄÜ¸³Öµ
+    //map åœ¨ä½¿ç”¨ä¹‹å‰å¿…é¡»ç”¨ make è€Œä¸æ˜¯ new æ¥åˆ›å»ºï¼›å€¼ä¸º nil çš„ map æ˜¯ç©ºçš„ï¼Œå¹¶ä¸”ä¸èƒ½èµ‹å€¼
     m = make(map[string]Vertex)
     m["Bell Labs"] = Vertex{
         40.68433, -74.39967,
     }   
     fmt.Println(m["Bell Labs"])
 
-    //map µÄÎÄ·¨¸ú½á¹¹ÌåÎÄ·¨ÏàËÆ£¬²»¹ı±ØĞëÓĞ¼üÃû
+    //map çš„æ–‡æ³•è·Ÿç»“æ„ä½“æ–‡æ³•ç›¸ä¼¼ï¼Œä¸è¿‡å¿…é¡»æœ‰é”®å
     fmt.Println(n)
 
     fmt.Println("modify m map data")

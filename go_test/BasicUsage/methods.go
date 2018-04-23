@@ -9,14 +9,14 @@ type Vertex struct {
 	X, Y float64
 }
 
-//·½·¨
-//·½·¨½ÓÊÕÕß ³öÏÖÔÚ func ¹Ø¼ü×ÖºÍ·½·¨ÃûÖ®¼äµÄ²ÎÊýÖÐ
+//æ–¹æ³•
+//æ–¹æ³•æŽ¥æ”¶è€… å‡ºçŽ°åœ¨ func å…³é”®å­—å’Œæ–¹æ³•åä¹‹é—´çš„å‚æ•°ä¸­
 func (v *Vertex) Abs1() float64 {
 	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 
-//¿ÉÒÔ¶Ô°üÖÐµÄ ÈÎÒâ ÀàÐÍ¶¨ÒåÈÎÒâ·½·¨£¬¶ø²»½ö½öÊÇÕë¶Ô½á¹¹Ìå
-//µ«ÊÇ£¬²»ÄÜ¶ÔÀ´×ÔÆäËû°üµÄÀàÐÍ»ò»ù´¡ÀàÐÍ¶¨Òå·½·¨
+//å¯ä»¥å¯¹åŒ…ä¸­çš„ ä»»æ„ ç±»åž‹å®šä¹‰ä»»æ„æ–¹æ³•ï¼Œè€Œä¸ä»…ä»…æ˜¯é’ˆå¯¹ç»“æž„ä½“
+//ä½†æ˜¯ï¼Œä¸èƒ½å¯¹æ¥è‡ªå…¶ä»–åŒ…çš„ç±»åž‹æˆ–åŸºç¡€ç±»åž‹å®šä¹‰æ–¹æ³•
 type MyFloat float64
 func (f MyFloat) Abs2() float64 {
 	if f < 0 {

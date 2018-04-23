@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-//slice ÓÉº¯Êı make ´´½¨¡£Õâ»á·ÖÅäÒ»¸öÁã³¤¶ÈµÄÊı×é²¢ÇÒ·µ»ØÒ»¸ö slice Ö¸ÏòÕâ¸öÊı×é
+//slice ç”±å‡½æ•° make åˆ›å»ºã€‚è¿™ä¼šåˆ†é…ä¸€ä¸ªé›¶é•¿åº¦çš„æ•°ç»„å¹¶ä¸”è¿”å›ä¸€ä¸ª slice æŒ‡å‘è¿™ä¸ªæ•°ç»„
 func newSlice() {
     a := make([]int, 5)
     printSlice("a", a)
@@ -14,7 +14,7 @@ func newSlice() {
     printSlice("d", d)
 }
 
-//slice µÄÁãÖµÊÇ `nil`¡£Ò»¸ö nil µÄ slice µÄ³¤¶ÈºÍÈİÁ¿ÊÇ 0
+//slice çš„é›¶å€¼æ˜¯ `nil`ã€‚ä¸€ä¸ª nil çš„ slice çš„é•¿åº¦å’Œå®¹é‡æ˜¯ 0
 func nilSlice() {
 	var z []int
 	fmt.Println(z, len(z), cap(z))
@@ -28,7 +28,7 @@ func printSlice(s string, x []int) {
         s, len(x), cap(x), x)
 }
 
-//Ìí¼ÓÔªËØ
+//æ·»åŠ å…ƒç´ 
 func appendDataToSlice() {
 	var a []int
 	printSlice("a", a)
@@ -47,15 +47,15 @@ func appendDataToSlice() {
 }
 
 func main() {
-    //Ò»¸ö slice »áÖ¸ÏòÒ»¸öĞòÁĞµÄÖµ£¬²¢ÇÒ°üº¬ÁË³¤¶ÈĞÅÏ¢
+    //ä¸€ä¸ª slice ä¼šæŒ‡å‘ä¸€ä¸ªåºåˆ—çš„å€¼ï¼Œå¹¶ä¸”åŒ…å«äº†é•¿åº¦ä¿¡æ¯
     p := []int{2, 3, 5, 7, 11, 13} 
     fmt.Println("p ==", p)
 
-    // slice ÏÂ±í´Ó0¿ªÊ¼£¬ÇĞÆ¬ÊÇ×ó±ÕÓÒ¿ª
+    // slice ä¸‹è¡¨ä»0å¼€å§‹ï¼Œåˆ‡ç‰‡æ˜¯å·¦é—­å³å¼€
     fmt.Println("p[1:4] ==", p[1:4])
-    // Ê¡ÂÔÏÂ±ê´ú±í´Ó 0 ¿ªÊ¼
+    // çœç•¥ä¸‹æ ‡ä»£è¡¨ä» 0 å¼€å§‹
     fmt.Println("p[:3] ==", p[:3])
-    // Ê¡ÂÔÉÏ±ê´ú±íµ½ len(s) ½áÊø
+    // çœç•¥ä¸Šæ ‡ä»£è¡¨åˆ° len(s) ç»“æŸ
     fmt.Println("p[4:] ==", p[4:])
 
     for i := 0; i < len(p); i++ {

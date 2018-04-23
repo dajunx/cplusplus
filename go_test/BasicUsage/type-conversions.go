@@ -8,7 +8,7 @@ import (
 func main() {
 	var x, y int = 3, 4
 	var f float64 = math.Sqrt(float64(x*x + y*y))
-	// ÀàĞÍ×ª»»£¬±ØĞëÏÔÊ¾×ª»»£¬±í´ïÊ½ T(v) ½«Öµ v ×ª»»ÎªÀàĞÍ `T`
+	// ç±»å‹è½¬æ¢ï¼Œå¿…é¡»æ˜¾ç¤ºè½¬æ¢ï¼Œè¡¨è¾¾å¼ T(v) å°†å€¼ v è½¬æ¢ä¸ºç±»å‹ `T`
 	var z int = int(f)
 	fmt.Println(x, y, z)
 }

@@ -5,8 +5,8 @@ import "fmt"
 const Pi = 3.14
 
 func main() {
-	// 常量定义，不能使用`:=`语法
-	const World = "世界"
+	// 甯搁噺瀹氫箟锛屼笉鑳戒娇鐢╜:=`璇硶
+	const World = "涓栫晫"
 	fmt.Println("Hello", World)
 	fmt.Println("Happy", Pi, "Day")
 
