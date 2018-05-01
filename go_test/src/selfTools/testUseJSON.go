@@ -2,7 +2,7 @@
 // decoding, including to and from built-in and custom
 // data types.
 
-package main
+package fileManage
 
 import "encoding/json"
 import "fmt"
@@ -19,7 +19,8 @@ type response2 struct {
 	Fruits []string `json:"fruits"`
 }
 
-func main() {
+//TestUseJSON 使用json例子
+func TestUseJSON() {
 
 	// First we'll look at encoding basic data types to
 	// JSON strings. Here are some examples for atomic

@@ -1,4 +1,4 @@
-package main
+package basicuse
 
 import (
 	"fmt"
@@ -26,7 +26,8 @@ func pow(x, n, lim float64) float64 {
 	return lim
 }
 
-func main() {
+//TestIfElseUse 常规if/else的使用
+func TestIfElseUse() {
 	fmt.Println(sqrt(2), sqrt(-4))
 	fmt.Println(
 		pow(3, 2, 10),

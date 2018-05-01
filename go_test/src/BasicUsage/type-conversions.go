@@ -1,11 +1,12 @@
-package main
+package basicuse
 
 import (
 	"fmt"
 	"math"
 )
 
-func main() {
+//TestTypeConver 类型转换
+func TestTypeConver() {
 	var x, y int = 3, 4
 	var f float64 = math.Sqrt(float64(x*x + y*y))
 	// 类型转换，必须显示转换，表达式 T(v) 将值 v 转换为类型 `T`

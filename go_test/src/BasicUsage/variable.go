@@ -1,9 +1,9 @@
-package main
+package basicuse
 
 import (
 	"fmt"
 	"math/cmplx"
-	)
+)
 
 //`var` 语句可以定义在包或函数级别，
 // 注意函数内与包体内函数初始化 差异
@@ -18,7 +18,8 @@ var (
 	z      complex128 = cmplx.Sqrt(-5 + 12i)
 )
 
-func main() {
+//TestVariable 变量使用
+func TestVariable() {
 	//var i int
 	//i := 999 //短声明变量，用在明确变量类型的地方
 	var i int = 999

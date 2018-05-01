@@ -1,4 +1,4 @@
-package main
+package basicuse
 
 import (
 	"fmt"
@@ -10,7 +10,8 @@ type Abser interface {
 	Abs() float64
 }
 
-func main() {
+//TestUseInterface 接口的使用
+func TestUseInterface() {
 	var a Abser
 	f := MyFloat(-math.Sqrt2)
 	v := Vertex{3, 4}
@@ -20,7 +21,7 @@ func main() {
 
 	// 下面一行，v 是一个 Vertex（而不是 *Vertex）
 	// 所以没有实现 Abser。
-	a = v
+	//a = v
 
 	fmt.Println(a.Abs())
 }

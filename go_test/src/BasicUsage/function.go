@@ -1,4 +1,4 @@
-package main
+package basicuse
 
 import "fmt"
 
@@ -24,9 +24,10 @@ func split(sum int) (x, y int) {
 	return
 }
 
-func main() {
+//TestUseNormalFunction 简单函数的使用
+func TestUseNormalFunction() {
 	fmt.Println(add1(42, 13))
 	fmt.Println(add2(42, 13))
-	fmt.Println(swap(42,13))
+	fmt.Println(swap("42", "13"))
 	fmt.Println(split(42))
 }

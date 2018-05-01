@@ -8,9 +8,10 @@ import (
 )
 
 func init() {
-	fmt.Println("main package's int func.")
+	//fmt.Println("main package's int func.")
 }
 
+//ConnectLocalDb 链接本地数据库
 func ConnectLocalDb() {
 	db, err := sql.Open("mysql", "root:@/test")
 	if err != nil {

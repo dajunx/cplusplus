@@ -1,6 +1,7 @@
 package main
 
 import (
+	"BasicUsage"
 	"fmt"
 	"selfDb"
 	"selfTools"
@@ -8,6 +9,11 @@ import (
 	"testDir"
 	"time"
 )
+
+//init 放在任何包中都会首先被调用，在main之前
+func init() {
+	//fmt.Println("[main.go] test init call.")
+}
 
 //获取网易歌曲含有评论的连接地址
 func useMusic() {
@@ -43,11 +49,16 @@ func testAddDelRobot() {
 	testMain.ExitRobotUser()
 }
 
+func testGoEvi() {
+	fmt.Println("hello world")
+}
+
 func main() {
 	//useMusic()
 	//useDb()
 	//fileManage.SaveToLocalFile1("input.txt", "output.txt")
 
-	testAddDelRobot()
+	//testAddDelRobot()
+	basicuse.TestUseArray()
 	fmt.Println("process finished.")
 }

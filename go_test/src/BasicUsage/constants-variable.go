@@ -1,10 +1,11 @@
-package main
+package basicuse
 
 import "fmt"
 
 const Pi = 3.14
 
-func main() {
+//TestConstVariable 常量的使用
+func TestConstVariable() {
 	// 常量定义，不能使用`:=`语法
 	const World = "世界"
 	fmt.Println("Hello", World)

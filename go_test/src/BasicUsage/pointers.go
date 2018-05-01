@@ -1,8 +1,9 @@
-package main
+package basicuse
 
 import "fmt"
 
-func main() {
+//TestPointers 指针的使用
+func TestPointers() {
 	i, j := 42, 2701
 
 	//Go 没有指针运算

@@ -1,4 +1,4 @@
-package main
+package basicuse
 
 import "fmt"
 
@@ -33,7 +33,8 @@ func normalCalcTotalNum3(sum int) {
 	fmt.Println(sum)
 }
 
-func main() {
+//TestForAction for语句的使用
+func TestForAction() {
 	normalCalcTotalNum1(0)
 	normalCalcTotalNum2(1)
 	normalCalcTotalNum3(2)
