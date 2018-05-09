@@ -30,7 +30,8 @@ func getIPAndDirIndex(doc *goquery.Document, nodeInfo string) {
 	})
 }
 
-func getAllSidNum(inputURL *string) ([]string, error) {
+//GetWebChildData 获取制定网址元素信息
+func GetWebChildData(inputURL *string) ([]string, error) {
 	var ret []string
 	doc, err := goquery.NewDocument(*inputURL)
 	if err != nil {
@@ -50,7 +51,7 @@ func getAllSidNum(inputURL *string) ([]string, error) {
 //GetMemdbSomeInfo 获取memdb相关信息
 func GetMemdbSomeInfo() {
 	var targetURL string = "http://www.xxxxx.com" //target url
-	sids, errSids := getAllSidNum(&targetURL)
+	sids, errSids := GetWebChildData(&targetURL)
 	if errSids != nil {
 		fmt.Print(errSids)
 		return

@@ -2,8 +2,8 @@ package basicuse
 
 import "fmt"
 
-//slice 由函数 make 创建。这会分配一个零长度的数组并且返回一个 slice 指向这个数组
-func newSlice() {
+//NewSlice 由函数 make 创建。这会分配一个零长度的数组并且返回一个 slice 指向这个数组
+func NewSlice() {
 	a := make([]int, 5)
 	printSlice("a", a)
 	b := make([]int, 0, 5)
@@ -28,8 +28,8 @@ func printSlice(s string, x []int) {
 		s, len(x), cap(x), x)
 }
 
-//添加元素
-func appendDataToSlice() {
+//AppendDataToSlice 添加元素
+func AppendDataToSlice() {
 	var a []int
 	printSlice("a", a)
 
@@ -64,11 +64,11 @@ func TestSlices() {
 	}
 
 	fmt.Println("new slice")
-	newSlice()
+	NewSlice()
 
 	fmt.Println("nil slice")
 	nilSlice()
 
 	fmt.Println("add itmes to slice")
-	appendDataToSlice()
+	AppendDataToSlice()
 }

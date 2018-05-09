@@ -146,10 +146,11 @@ func PostHttpRequest(url string, cookie string, postStr string) []byte {
 	return nil
 }
 
-func NormalGetURL() {
+// NormalGetURL 常规方式获取url内容
+func NormalGetURL(URLTemp string) {
 	//URLTemp := "http://localhost/test/a_json_file.php" //本地wampserver启动服务提供json文件访问
 	//URLTemp := "http://127.0.0.1:9999/ReadMe.txt" //本地c++ 编写的web服务器
-	URLTemp := "https://music.163.com/#/song?id=306752"
+	//URLTemp := "https://music.163.com/#/song?id=306752"
 	resp, err := http.Get(URLTemp)
 	if err != nil {
 		//

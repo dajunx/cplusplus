@@ -1,7 +1,6 @@
 package main
 
 import (
-	"BasicUsage"
 	"fmt"
 	"selfDb"
 	"selfTools"
@@ -59,6 +58,7 @@ func main() {
 	//fileManage.SaveToLocalFile1("input.txt", "output.txt")
 
 	//testAddDelRobot()
-	basicuse.TestUseArray()
+	//basicuse.TestUseArray()
+	testGoEvi()
 	fmt.Println("process finished.")
 }
