@@ -72,3 +72,16 @@ func TestSlices() {
 	fmt.Println("add itmes to slice")
 	AppendDataToSlice()
 }
+
+/*  对于slice, 如下两种添加数据方式适用场景：
+	copy(dst, src []Type) int  这种 dst src都是用 []int{2, 3, 5, 7, 11, 13} 或者 make 初始化
+	append(slice []Type, elems ...Type) []Type  这种添加元素函数，可以使用 var a []int 初始化
+ */
+func testSliceCopyFunc() {
+	src := []int{1, 2}
+	des := make([]int, len(src))
+	copy(des, src) //copy des端必须是 := 初始化或者 make初始化
+	//des = append(des, 1)
+	//des = append(des, 2)
+	fmt.Printf("\n des:%d\n", des)
+}

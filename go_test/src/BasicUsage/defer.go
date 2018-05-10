@@ -2,7 +2,7 @@ package basicuse
 
 import "fmt"
 
-//返回指针版本 func fun1(t bool, i* int) *int {
+//返回指针版本 func thread1(t bool, i* int) *int {
 func fun1(t bool, i *int) int {
 	switch {
 	case t == false:

@@ -1,10 +1,8 @@
 package testMain
 
-import (
-	"fmt"
-)
+import "3rdTest"
 
 // Test 测试用 函数
 func Test() {
-	fmt.Println("test")
+	officialLibTest.TestStringFunc()
 }

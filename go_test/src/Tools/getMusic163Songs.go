@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 //WebGetAction 模拟GEt
@@ -163,7 +164,7 @@ func NormalGetURL(URLTemp string) {
 	fmt.Println(string(body))
 }
 
-func DownloadSongJSON(songID int) []byte {
+func downloadSongJSON(songID int) []byte {
 	URLTemp := "http://music.163.com/api/v1/resource/comments/R_SO_4_"
 	URLTemp += strconv.Itoa(songID)
 	//fmt.Println(URLTemp)
@@ -187,7 +188,7 @@ func DownloadSongJSON(songID int) []byte {
 	return res
 }
 
-func ParseJSON(res []byte) bool {
+func parseJSON(res []byte) bool {
 	ret := false
 	//解析json
 	var dat map[string]interface{}
@@ -202,4 +203,22 @@ func ParseJSON(res []byte) bool {
 	}
 	//fmt.Println(dat)
 	return ret
+}
+
+//获取网易歌曲含有评论的连接地址
+func get163MusicComment() {
+	// 网易歌曲原始播放地址，含有评论
+	songURL := "https://music.163.com/#/song?id="
+
+	//遍历歌曲json API，获取有评论数的歌曲链接
+	songIDBegin := 306665
+	songIDEnd := songIDBegin + 100
+	for songID := songIDBegin; songID <= songIDEnd; songID++ {
+		JSONContent := downloadSongJSON(songID)
+		ret := parseJSON(JSONContent)
+		if ret == true {
+			fmt.Println(songURL + strconv.Itoa(songID))
+		}
+		time.Sleep(time.Millisecond * 100)
+	}
 }

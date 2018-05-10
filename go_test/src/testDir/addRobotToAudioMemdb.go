@@ -1,7 +1,7 @@
 package testMain
 
 import (
-	"selfTools"
+	"Tools"
 	"strconv"
 	"time"
 )
