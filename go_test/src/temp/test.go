@@ -1,16 +1,14 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
 	"os"
 	"regexp"
-	"selfDb"
 	"strconv"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"selfDb"
 )
 
 type cnblog struct {
@@ -52,14 +50,6 @@ func saveToLocalFile1(outPutFilename string, contents string) {
 	if _, err := fo.Write([]byte(contents)); err != nil {
 		panic(err)
 	}
-}
-
-func saveDataToSqlite3() {
-	db, err := sql.Open("sqlite3", "./foo.db")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
 }
 
 //GetWebChildData 获取制定网址元素信息
@@ -106,6 +96,7 @@ func main() {
 		GetWebChildData(&URL, &cnblogData)
 	}
 
+	//保存到磁盘文件中
 	//content := converCnblogDataToSimpleString(&cnblogData)
 	//os.Remove("output.log")
 	//saveToLocalFile1("output.log", content)
