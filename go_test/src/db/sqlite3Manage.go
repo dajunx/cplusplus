@@ -2,56 +2,35 @@ package dbMange
 
 import (
 	"database/sql"
-	"log"
-	"os"
-
+	"fmt"
 	_ "github.com/mattn/go-sqlite3" //
+	"log"
 )
 
-func openDB() *sql.DB {
-	db, err := sql.Open("sqlite3", "F:/github_git/go_test/src/temp/cnblogData.db")
+var pSqliteDB *sql.DB
+var connSqliteDBStatus bool = false
+
+func init() {
+	db, err := sql.Open("sqlite3", "F:/github_git/go_test/src/temp/test.db")
 	if err != nil {
-		log.Fatal(err)
-	}
-	//defer db.Close()
-	return db
-}
-
-//CreateSqliteTable 创建表语句
-func CreateSqliteTable() {
-
-	if _, err := os.Stat("F:/github_git/go_test/src/temp/cnblogData.db"); os.IsNotExist(err) == false {
-		//log.Fatal(err)
+		fmt.Printf("init sqlite3 failed, err code:%s\n", err)
+		connSqliteDBStatus = false
 		return
 	}
 
-	db := openDB()
-	defer db.Close()
-
-	sqlStmt := `
-	create table cnblogData (
-		id integer not null primary key, 
-		title text,
-		contentURL text,
-		summary text,
-		authorURL text,
-		time text
-		);
-	delete from cnblogData;
-	`
-	_, err1 := db.Exec(sqlStmt)
-	if err1 != nil {
-		log.Printf("%q: %s\n", err1, sqlStmt)
-		return
-	}
+	pSqliteDB = db
+	connSqliteDBStatus = true
 }
 
 //AddDataToTable x
 func AddDataToTable(index int, data []string) {
-	db := openDB()
-	defer db.Close()
+	if connSqliteDBStatus == false {
+		return
+	}
 
-	tx, err := db.Begin()
+	defer pSqliteDB.Close()
+
+	tx, err := pSqliteDB.Begin()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -69,23 +48,38 @@ func AddDataToTable(index int, data []string) {
 	tx.Commit()
 }
 
-//QueryMaxid 1
-func QueryMaxid() int {
-	db := openDB()
-	defer db.Close()
+func ExecutionSql(inputSql string) bool {
+	if connSqliteDBStatus == false {
+		return false
+	}
 
-	maxID := 0
-	rows, err := db.Query("select count(*) from cnblogData")
+	_, err := pSqliteDB.Exec(inputSql)
+	if err != nil {
+		fmt.Printf("ExecutionSql failed, err code:%s\n", err)
+	}
+
+	return true
+}
+
+func QueryWithSql(inputSql string) int {
+	if connSqliteDBStatus == false {
+		return 0
+	}
+
+	rows, err := pSqliteDB.Query(inputSql)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
+
+	maxID := 0
 	for rows.Next() {
 		err = rows.Scan(&maxID)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
+
 	err = rows.Err()
 	if err != nil {
 		log.Fatal(err)
@@ -94,13 +88,27 @@ func QueryMaxid() int {
 	return maxID
 }
 
-//ClearData 1
-func ClearData() {
-	db := openDB()
-	defer db.Close()
-
-	_, err := db.Exec("delete from cnblogData")
-	if err != nil {
-		log.Fatal(err)
+func TestSqliteUse() {
+	if connSqliteDBStatus == false {
+		return
 	}
+
+	var inputSql []string
+	inputSql = append(inputSql, `create table if not exists test (
+		id integer not null primary key,
+		name text,
+		pwd integer
+		);`)
+	inputSql = append(inputSql, `delete from test`)
+	inputSql = append(inputSql, `insert into test values(1, "111", 1)`)
+	inputSql = append(inputSql, `insert into test values(2, "222", 2)`)
+	inputSql = append(inputSql, `insert into test values(3, "333", 3)`)
+	for _, sql := range inputSql {
+		err := ExecutionSql(sql)
+		if err == true {
+			fmt.Println("execution sql succ.")
+		}
+	}
+
+	defer pSqliteDB.Close()
 }
