@@ -8,23 +8,23 @@ import (
 )
 
 var pMysqlDB *sql.DB
-var connectMysqlDBStatus bool
+var connectMysqlDBStatus bool = false
 
 func init() {
-	initConnectMysql()
+	//initConnectMysql()
 }
 
-func initConnectMysql() {
-	db, err := sql.Open("mysql", "root:@/test")
+func initConnectMysql(connInfo string) bool {
+	db, err := sql.Open("mysql", connInfo)
 	if err != nil {
 		fmt.Printf("failed connect mysql, err code:%s\n", err)
 		connectMysqlDBStatus = false
-		return
 	} else {
 		pMysqlDB = db
+		connectMysqlDBStatus = true
 	}
 
-	connectMysqlDBStatus = true
+	return connectMysqlDBStatus
 }
 
 func executeMysql(sql string) bool {
@@ -34,7 +34,7 @@ func executeMysql(sql string) bool {
 
 	rows, err := pMysqlDB.Query(sql)
 	if err != nil {
-		fmt.Printf("failed execute sql, err code:%s, source sql:%s\n", err, sql)
+		fmt.Printf("failed execute sql, err info:[%s], source sql:[%s]\n", err, sql)
 		return false
 	}
 
@@ -54,7 +54,14 @@ func executeMysql(sql string) bool {
 	return true
 }
 
-func TestMysqlUse() {
+/*
+	参数说明：connInfo 形如："DBUserName:DBPWD@tcp(IP:Port)/DatabaseName"
+ */
+func TestConnectJDClondMysql(connInfo string) {
+	if initConnectMysql(connInfo) == false { // 连接数据库异常
+		return
+	}
+
 	var sqlArray []string
 	sqlArray = append(sqlArray, "delete from test")
 	sqlArray = append(sqlArray, `insert into test values(1, "111", 1)`)
@@ -67,7 +74,10 @@ func TestMysqlUse() {
 	for _, sql := range sqlArray {
 		resExecuteSql = executeMysql(sql)
 		if resExecuteSql == true {
-			fmt.Printf("execute `%s` succ.\n", sql)
+			fmt.Printf("[JDClond]execute `%s` succ.\n", sql)
+		} else {
+			fmt.Printf("execute mysql meet error, return.\n")
+			break
 		}
 	}
 }
