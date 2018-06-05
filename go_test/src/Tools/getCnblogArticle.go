@@ -1,4 +1,4 @@
-package main
+package fileManage
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/PuerkitoBio/goquery"
 	"db"
+	"github.com/PuerkitoBio/goquery"
 )
 
 type cnblog struct {
@@ -101,10 +101,24 @@ func main() {
 	//os.Remove("output.log")
 	//saveToLocalFile1("output.log", content)
 
+	//建表并清理数据
+	var inputSql []string
+	inputSql = append(inputSql, `
+	create table if not exists cnblogData (
+		id integer not null primary key, 
+		title text,
+		contentURL text,
+		summary text,
+		authorURL text,
+		time text
+		);`)
+	inputSql = append(inputSql, "delete from cnblogData")
+	for _, sql := range inputSql {
+		dbMange.ExecutionSql(sql)
+	}
+
 	//保存到sqlit中
-	dbMange.CreateSqliteTable()
-	dbMange.ClearData()
-	index := dbMange.QueryMaxid()
+	index := dbMange.QueryWithSql(`select count(*) from cnblogData`)
 	//index := 0
 	for _, singleData := range cnblogData {
 		var data []string

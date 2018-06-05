@@ -26,6 +26,17 @@ func split(sum int) (x, y int) {
 
 //TestUseNormalFunction 简单函数的使用
 func TestUseNormalFunction() {
+
+	//函数的特殊使用方法，如下：
+	func (msg string) {
+		fmt.Println(msg)
+	}("lin")
+
+	f := func (msg string) {
+		fmt.Println(msg)
+	}
+	f("lin")
+
 	fmt.Println(add1(42, 13))
 	fmt.Println(add2(42, 13))
 	fmt.Println(swap("42", "13"))

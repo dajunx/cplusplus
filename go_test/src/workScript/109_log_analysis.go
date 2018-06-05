@@ -1,4 +1,4 @@
-package main
+package fileManage
 
 import (
 	"fmt"
@@ -11,17 +11,9 @@ import (
 	"bufio"
 )
 
-func checkStringEmpty(filename string) bool {
-	if len(filename) == 0 {
-		return true
-	} else {
-		return false
-	}
-}
-
 func listDirectoryFiles(directoryName string) []string {
 	var  fileNames []string
-	if checkStringEmpty(directoryName) == true {
+	if len(directoryName) == 0 {
 		fmt.Printf("[ERROR] 目录字符为空!")
 		return fileNames
 	}
@@ -90,6 +82,10 @@ func handle109Log() {
 		}
 	}
 
+	//埋点，新建目录用于汇总 所有日期的日志文件
+	var LogFor109Dir string = desPath + `\` + "109_log"
+	os.Mkdir(LogFor109Dir, 077)
+
 	//迁移文件
 	for _, fileName := range desFileNames {
 		//提取日志文件中的日期值，形如 xxxx-xx-xx
@@ -140,6 +136,10 @@ func handle109Log() {
 				logFilesContents = logFilesContents[:0]
 			}
 		}
+
+		//赋值每日汇总的文件到 ../109_log 目录
+		os.Link(finalLogFile[0], LogFor109Dir + `\` + `text_reocords.log.` + logTime + `_00~11`)
+		os.Link(finalLogFile[1], LogFor109Dir + `\` + `text_reocords.log.` + logTime + `_12~23`)
 	}
 }
 
@@ -166,7 +166,6 @@ func ReadLineByLineFromLocalFile(filename string) ([]string, bool) {
 }
 
 func SaveToLocalFile(outPutFilename string, content []string) bool {
-	result := false
 	// open output file
 	fo, err := os.Create(outPutFilename)
 	if err != nil {
@@ -188,9 +187,8 @@ func SaveToLocalFile(outPutFilename string, content []string) bool {
 			panic(err)
 		}
 	}
-	result = true
 
-	return result
+	return true
 }
 
 func main() {

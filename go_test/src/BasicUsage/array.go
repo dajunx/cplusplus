@@ -2,6 +2,17 @@ package basicuse
 
 import "fmt"
 
+//多维数组测试
+func MultiArray() {
+	var aa [2][2]int
+	aa = [2][2]int{{1,2}, {3,4}}
+	for _,i := range aa {
+		for _,j := range i {
+			fmt.Println(j)
+		}
+	}
+}
+
 //TestUseArray 数组的使用
 func TestUseArray() {
 	// 表达式 var a [10]int
