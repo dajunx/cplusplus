@@ -95,7 +95,6 @@
     <ClCompile Include="boost_normal\boost_multi_index_test.cpp" />
     <ClCompile Include="boost_normal\boost_random.cpp" />
     <ClCompile Include="boost_normal\calculate_fun_duration_time.cpp" />
-    <ClCompile Include="boost_normal\calculate_ptime_cost_time.cpp" />
     <ClCompile Include="boost_normal\cancle_steady_timer.cpp" />
     <ClCompile Include="boost_normal\coroutine_test.cpp" />
     <ClCompile Include="boost_normal\cpp_fun_para_not_in_order.cpp" />
@@ -156,7 +155,7 @@
     <ClCompile Include="cpp_normal\compare_files_contents.cpp" />
     <ClCompile Include="cpp_normal\complex_fun_point.cpp" />
     <ClCompile Include="cpp_normal\cplusplus_friend_fun_class.cpp" />
-    <ClCompile Include="cpp_normal\cplusplus_random_base_from_time.cpp" />
+    <ClCompile Include="cpp_normal\product_random_num_base_from_time.cpp" />
     <ClCompile Include="cpp_normal\cplusplus_random_example.cpp" />
     <ClCompile Include="cpp_normal\cplusplus_time_test.cpp" />
     <ClCompile Include="cpp_normal\cpp_constructor_copying_cycle.cpp" />
@@ -199,6 +198,7 @@
     <ClCompile Include="cpp_template\typedef_typename_usage.cpp" />
     <ClCompile Include="hash_test\md5.cpp" />
     <ClCompile Include="hash_test\md5test.cpp" />
+    <ClCompile Include="others\getMusic163SongsCommentsInfo.cpp" />
     <ClCompile Include="others\map_erase_element_effective.cpp" />
     <ClCompile Include="others\parse_json_contents_to_simple_text.cpp" />
     <ClCompile Include="others\rapidjson_test.cpp" />

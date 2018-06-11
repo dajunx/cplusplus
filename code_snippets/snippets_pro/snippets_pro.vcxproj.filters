@@ -75,9 +75,6 @@
     <ClCompile Include="cpp_normal\cplusplus_friend_fun_class.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
-    <ClCompile Include="cpp_normal\cplusplus_random_base_from_time.cpp">
-      <Filter>normal_cplusplus\cplusplus</Filter>
-    </ClCompile>
     <ClCompile Include="cpp_normal\cplusplus_random_example.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
@@ -378,9 +375,6 @@
     <ClCompile Include="boost_normal\calculate_fun_duration_time.cpp">
       <Filter>boost\boost</Filter>
     </ClCompile>
-    <ClCompile Include="boost_normal\calculate_ptime_cost_time.cpp">
-      <Filter>boost\boost</Filter>
-    </ClCompile>
     <ClCompile Include="boost_normal\cancle_steady_timer.cpp">
       <Filter>boost\boost</Filter>
     </ClCompile>
@@ -506,6 +500,12 @@
     </ClCompile>
     <ClCompile Include="others\parse_json_contents_to_simple_text.cpp">
       <Filter>others</Filter>
+    </ClCompile>
+    <ClCompile Include="others\getMusic163SongsCommentsInfo.cpp">
+      <Filter>others</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp_normal\product_random_num_base_from_time.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
