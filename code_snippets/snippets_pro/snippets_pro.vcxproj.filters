@@ -507,6 +507,9 @@
     <ClCompile Include="cpp_normal\product_random_num_base_from_time.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
+    <ClCompile Include="cpp_normal\happyNumber.cpp">
+      <Filter>normal_cplusplus\cplusplus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash_test\md5.h">

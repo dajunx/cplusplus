@@ -155,6 +155,7 @@
     <ClCompile Include="cpp_normal\compare_files_contents.cpp" />
     <ClCompile Include="cpp_normal\complex_fun_point.cpp" />
     <ClCompile Include="cpp_normal\cplusplus_friend_fun_class.cpp" />
+    <ClCompile Include="cpp_normal\happyNumber.cpp" />
     <ClCompile Include="cpp_normal\product_random_num_base_from_time.cpp" />
     <ClCompile Include="cpp_normal\cplusplus_random_example.cpp" />
     <ClCompile Include="cpp_normal\cplusplus_time_test.cpp" />
