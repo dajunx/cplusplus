@@ -64,8 +64,12 @@ void testStringContentNum(string digits) {
   string::iterator it = digits.begin();
   for (; it != digits.end();++it)
   {
-    int temp = atoi(&(*it));
-    std::cout<<"temp: "<<temp<<std::endl;
+    //int temp = atoi(&(*it));
+    // 修改成如下即可：
+    char temp = *it;
+    int i = atoi(&temp);
+
+    std::cout<<"temp: "<<i<<std::endl;
   }
 }
 
