@@ -403,6 +403,14 @@ int redisContextConnectTcp(redisContext *c, const char *addr, int port, const st
 	struct sockaddr_in sockaddr;
     int blocking = (c->flags & REDIS_BLOCK);
 
+  //add by linjj 发现hiredis 连接 redis socket没有初始化，提示10093 错误，加入如下初始化代码：
+  WORD sockVersion = MAKEWORD(2,2);
+  WSADATA data; 
+  if(WSAStartup(sockVersion, &data) != 0)
+  {
+    return 0;
+  }
+
 	memset(&sockaddr, 0, sizeof(sockaddr));
 	sockaddr.sin_family = AF_INET;
 
@@ -439,6 +447,8 @@ int redisContextConnectTcp(redisContext *c, const char *addr, int port, const st
     goto end;
 
 error:
+    //add by linjj print net err
+    printf("function:%s failed, socket err:%d", __FUNCTION__, WSAGetLastError());
     rv = REDIS_ERR;
 end:
     return rv;  // Need to return REDIS_OK if alright

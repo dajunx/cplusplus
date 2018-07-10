@@ -15,8 +15,10 @@ int main()
 
 void doTest()
 {
-  //redis默认监听端口为6387 可以再配置文件中修改
-  redisContext* c = redisConnect("192.168.221.138", 6379);
+  /* 初始化
+     redis默认监听端口为6387 可以再配置文件中修改
+  */
+  redisContext* c = redisConnect("127.0.0.1", 9999);
   if ( c->err)
   {
     redisFree(c);
@@ -25,6 +27,8 @@ void doTest()
   }
   printf("Connect to redisServer Success\n");
 
+
+  // 设置值
   const char* command1 = "set stest1 value1";
   redisReply* r = (redisReply*)redisCommand(c, command1);
 
@@ -44,6 +48,8 @@ void doTest()
   freeReplyObject(r);
   printf("Succeed to execute command[%s]\n", command1);
 
+
+  // 校验键是否存在
   const char* command2 = "strlen stest1";
   r = (redisReply*)redisCommand(c, command2);
   if ( r->type != REDIS_REPLY_INTEGER)
@@ -59,6 +65,7 @@ void doTest()
   printf("Succeed to execute command[%s]\n", command2);
 
 
+  // 查看键stest1具体值
   const char* command3 = "get stest1";
   r = (redisReply*)redisCommand(c, command3);
   if ( r->type != REDIS_REPLY_STRING)
@@ -72,6 +79,8 @@ void doTest()
   freeReplyObject(r);
   printf("Succeed to execute command[%s]\n", command3);
 
+
+  // 查看键stest2具体值
   const char* command4 = "get stest2";
   r = (redisReply*)redisCommand(c, command4);
   if ( r->type != REDIS_REPLY_NIL)
@@ -86,5 +95,4 @@ void doTest()
 
 
   redisFree(c);
-
 }
