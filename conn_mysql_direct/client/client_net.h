@@ -5,7 +5,44 @@
 #include <winsock2.h>
 #pragma comment(lib, "ws2_32.lib")
 
+#include <ctime>
+#include <fstream>
+#include <string>
+
 enum enumNetType { tNetServer, tNetClient };
+
+//=============================IO=============================================
+
+class IO {
+public:
+  IO() { readFileContent("test.log"); }
+  ~IO() {}
+
+  void wrapSave(const std::string &fileName, const std::string &data) {
+    saveContentToFile("F:\\github_git\\conn_mysql_direct\\" + fileName, data);
+  }
+
+  void readFileContent(const std::string fileName) {
+    return;
+    /// TODO 没想好这点要做什么
+    std::ifstream file(fileName);
+    std::string s;
+    while (file >> s) {
+      std::cout << "ch : " << s << std::endl;
+    }
+  }
+
+  void saveContentToFile(const std::string &fileName,
+                         const std::string &inputData) {
+    std::fstream file(fileName,
+                      std::fstream::in | std::fstream::out | std::fstream::app);
+
+    file << inputData;
+    file.close();
+  }
+};
+
+//=============================net=============================================
 
 class net_manage {
 public:

@@ -9,6 +9,7 @@
 #include <list>
 #include <sstream>
 #include <string>
+#include <time.h>
 #include <vector>
 
 class DB_managment;
@@ -33,7 +34,7 @@ public:
   ~IO() {}
 
   void wrapSave(const std::string &fileName, const std::string &data) {
-    saveContentToFile(fileName, data);
+    saveContentToFile("F:\\github_git\\conn_mysql_direct\\" + fileName, data);
   }
 
   void readFileContent(const std::string fileName) {
@@ -50,6 +51,7 @@ public:
                          const std::string &inputData) {
     std::fstream file(fileName,
                       std::fstream::in | std::fstream::out | std::fstream::app);
+
     file << inputData;
     file.close();
   }

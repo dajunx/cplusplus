@@ -4,9 +4,21 @@
 
 #include "client_net.h"
 
+void appendTimeFollowedByString(std::string& str) {
+  SYSTEMTIME tt;
+  std::stringstream str_date;
+
+  GetLocalTime(&tt);
+  str_date << "[" << tt.wYear << "-" << tt.wMonth << "-" << tt.wDay << " "
+    << tt.wHour << ":" << tt.wMinute << ":" << tt.wSecond
+    << ":" << tt.wMilliseconds << "] ";
+  str_date << str;
+  str.swap(str_date.str());
+}
+
 int main() {
   // client ÂýÆô¶¯
-  Sleep(100);
+  Sleep(200);
 
   net_manage net(tNetClient);
   int ret = net.conn_server();
@@ -26,6 +38,12 @@ int main() {
         std::cout << "sql: " << ssql.str() << ", is not execute right."
                   << "content: " << strResponse << std::endl;
       }
+
+      IO io;
+      ssql << " result:" << strResponse << "\n";
+      std::string ss_log = ssql.str();
+      appendTimeFollowedByString(ss_log);
+      io.wrapSave("client_req_rsp.log", ss_log);
       strResponse.clear();
 
       ssql.str("");
