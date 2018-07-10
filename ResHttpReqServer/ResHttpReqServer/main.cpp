@@ -5,6 +5,8 @@
 
 #include "tools.hpp"
 
+//请求地址 http://127.0.0.1:9999/ReadMe.txt
+
 int main(int argc, char *argv[]) {
   //初始化WSA
   WORD sockVersion = MAKEWORD(2, 2);
