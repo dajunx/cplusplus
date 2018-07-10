@@ -10,6 +10,9 @@ class user;
 class user_manage;
 class db_manage;
 class db;
+class records;
+
+enum eUSER{xiaohong_id = 661, xiaoli_id, xiaowang_admin_id = 991};
 
 class object_manage
 {
@@ -32,13 +35,14 @@ public:
   
   bool init();
   void add_template_users();
-  user& get_user(int uid);
+  user* get_user(int uid);
 
   shop& get_shop() { return *p_shop_; }
   bank& get_bank() { return *p_bank_; }
   terminal& get_terminal() { return *p_terminal_; }
   user_manage& get_user_manage() { return *p_user_manage_; }
   db& get_db() { return *p_db_; }
+  records& get_records() { return *p_records_; }
 
 private:
   shop* p_shop_;
@@ -47,6 +51,7 @@ private:
   user_manage* p_user_manage_;
   std::set<user*> set_users_;
   db* p_db_;
+  records* p_records_;
   static object_manage* p_object_manage_;
 };
 

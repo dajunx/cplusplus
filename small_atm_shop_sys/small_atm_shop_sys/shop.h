@@ -16,6 +16,11 @@ public:
       return -1;
     }
 
+    records& record_temp = object_manage::get_instance()->get_records();
+    std::stringstream strLog;
+    strLog << "[购物]:" << pUser->uid << std::endl;
+    record_temp.saveContentToFile("ATM.log", strLog.str());
+
     //每次消费暂时定位 10 个单位
     return bk.reduce_money(pUser, money);
   }

@@ -18,7 +18,7 @@ public:
       return -1; //待添加用户指针不能为空
     }
 
-    return bk.increase_money(pUser, money);
+    return bk.init_user_account(pUser, money);
   }
 
   // 转账给其他用户
@@ -40,10 +40,11 @@ public:
     //借钱
     bk.reduce_money(pUserSrc, money);
     bk.increase_money(pUserDes, money);
-    std::cout<<"user: "<<pUserSrc->uid
-      <<"borrow "<<money
-      <<" money to user: "<<pUserDes->uid
-      <<" success."<<std::endl;
+
+    records& record_temp = object_manage::get_instance()->get_records();
+    std::stringstream strLog;
+    strLog << "[转账] 借钱人:" << pUserDes->uid << "， 被借钱人:" << pUserSrc->uid << std::endl;
+    record_temp.saveContentToFile("ATM.log", strLog.str());
 
     return 0;
   }
@@ -60,6 +61,11 @@ public:
     if (!mgr.active_user(pUser)) {
       return -1; // 要存钱的用户不存在，请对该用户开户
     }
+
+    records& record_temp = object_manage::get_instance()->get_records();
+    std::stringstream strLog;
+    strLog << "[还钱]:" << pUser->uid <<", 还掉的金额:" << money << std::endl;
+    record_temp.saveContentToFile("ATM.log", strLog.str());
 
     return bk.increase_money(pUser, money);
   }
@@ -83,6 +89,11 @@ public:
     if (NULL == pUser) {
       return -1;
     }
+
+    records& record_temp = object_manage::get_instance()->get_records();
+    std::stringstream strLog;
+    strLog << "[提现]:" << pUser->uid <<", 提现金额:" << money << std::endl;
+    record_temp.saveContentToFile("ATM.log", strLog.str());
 
     //每次消费暂时定位 10 个单位
     return bk.reduce_money(pUser, money * 1.05);

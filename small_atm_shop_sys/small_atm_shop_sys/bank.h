@@ -1,9 +1,12 @@
 #ifndef H_BANK_H
 #define H_BANK_H
 
+#include <sstream>
+
 #include "object_manage.h"
 #include "db_manage.h"
 #include "users.h"
+#include "tools.h"
 
 class user;
 class db;
@@ -48,9 +51,6 @@ public:
   //用户间转账
   int exchange_money();
 
-  //添加用户
-  int add_user_account();
-
   //存钱
   int increase_money(user* pUser, float money)
   {
@@ -61,6 +61,23 @@ public:
 
     db_temp.increase_money(pUser->uid, money);
 
+    return 0;
+  }
+
+  //初始化用户帐户
+  int init_user_account(user* pUser, float money)
+  {
+    db& db_temp = object_manage::get_instance()->get_db();
+    if (NULL == pUser) {
+      return -1; //待添加用户指针不能为空
+    }
+
+    db_temp.increase_money(pUser->uid, money);
+
+    records& record_temp = object_manage::get_instance()->get_records();
+    std::stringstream strLog;
+    strLog << "[初始化用户]:" << pUser->uid << " 信用卡帐户" << std::endl;
+    record_temp.saveContentToFile("ATM.log", strLog.str());
     return 0;
   }
 
