@@ -10,9 +10,6 @@
     <Filter Include="boost\network">
       <UniqueIdentifier>{a079670a-04a6-481f-80e5-000e18556f89}</UniqueIdentifier>
     </Filter>
-    <Filter Include="boost\生产者消费者模型">
-      <UniqueIdentifier>{52546a99-e78d-4114-a376-4b6c367becd2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="normal_cplusplus">
       <UniqueIdentifier>{22124ad2-db7a-48e5-81d9-d428f1c799cf}</UniqueIdentifier>
     </Filter>

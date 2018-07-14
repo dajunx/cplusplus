@@ -542,7 +542,8 @@ static void initServer() {
     server.clients = listCreate();
     server.objfreelist = listCreate();
     createSharedObjects();
-    server.el = aeCreateEventLoop();  //linjj ac/event_loop
+    //linjj 创建event_loop
+    server.el = aeCreateEventLoop();
     server.dict = malloc(sizeof(dict*)*server.dbnum);
     if (!server.dict || !server.clients || !server.el || !server.objfreelist)
         oom("server initialization"); /* Fatal OOM */
@@ -560,7 +561,8 @@ static void initServer() {
     server.bgsaveinprogress = 0;
     server.lastsave = time(NULL);
     server.dirty = 0;
-    aeCreateTimeEvent(server.el, 1000, serverCron, NULL, NULL); //linjj ac/time_event
+    //linjj 创建time_loop
+    aeCreateTimeEvent(server.el, 1000, serverCron, NULL, NULL);
 }
 
 /* I agree, this is a very rudimental way to load a configuration...
@@ -802,7 +804,7 @@ static void readQueryFromClient(aeEventLoop *el, int fd, void *privdata, int mas
     REDIS_NOTUSED(mask);
 
     nread = read(fd, buf, REDIS_QUERYBUF_LEN);
-    printf("fun:%s, line:%d \n", __FUNCTION__, __LINE__);
+    printf("[linjianjun]fun:%s, line:%d \n", __FUNCTION__, __LINE__);
     if (nread == -1) {
         if (errno == EAGAIN) {
             nread = 0;
@@ -1271,7 +1273,7 @@ static void setGenericCommand(redisClient *c, int nx) {
 }
 
 static void setCommand(redisClient *c) {
-    printf("fun:%s, line:%d \n", __FUNCTION__, __LINE__);
+    printf("[linjianjun]fun:%s, line:%d \n", __FUNCTION__, __LINE__);
     return setGenericCommand(c,0);
 }
 
@@ -1798,7 +1800,8 @@ int main(int argc, char **argv) {
       }
       
     redisLog(REDIS_NOTICE,"The server is now ready to accept connections");
-    aeMain(server.el); //linjj select 循环
+    //linjj select 主循环
+    aeMain(server.el);
 
     //linjj 删除 ac event_loop
     aeDeleteEventLoop(server.el);

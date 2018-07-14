@@ -23,8 +23,8 @@ class worker;
 
 //=============================数据定义=========================================
 
-enum enumIOType { tIOERR, tINPUT, tGET };
-enum enumSqlType { tSqlERR, tInsert, tGetRecordCount, tSimpleSearch };
+enum enumSqlMgrType { tIOERR, tINPUT, tGET };
+enum enumSqlExcuteType { tSqlERR, tInsert, tGetRecordCount, tSimpleSearch };
 
 //=============================IO=============================================
 
@@ -166,34 +166,35 @@ public:
 //=============================消息容器==========================================
 
 struct strRequest {
-  strRequest(const std::string &sql, enumSqlType type)
+  strRequest(const std::string &sql, enumSqlExcuteType type)
       : strSql(sql), iSqlType(type) {}
   ~strRequest() {}
   std::string strSql;
-  enumSqlType iSqlType;
+  enumSqlExcuteType iSqlType;
 };
 
 static std::list<strRequest> slist_str;
-std::vector<std::string> vecInsertSql;
 static HANDLE mutex_data_box = CreateMutex(NULL, false, NULL);
-void data_box(enumIOType ioType, enumSqlType &SqlType, std::string &str_data) {
+
+// sql执行语句的管理：1. 插入sql请求语句； 2.取出sql请求语句去执行；
+void sqlReqMgr(enumSqlMgrType sqlMgrType, enumSqlExcuteType &sqlExcuteType, std::string &str_data) {
   WaitForSingleObject(mutex_data_box, INFINITE);
-  switch (ioType) {
+  switch (sqlMgrType) {
   case tINPUT: {
     //拆分裹在一起的
     // insert语句，原因：mysql_real_query只能一条一条的执行插入语句;
-    if (tInsert == SqlType) {
+    if (tInsert == sqlExcuteType) {
       while (!str_data.empty() &&
              str_data.find_first_of(';') != std::string::npos) {
         std::string::size_type pos_begin = 0, pos_end = 0;
         pos_end = str_data.find_first_of(';');
         strRequest req(str_data.substr(pos_begin, pos_end - pos_begin + 1),
-                       SqlType);
+                       sqlExcuteType);
         slist_str.insert(slist_str.end(), req);
         str_data.erase(pos_begin, pos_end - pos_begin + 1);
       }
     } else {
-      strRequest req(str_data, SqlType);
+      strRequest req(str_data, sqlExcuteType);
       slist_str.insert(slist_str.end(), req);
     }
 
@@ -207,7 +208,7 @@ void data_box(enumIOType ioType, enumSqlType &SqlType, std::string &str_data) {
     }
 
     str_data.swap(slist_str.front().strSql);
-    SqlType = slist_str.front().iSqlType;
+    sqlExcuteType = slist_str.front().iSqlType;
     slist_str.pop_front();
   } break;
   default: { std::cout << "" << std::endl; } break;
@@ -225,7 +226,8 @@ struct strMultiThread {
   int init() {
     int ret = 1;
     do {
-      if (init_db(pConnDb_3306, 3306) || init_db(pConnDb_3307, 3307)) {
+      ///TODO 由于使用本地mysql，为配置两套连接，故暂时注释掉使用 3307 端口逻辑
+      if (init_db(pConnDb_3306, 3306)/* || init_db(pConnDb_3307, 3307)*/) {
         break;
       }
       mutex = CreateMutex(NULL, false, NULL);
@@ -236,7 +238,7 @@ struct strMultiThread {
   }
 
   int init_db(DB_managment *pdb, int port) {
-    if (pdb->init("kaka", "kaka", "172.20.24.190", port)) {
+    if (pdb->init("root", "", "127.0.0.1", port)) {
       pdb->print_errcode(__LINE__);
       return 1;
     }
@@ -244,7 +246,8 @@ struct strMultiThread {
   }
 
   void chooseDatabase() {
-    if (pConnDb_3306->choose_database() && pConnDb_3307->choose_database()) {
+    ///TODO 由于使用本地mysql，为配置两套连接，故暂时注释掉使用 3307 端口逻辑
+    if (pConnDb_3306->choose_database()/* && pConnDb_3307->choose_database()*/) {
       pConnDb_3306->print_errcode(__LINE__);
     }
   }
@@ -265,13 +268,14 @@ struct strMultiThread {
   HANDLE mutex;
 };
 
-DWORD WINAPI HandleReq(LPVOID lpParameter) {
+// 处理 sql语句请求的 工作线程，间隔 去取要执行的sql语句
+DWORD WINAPI workerThread(LPVOID lpParameter) {
   strMultiThread *pMultiThread = static_cast<strMultiThread *>(lpParameter);
 
   std::string strSql;
   while (true) {
-    enumSqlType iSqlType = tSqlERR;
-    data_box(tGET, iSqlType, strSql);
+    enumSqlExcuteType iSqlType = tSqlERR;
+    sqlReqMgr(tGET, iSqlType, strSql);
     DB_managment *pdb = pMultiThread->pConnDb_3306;
 
     /// TODo 插入数据使用3306实例，查询类使用3307
@@ -314,7 +318,7 @@ public:
     if (!bInitRes_) {
       return;
     }
-    thread_handler = CreateThread(NULL, 0, HandleReq, &multiThread_, 0, NULL);
+    thread_handler = CreateThread(NULL, 0, workerThread, &multiThread_, 0, NULL);
   }
 
 private:

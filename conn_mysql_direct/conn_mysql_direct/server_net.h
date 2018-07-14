@@ -5,8 +5,13 @@
 #include <winsock2.h>
 #pragma comment(lib, "ws2_32.lib")
 
-enum enumNetType { tNetServer, tNetClient };
+#include <Windows.h>
+#include "db.h"
 
+enum enumNetType { tNetServer, tNetClient };
+DWORD WINAPI HandleReq(LPVOID lpParameter);
+
+//------------------------- net management class ----------------------
 class net_manage {
 public:
   net_manage(enumNetType nt): netType_(nt) {
@@ -28,6 +33,13 @@ public:
       std::cout << "init net err, net type is:" << netType_ << std::endl;
     }
   }
+
+  // 把网络请求细节下方到类中，新开线程来处理 【把业务细节从main中隐藏，迁移到细节类中】
+  void receiveRequest() {
+    accept_new_conn();
+    thread_handler_ = CreateThread(NULL, 0, HandleReq, this, 0, NULL);
+  }
+
   ~net_manage() {
     if (tNetClient == netType_) {
       closesocket(socket_client_);
@@ -148,6 +160,46 @@ private:
   // data.
   char receive_data_[255];
   enumNetType netType_;
+
+  // thread
+  HANDLE thread_handler_;
 };
+
+void addTime(std::string& str) {
+  SYSTEMTIME tt;
+  std::stringstream str_date;
+
+  GetLocalTime(&tt);
+  // 拼凑 [年-月-日 时:分:秒:毫秒]
+  str_date << "[" << tt.wYear << "-" << tt.wMonth << "-" << tt.wDay << " "
+    << tt.wHour << ":" << tt.wMinute << ":" << tt.wSecond
+    << ":" << tt.wMilliseconds << "] ";
+  str_date << str;
+  str.swap(str_date.str());
+}
+
+//------------------------- new thread ---------------------------------
+DWORD WINAPI HandleReq(LPVOID lpParameter) {
+  net_manage *pNetManage = static_cast<net_manage *>(lpParameter);
+
+  std::string strReceiveData, strTemp;
+  while (true) { // true，接收请求服务是不间断的，会一直运行
+    pNetManage->receive_data(strReceiveData);
+    strTemp = strReceiveData;
+
+    enumSqlExcuteType iSqlType = tInsert;
+    sqlReqMgr(tINPUT, iSqlType, strReceiveData);
+
+    IO io;
+    addTime(strTemp);
+    io.wrapSave("server_receive_sql.log", strTemp + "\n");
+    strReceiveData.clear();
+    strTemp.clear();
+    pNetManage->send_data("OK"); //Response
+  }
+
+  std::cout << "handle request finished." << std::endl;
+  return 0L;
+}
 
 #endif

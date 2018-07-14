@@ -18,7 +18,11 @@ public:
   IO() { readFileContent("test.log"); }
   ~IO() {}
 
-  void wrapSave(const std::string &fileName, const std::string &data) {
+  void wrapSave(const std::string &fileName, std::string data, bool bAddTime=false) {
+    if (bAddTime) {
+      addTime(data);
+    }
+
     saveContentToFile("F:\\github_git\\conn_mysql_direct\\" + fileName, data);
   }
 
@@ -32,8 +36,20 @@ public:
     }
   }
 
+  void addTime(std::string& str) {
+    SYSTEMTIME tt;
+    std::stringstream str_date;
+
+    GetLocalTime(&tt);
+    str_date << "[" << tt.wYear << "-" << tt.wMonth << "-" << tt.wDay << " "
+      << tt.wHour << ":" << tt.wMinute << ":" << tt.wSecond
+      << ":" << tt.wMilliseconds << "] ";
+    str_date << str;
+    str.swap(str_date.str());
+  }
+
   void saveContentToFile(const std::string &fileName,
-                         const std::string &inputData) {
+                         std::string inputData) {
     std::fstream file(fileName,
                       std::fstream::in | std::fstream::out | std::fstream::app);
 
