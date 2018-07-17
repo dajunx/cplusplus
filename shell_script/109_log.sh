@@ -83,6 +83,7 @@ gatherDailyLogs() {
 case "$1" in
     'all' )
         MoveLogSourceFiles
+        GetLogFileDates
         DecompressLogFiles
         DailyAction
         ;;
