@@ -74,6 +74,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="3rd\md5\md5.cpp" />
+    <ClCompile Include="3rd\md5\md5test.cpp" />
+    <ClCompile Include="3rd\tools.cpp" />
     <ClCompile Include="boost_multi_thread\once_outine_test.cpp" />
     <ClCompile Include="boost_multi_thread\thread_condition_test.cpp" />
     <ClCompile Include="boost_multi_thread\thread_local_data_save.cpp" />
@@ -197,8 +200,6 @@
     <ClCompile Include="cpp_template\template_keyword_typename.cpp" />
     <ClCompile Include="cpp_template\typedef_combine_template_err.cpp" />
     <ClCompile Include="cpp_template\typedef_typename_usage.cpp" />
-    <ClCompile Include="hash_test\md5.cpp" />
-    <ClCompile Include="hash_test\md5test.cpp" />
     <ClCompile Include="others\getMusic163SongsCommentsInfo.cpp" />
     <ClCompile Include="others\map_erase_element_effective.cpp" />
     <ClCompile Include="others\parse_json_contents_to_simple_text.cpp" />
@@ -223,7 +224,7 @@
     <ClCompile Include="thread_win\thread_semaphore.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="hash_test\md5.h" />
+    <ClInclude Include="3rd\md5\md5.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

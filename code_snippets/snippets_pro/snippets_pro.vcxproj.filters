@@ -37,12 +37,6 @@
     <Filter Include="normal_cplusplus\network\select">
       <UniqueIdentifier>{9daf42e0-1223-48cc-83af-18b3832e1f73}</UniqueIdentifier>
     </Filter>
-    <Filter Include="normal_cplusplus\hash_test">
-      <UniqueIdentifier>{a9950e08-aa8a-4b73-a217-f0c2dcef8ac4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="normal_cplusplus\hash_test\md5">
-      <UniqueIdentifier>{6d76ddc3-0528-4bcc-8f00-3175a5a3b69d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="others">
       <UniqueIdentifier>{5916e5d1-7f0a-40ab-8b63-17c3428a5f69}</UniqueIdentifier>
     </Filter>
@@ -63,6 +57,12 @@
     </Filter>
     <Filter Include="normal_cplusplus\process_linux">
       <UniqueIdentifier>{0fe3d39c-b344-49b3-9e7f-47e8bf96e435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\3rd">
+      <UniqueIdentifier>{0020d2be-241c-4f46-b4a5-8177c1915621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\3rd\md5">
+      <UniqueIdentifier>{81272fd5-1525-4b7e-ad06-eca91be6cd6b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -173,12 +173,6 @@
     </ClCompile>
     <ClCompile Include="cpp_normal\complex_fun_point.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
-    </ClCompile>
-    <ClCompile Include="hash_test\md5test.cpp">
-      <Filter>normal_cplusplus\hash_test\md5</Filter>
-    </ClCompile>
-    <ClCompile Include="hash_test\md5.cpp">
-      <Filter>normal_cplusplus\hash_test\md5</Filter>
     </ClCompile>
     <ClCompile Include="cpp_network\epoll\net_epoll_client.cpp">
       <Filter>normal_cplusplus\network\epoll</Filter>
@@ -507,10 +501,19 @@
     <ClCompile Include="cpp_normal\happyNumber.cpp">
       <Filter>normal_cplusplus\cplusplus</Filter>
     </ClCompile>
+    <ClCompile Include="3rd\tools.cpp">
+      <Filter>normal_cplusplus\3rd</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd\md5\md5.cpp">
+      <Filter>normal_cplusplus\3rd\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd\md5\md5test.cpp">
+      <Filter>normal_cplusplus\3rd\md5</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="hash_test\md5.h">
-      <Filter>normal_cplusplus\hash_test\md5</Filter>
+    <ClInclude Include="3rd\md5\md5.h">
+      <Filter>normal_cplusplus\3rd\md5</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
