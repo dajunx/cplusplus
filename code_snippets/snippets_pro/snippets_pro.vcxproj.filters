@@ -64,6 +64,9 @@
     <Filter Include="normal_cplusplus\3rd\md5">
       <UniqueIdentifier>{81272fd5-1525-4b7e-ad06-eca91be6cd6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="normal_cplusplus\3rd\base64">
+      <UniqueIdentifier>{55af93e0-4920-4ce5-a680-fc23532c1049}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="others\map_erase_element_effective.cpp">
@@ -510,10 +513,19 @@
     <ClCompile Include="3rd\md5\md5test.cpp">
       <Filter>normal_cplusplus\3rd\md5</Filter>
     </ClCompile>
+    <ClCompile Include="3rd\base64\base64.cpp">
+      <Filter>normal_cplusplus\3rd\base64</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd\base64\test.cpp">
+      <Filter>normal_cplusplus\3rd\base64</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\md5\md5.h">
       <Filter>normal_cplusplus\3rd\md5</Filter>
+    </ClInclude>
+    <ClInclude Include="3rd\base64\base64.h">
+      <Filter>normal_cplusplus\3rd\base64</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
