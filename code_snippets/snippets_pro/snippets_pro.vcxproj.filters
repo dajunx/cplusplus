@@ -67,6 +67,12 @@
     <Filter Include="normal_cplusplus\3rd\base64">
       <UniqueIdentifier>{55af93e0-4920-4ce5-a680-fc23532c1049}</UniqueIdentifier>
     </Filter>
+    <Filter Include="normal_cplusplus\3rd\GoogleProtoSerialize">
+      <UniqueIdentifier>{29b6fe7f-fea6-40f9-b411-a62b2a324531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="normal_cplusplus\3rd\protobuf_test">
+      <UniqueIdentifier>{b7d7555f-d728-4560-9b2e-17daa82d352b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="others\map_erase_element_effective.cpp">
@@ -519,6 +525,12 @@
     <ClCompile Include="3rd\base64\test.cpp">
       <Filter>normal_cplusplus\3rd\base64</Filter>
     </ClCompile>
+    <ClCompile Include="3rd\GoogleProtoSerialize\SerializeProtoBufTest.cpp">
+      <Filter>normal_cplusplus\3rd\GoogleProtoSerialize</Filter>
+    </ClCompile>
+    <ClCompile Include="boost_normal\parse_string.cpp">
+      <Filter>boost\boost</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\md5\md5.h">
@@ -527,5 +539,10 @@
     <ClInclude Include="3rd\base64\base64.h">
       <Filter>normal_cplusplus\3rd\base64</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="3rd\protobuf_test\lm.helloworld.proto">
+      <Filter>normal_cplusplus\3rd\protobuf_test</Filter>
+    </None>
   </ItemGroup>
 </Project>

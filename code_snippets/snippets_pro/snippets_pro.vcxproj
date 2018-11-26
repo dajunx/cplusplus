@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClCompile Include="3rd\base64\base64.cpp" />
     <ClCompile Include="3rd\base64\test.cpp" />
+    <ClCompile Include="3rd\GoogleProtoSerialize\SerializeProtoBufTest.cpp" />
     <ClCompile Include="3rd\md5\md5.cpp" />
     <ClCompile Include="3rd\md5\md5test.cpp" />
     <ClCompile Include="3rd\tools.cpp" />
@@ -118,6 +119,7 @@
     <ClCompile Include="boost_normal\judge_task_io_service_reactor_type.cpp" />
     <ClCompile Include="boost_normal\linux_get_file_property.cpp" />
     <ClCompile Include="boost_normal\multi_index_add_up_view.cpp" />
+    <ClCompile Include="boost_normal\parse_string.cpp" />
     <ClCompile Include="boost_normal\print_thread_id_code_spipet.cpp" />
     <ClCompile Include="boost_normal\property_tree_rw_ini_file.cpp" />
     <ClCompile Include="boost_normal\property_tree_write_read_json.cpp" />
@@ -228,6 +230,9 @@
   <ItemGroup>
     <ClInclude Include="3rd\base64\base64.h" />
     <ClInclude Include="3rd\md5\md5.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="3rd\protobuf_test\lm.helloworld.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
