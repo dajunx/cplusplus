@@ -1,1 +1,0 @@
-protoc.exe -I=./  --cpp_out=./ lm.helloworld.proto
