@@ -1,1 +1,0 @@
-protoc.exe -I=F:\github_git\protobuf_test  --cpp_out=F:\github_git\protobuf_test F:\github_git\protobuf_test\lm.helloworld.proto
