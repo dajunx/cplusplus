@@ -531,6 +531,12 @@
     <ClCompile Include="boost_normal\parse_string.cpp">
       <Filter>boost\boost</Filter>
     </ClCompile>
+    <ClCompile Include="3rd\protobuf_test\lm.helloworld.pb.cc">
+      <Filter>normal_cplusplus\3rd\protobuf_test</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd\protobuf_test\main.cpp">
+      <Filter>normal_cplusplus\3rd\protobuf_test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\md5\md5.h">
@@ -538,6 +544,9 @@
     </ClInclude>
     <ClInclude Include="3rd\base64\base64.h">
       <Filter>normal_cplusplus\3rd\base64</Filter>
+    </ClInclude>
+    <ClInclude Include="3rd\protobuf_test\lm.helloworld.pb.h">
+      <Filter>normal_cplusplus\3rd\protobuf_test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

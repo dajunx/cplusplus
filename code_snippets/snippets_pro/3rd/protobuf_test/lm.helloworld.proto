@@ -1,0 +1,17 @@
+package lm;
+
+message userinfo
+{
+  required int32     uid  = 1;
+  required int32     pwd  = 2;
+  required string    name = 3;
+  optional bytes     some = 4;
+}
+
+message helloworld
+{
+  required int32     id   = 1;  // ID 
+  required string    str  = 2;  // str
+  optional int32     opt  = 4;  // optional field 
+  repeated userinfo uinfo = 5;  // test mutab_xxx
+}
