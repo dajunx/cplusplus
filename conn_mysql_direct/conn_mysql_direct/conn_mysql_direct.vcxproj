@@ -65,8 +65,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>D:\mysql-5.6.38\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>D:\mysql-5.6.38\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)../../../3rd_lib/mysql-5.7.21-win32/lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)../../../3rd_lib/mysql-5.7.21-win32/include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

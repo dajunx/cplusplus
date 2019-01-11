@@ -177,7 +177,8 @@ static std::list<strRequest> slist_str;
 static HANDLE mutex_data_box = CreateMutex(NULL, false, NULL);
 
 // sql执行语句的管理：1. 插入sql请求语句； 2.取出sql请求语句去执行；
-void sqlReqMgr(enumSqlMgrType sqlMgrType, enumSqlExcuteType &sqlExcuteType, std::string &str_data) {
+void sqlReqMgr(enumSqlMgrType sqlMgrType, enumSqlExcuteType &sqlExcuteType,
+               std::string &str_data) {
   WaitForSingleObject(mutex_data_box, INFINITE);
   switch (sqlMgrType) {
   case tINPUT: {
@@ -226,8 +227,8 @@ struct strMultiThread {
   int init() {
     int ret = 1;
     do {
-      ///TODO 由于使用本地mysql，为配置两套连接，故暂时注释掉使用 3307 端口逻辑
-      if (init_db(pConnDb_3306, 3306)/* || init_db(pConnDb_3307, 3307)*/) {
+      /// TODO 由于使用本地mysql，为配置两套连接，故暂时注释掉使用 3307 端口逻辑
+      if (init_db(pConnDb_3306, 3306) /* || init_db(pConnDb_3307, 3307)*/) {
         break;
       }
       mutex = CreateMutex(NULL, false, NULL);
@@ -246,8 +247,9 @@ struct strMultiThread {
   }
 
   void chooseDatabase() {
-    ///TODO 由于使用本地mysql，为配置两套连接，故暂时注释掉使用 3307 端口逻辑
-    if (pConnDb_3306->choose_database()/* && pConnDb_3307->choose_database()*/) {
+    /// TODO 由于使用本地mysql，为配置两套连接，故暂时注释掉使用 3307 端口逻辑
+    if (pConnDb_3306
+            ->choose_database() /* && pConnDb_3307->choose_database()*/) {
       pConnDb_3306->print_errcode(__LINE__);
     }
   }
@@ -318,7 +320,8 @@ public:
     if (!bInitRes_) {
       return;
     }
-    thread_handler = CreateThread(NULL, 0, workerThread, &multiThread_, 0, NULL);
+    thread_handler =
+        CreateThread(NULL, 0, workerThread, &multiThread_, 0, NULL);
   }
 
 private:

@@ -5,7 +5,6 @@
 #include <winsock2.h>
 #pragma comment(lib, "ws2_32.lib")
 
-#include <Windows.h>
 #include "db.h"
 
 enum enumNetType { tNetServer, tNetClient };
@@ -14,7 +13,7 @@ DWORD WINAPI HandleReq(LPVOID lpParameter);
 //------------------------- net management class ----------------------
 class net_manage {
 public:
-  net_manage(enumNetType nt): netType_(nt) {
+  net_manage(enumNetType nt) : netType_(nt) {
     int ret = -2;
     init_net_lib();
 
@@ -34,7 +33,8 @@ public:
     }
   }
 
-  // 把网络请求细节下方到类中，新开线程来处理 【把业务细节从main中隐藏，迁移到细节类中】
+  // 把网络请求细节下方到类中，新开线程来处理
+  // 【把业务细节从main中隐藏，迁移到细节类中】
   void receiveRequest() {
     accept_new_conn();
     thread_handler_ = CreateThread(NULL, 0, HandleReq, this, 0, NULL);
@@ -45,7 +45,7 @@ public:
       closesocket(socket_client_);
     } else {
       closesocket(socket_server_);
-    }    
+    }
   }
 
 private:
@@ -120,11 +120,12 @@ public:
 public:
   //===============================收发数据=====================================
   /// TODO 有了数据，但是得把数据结构化 --add by ljj 2018-03-19
-  int receive_data(std::string& strReceiveData) {
+  int receive_data(std::string &strReceiveData) {
     int ret = recv(accept_socket_, receive_data_, 255, 0);
     if (ret > 0) {
       receive_data_[ret] = 0x00;
-      //std::cout << "get a tcp data from client, data:" << receive_data_ << std::endl;
+      // std::cout << "get a tcp data from client, data:" << receive_data_ <<
+      // std::endl;
     } else {
       int err_code = WSAGetLastError();
       return err_code;
@@ -165,15 +166,15 @@ private:
   HANDLE thread_handler_;
 };
 
-void addTime(std::string& str) {
+void addTime(std::string &str) {
   SYSTEMTIME tt;
   std::stringstream str_date;
 
   GetLocalTime(&tt);
   // 拼凑 [年-月-日 时:分:秒:毫秒]
   str_date << "[" << tt.wYear << "-" << tt.wMonth << "-" << tt.wDay << " "
-    << tt.wHour << ":" << tt.wMinute << ":" << tt.wSecond
-    << ":" << tt.wMilliseconds << "] ";
+           << tt.wHour << ":" << tt.wMinute << ":" << tt.wSecond << ":"
+           << tt.wMilliseconds << "] ";
   str_date << str;
   str.swap(str_date.str());
 }
@@ -195,7 +196,7 @@ DWORD WINAPI HandleReq(LPVOID lpParameter) {
     io.wrapSave("server_receive_sql.log", strTemp + "\n");
     strReceiveData.clear();
     strTemp.clear();
-    pNetManage->send_data("OK"); //Response
+    pNetManage->send_data("OK"); // Response
   }
 
   std::cout << "handle request finished." << std::endl;
