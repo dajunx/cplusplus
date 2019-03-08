@@ -14,6 +14,8 @@
 */
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <assert.h>
 using namespace std;
 
 class Solution {
@@ -64,12 +66,41 @@ public:
   }
 };
 
-int main() {
-  // mississippi - issip.
+// 运行算法 + 输出结果
+void impl_test_fun(Solution & slu, std::string const& haystack, std::string const& needle, bool expect_res) {
+  bool ret = slu.strStr(haystack, needle) != -1 ? true : false;
+  if (ret != expect_res) {
+    assert(false);
+  } else {
+    std::stringstream sstr_haystack, sstr_needle, sstr_expect_res;
+    sstr_haystack << "\"" << (haystack.empty()?"":haystack) << "\"";
+    sstr_needle << "\"" << (needle.empty()?"":needle) << "\"";
+    sstr_expect_res << (expect_res?"true":"false");
+
+    std::cout<<"[test] compre<"<<sstr_haystack.str()<<", "<<sstr_needle.str()<<">, is "<<sstr_expect_res.str()<<" success."<<std::endl;
+  }
+}
+
+// 自定义测试用例，用于测试算法
+void self_test_case() {
   Solution slu;
-  string haystack("mississippi"), needle("issip");
-  
-  std::cout<<"result: "<<slu.strStr(haystack, needle)<<std::endl;
+  /** 测试用例
+   * imple_test_fun 参数解释:
+   *   1.第二个参数为 父字符串 haystack
+   *   2.第三个参数为 子字符串 needle
+   *   3.第四个参数为 期望的算法结果
+   */
+  impl_test_fun(slu, "mississippi", "issip", true);
+  impl_test_fun(slu, "missi", "ss", true);
+
+  // 三种特殊 case
+  impl_test_fun(slu, "", "ss", false);
+  impl_test_fun(slu, "missi", "", true);
+  impl_test_fun(slu, "", "", true);
+}
+
+int main() {
+  self_test_case();
 
   return 0;
 }
