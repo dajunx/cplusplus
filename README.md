@@ -16,7 +16,7 @@
   - select
   - windows端的tcp
   - windows端的udp
-- 牛客网编程题（没怎么做）
+- 牛客网编程题（TODO）
 - sigslot 例子（异步编程的一个库，单头文件源码）
 - python脚本
 - rapidjson 库的旧版本源码
