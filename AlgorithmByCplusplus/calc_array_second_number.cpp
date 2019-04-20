@@ -1,4 +1,7 @@
-﻿#include <iostream>
+﻿/*
+** 本代码目的：计算数组中第二大的数字;
+*/
+#include <iostream>
 
 // 返回数组中第二大的数字
 int get_second_number(int arr[], int arr_size)
