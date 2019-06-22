@@ -7,6 +7,10 @@
 #include "sme_moniterDlg.h"
 #include "afxdialogex.h"
 
+#include <iostream>
+#include <string>
+#include <sstream>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -63,6 +67,7 @@ BEGIN_MESSAGE_MAP(Csme_moniterDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+  ON_BN_CLICKED(IDOK, &Csme_moniterDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -151,3 +156,61 @@ HCURSOR Csme_moniterDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+// 链接数据库
+void Csme_moniterDlg::test_mysql_functions()
+{
+  //初始化
+  try {
+    conn = mysql_init(NULL);
+  } catch (int e) {
+    int i = 0;
+  }
+  // conn = mysql_init(0);
+
+  if (conn == NULL) {
+    return;
+  }
+
+  std::string str_ip("119.29.36.228");
+  std::string str_username("kaka"), str_pwd("kaka");
+  std::string str_db_name("test");
+  int login_port = 3306;
+
+  //连接数据库
+  if (!mysql_real_connect(conn, str_ip.c_str(), str_username.c_str(), str_pwd.c_str(),
+    str_db_name.c_str(), login_port, NULL, 0)) {
+      std::stringstream ss_err;
+      ss_err << "Failed to connect to database: Error: " << mysql_error(conn);
+      std::string str_err = ss_err.str();
+
+      return;
+  }
+
+
+  //执行sql
+  std::string str_sql("select * from test;");
+  if (mysql_real_query(conn, str_sql.c_str(), str_sql.size())) {
+    return;
+  }
+
+  res = mysql_store_result(conn);
+
+  std::stringstream data;
+  int column = mysql_num_fields(res);
+  while (row = mysql_fetch_row(res)) {
+    for (int i = 0; i < column; ++i) {
+      data << row[i] << " ";
+    }
+    data << std::endl;
+  }
+
+  std::string str_query_result = data.str();
+}
+
+void Csme_moniterDlg::OnBnClickedOk()
+{
+  // TODO: Add your control notification handler code here
+  CDialogEx::OnOK();
+
+  test_mysql_functions();
+}

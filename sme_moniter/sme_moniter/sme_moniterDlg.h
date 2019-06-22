@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <mysql.h>
 
 // Csme_moniterDlg dialog
 class Csme_moniterDlg : public CDialogEx
@@ -29,4 +30,16 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+  afx_msg void OnBnClickedOk();
+
+private:
+  // ≤‚ ‘mysql ¡¥Ω”
+  void test_mysql_functions();
+  void test_socket();
+
+private:
+  MYSQL *conn;
+  MYSQL_RES *res;
+  MYSQL_ROW row;
 };
