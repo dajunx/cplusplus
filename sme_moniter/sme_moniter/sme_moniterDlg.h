@@ -11,6 +11,8 @@
 #include <STDIO.H>
 #include <Ws2tcpip.h>
 
+#include "TreeControl.h"
+
 #pragma  comment(lib,"ws2_32.lib")
 
 // Csme_moniterDlg dialog
@@ -52,4 +54,6 @@ private:
   MYSQL *conn;
   MYSQL_RES *res;
   MYSQL_ROW row;
+public:
+  afx_msg void OnBnClickedOpenTreeDialog();
 };

@@ -68,6 +68,7 @@ BEGIN_MESSAGE_MAP(Csme_moniterDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
   ON_BN_CLICKED(IDOK, &Csme_moniterDlg::OnBnClickedOk)
+  ON_BN_CLICKED(IDC_OPEN_TREE_DIALOG, &Csme_moniterDlg::OnBnClickedOpenTreeDialog)
 END_MESSAGE_MAP()
 
 
@@ -287,4 +288,12 @@ void Csme_moniterDlg::OnBnClickedOk()
 
   //test_mysql_functions();
   test_socket();
+}
+
+
+void Csme_moniterDlg::OnBnClickedOpenTreeDialog()
+{
+  // TODO: Add your control notification handler code here
+  CTreeControl tree_control;
+  tree_control.DoModal();
 }
