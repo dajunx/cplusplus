@@ -207,10 +207,84 @@ void Csme_moniterDlg::test_mysql_functions()
   std::string str_query_result = data.str();
 }
 
+void Csme_moniterDlg::test_socket()
+{
+  WORD sockVersion = MAKEWORD(2, 2);
+  WSADATA data;
+  if (WSAStartup(sockVersion, &data) != 0)
+  {
+    return;
+  }
+
+  SOCKET sclient = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  if (sclient == INVALID_SOCKET)
+  {
+    printf("invalid socket !");
+    return;
+  }
+
+  sockaddr_in serAddr;
+  serAddr.sin_family = AF_INET;
+  serAddr.sin_port = htons(6888);
+  serAddr.sin_addr.S_un.S_addr = inet_addr("119.29.36.228");
+
+  while (true)
+  {
+    int ret_conn = connect(sclient, (sockaddr *)&serAddr, sizeof(serAddr));
+    if (ret_conn == SOCKET_ERROR) {
+      std::cout << "connect server err:" << WSAGetLastError() << std::endl;
+      break;
+    }
+
+    // 优化连接服务端：若没连接上服务端则sleep 1秒，直到连接上服务端；
+    bool continueConn = false;
+    showSubNetErr(continueConn);
+    if (continueConn) {
+      Sleep(1000);
+      continue;
+    }
+
+    //接收客户端发送的数据并打印
+    while (true) {
+
+      std::string str_send_data("hello server,i'm client.");
+      int ret  = send(sclient, str_send_data.c_str(), str_send_data.size(), 0);
+      if (ret > 0)
+      {
+        int i = 0; // succ.
+      } else {
+        std::stringstream ss_err;
+        ss_err << "recv server data err:" << WSAGetLastError();
+        std::string str_err = ss_err.str();
+        break;
+      }
+    }
+  }
+
+  closesocket(sclient);
+  WSACleanup();
+}
+
+void Csme_moniterDlg::showSubNetErr(bool& continueConn)
+{
+  switch (WSAGetLastError()) {
+  case WSAECONNREFUSED:
+    {
+      std::cout << "Connection refused." << std::endl;
+      continueConn = true;
+      break;
+    }
+  default:
+    ;
+    //std::cout<<"unknow err."<<std::endl;
+  }
+}
+
 void Csme_moniterDlg::OnBnClickedOk()
 {
   // TODO: Add your control notification handler code here
   CDialogEx::OnOK();
 
-  test_mysql_functions();
+  //test_mysql_functions();
+  test_socket();
 }

@@ -6,6 +6,13 @@
 
 #include <mysql.h>
 
+#include <windows.h>
+#include <WINSOCK2.H>
+#include <STDIO.H>
+#include <Ws2tcpip.h>
+
+#pragma  comment(lib,"ws2_32.lib")
+
 // Csme_moniterDlg dialog
 class Csme_moniterDlg : public CDialogEx
 {
@@ -36,7 +43,10 @@ public:
 private:
   // ≤‚ ‘mysql ¡¥Ω”
   void test_mysql_functions();
+  
+  // ≤‚ ‘Õ¯¬Á ¡¥Ω”
   void test_socket();
+  void showSubNetErr(bool& continueConn);
 
 private:
   MYSQL *conn;
