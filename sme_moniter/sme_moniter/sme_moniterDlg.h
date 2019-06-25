@@ -56,4 +56,8 @@ private:
   MYSQL_ROW row;
 public:
   afx_msg void OnBnClickedOpenTreeDialog();
+
+  CStatic m_static[20];
+
+  static unsigned int __stdcall ThreadFun(PVOID pm);
 };

@@ -7,7 +7,9 @@
 #include "sme_moniterDlg.h"
 #include "afxdialogex.h"
 
+#include <Windows.h>
 #include <iostream>
+//#include <process.h> // _beginthreadex head file
 #include <string>
 #include <sstream>
 
@@ -15,6 +17,7 @@
 #define new DEBUG_NEW
 #endif
 
+#define IDC_D_BTN 10000
 
 // CAboutDlg dialog used for App About
 
@@ -105,7 +108,56 @@ BOOL Csme_moniterDlg::OnInitDialog()
 
 	// TODO: Add extra initialization here
 
+  m_static[0].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 100, 150, 120), this, IDC_D_BTN + 1);
+  m_static[1].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 120, 150, 140), this, IDC_D_BTN + 2);
+  m_static[2].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 140, 150, 160), this, IDC_D_BTN + 3);
+  m_static[3].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 160, 150, 180), this, IDC_D_BTN + 4);
+  m_static[4].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 180, 150, 200), this, IDC_D_BTN + 5);
+  m_static[5].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 200, 150, 220), this, IDC_D_BTN + 6);
+  m_static[6].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 220, 150, 240), this, IDC_D_BTN + 7);
+  m_static[7].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 240, 150, 260), this, IDC_D_BTN + 8);
+  m_static[8].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 260, 150, 280), this, IDC_D_BTN + 9);
+  m_static[9].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 280, 150, 300), this, IDC_D_BTN + 10);
+
+  HANDLE thread1 = CreateThread(NULL, 0, Csme_moniterDlg::ThreadFun, NULL, 0, NULL);
+  //WaitForSingleObject(thread3, INFINITE);
+
+  //static[10].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 200, 150, 220), this, IDC_D_BTN + 11);
+  //static[11].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 210, 150, 230), this, IDC_D_BTN + 12);
+  //static[12].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 220, 150, 240), this, IDC_D_BTN + 13);
+  //static[13].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 230, 150, 250), this, IDC_D_BTN + 14);
+  //static[14].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 240, 150, 260), this, IDC_D_BTN + 15);
+  //static[15].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 250, 150, 270), this, IDC_D_BTN + 16);
+  //static[16].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 260, 150, 280), this, IDC_D_BTN + 17);
+  //static[17].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 270, 150, 290), this, IDC_D_BTN + 18);
+  //static[18].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 280, 150, 300), this, IDC_D_BTN + 19);
+  //static[19].Create(_T("test"), WS_CHILD|WS_VISIBLE, CRect(100, 290, 150, 310), this, IDC_D_BTN + 20);
+
 	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+unsigned int __stdcall Csme_moniterDlg::ThreadFun(PVOID pm)
+{
+  std::stringstream ss_content;
+  
+  int i = 0;
+  while(true)
+  {
+    ss_content << "linjianjun" << i;
+    CString cstr_temp = CT2A(ss_content.str().c_str());
+    m_static[0].SetWindowText(cstr_temp);
+    m_static[1].SetWindowText(cstr_temp);
+    m_static[2].SetWindowText(cstr_temp);
+    m_static[3].SetWindowText(cstr_temp);
+    m_static[4].SetWindowText(cstr_temp);
+    m_static[5].SetWindowText(cstr_temp);
+    m_static[6].SetWindowText(cstr_temp);
+    m_static[7].SetWindowText(cstr_temp);
+    m_static[8].SetWindowText(cstr_temp);
+    m_static[9].SetWindowText(cstr_temp);
+  }
+  
+  return 0;
 }
 
 void Csme_moniterDlg::OnSysCommand(UINT nID, LPARAM lParam)
