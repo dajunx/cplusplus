@@ -1,6 +1,7 @@
-#### 工程说明
+#### 一、工程说明
 >用于自测，放置一些自己使用的代码片段，小程序等等，包括c++ shell go autohotkey 代码
 
+#### 二、项目列表
 - ahk_script ahk的一些脚本
 - AlgorithmByCplusplus ？？
 - baidu_ocr_test 百度的文字识别，php代码
@@ -25,3 +26,6 @@
 - ResHttpReqServer 模拟http的一个例子，待完善
 - shell_script shell 脚本
 - small_atm_shop_sys 模拟银行交易的一个例子  
+
+#### 三、备份渠道
+- 码云
