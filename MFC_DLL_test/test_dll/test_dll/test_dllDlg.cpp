@@ -11,12 +11,12 @@
 #define new DEBUG_NEW
 #endif
 
-#define  DllImport extern "C" _declspec(dllimport)
-DllImport int Add(int d1,int d2);
-DllImport int Sub(int d1,int d2);
-DllImport int Mul(int d1,int d2);
-DllImport int Div(int d1,int d2);
-DllImport int Mod(int d1,int d2);
+//#define  DllImport extern "C" _declspec(dllimport)
+//DllImport int Add(int d1,int d2);
+//DllImport int Sub(int d1,int d2);
+//DllImport int Mul(int d1,int d2);
+//DllImport int Div(int d1,int d2);
+//DllImport int Mod(int d1,int d2);
 
 // CAboutDlg dialog used for App About
 
@@ -70,6 +70,7 @@ BEGIN_MESSAGE_MAP(Ctest_dllDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
   ON_BN_CLICKED(IDC_BUTTON_USE_DLL, &Ctest_dllDlg::OnBnClickedButtonUseDll)
+  ON_BN_CLICKED(IDC_BUTTON_LOAD, &Ctest_dllDlg::OnBnClickedButtonLoad)
 END_MESSAGE_MAP()
 
 
@@ -162,6 +163,7 @@ HCURSOR Ctest_dllDlg::OnQueryDragIcon()
 
 void Ctest_dllDlg::OnBnClickedButtonUseDll()
 {
+  /*
   int result;
 
   int nID = 1;
@@ -195,5 +197,33 @@ void Ctest_dllDlg::OnBnClickedButtonUseDll()
       result = Mod(data1, data2);
     }
     break; 
+  }
+  */
+
+}
+
+
+void Ctest_dllDlg::OnBnClickedButtonLoad()
+{
+  typedef VOID (CALLBACK *Add)(int, int);
+  Add add;
+  HINSTANCE g_hInstanceDll = NULL;
+
+  g_hInstanceDll = LoadLibrary(_T("static_dll.dll"));
+
+  if ( g_hInstanceDll == NULL)
+  {
+    AfxMessageBox(_T("º”‘ÿDLL ß∞‹"));
+    return;
+  }
+
+  add = (Add) ::GetProcAddress(g_hInstanceDll, "Add");
+  if (add == NULL)
+  {
+    int i = 0;
+  }
+  else
+  {
+    int i = 0;
   }
 }
