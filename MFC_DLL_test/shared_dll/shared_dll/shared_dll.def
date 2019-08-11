@@ -1,6 +1,11 @@
 ; shared_dll.def : Declares the module parameters for the DLL.
 
-LIBRARY
+LIBRARY "shared_dll"
 
 EXPORTS
     ; Explicit exports can go here
+	Add @1
+	Sub @2
+	Mul @3
+	Div @4
+	Mod @5

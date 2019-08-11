@@ -11,6 +11,12 @@
 #define new DEBUG_NEW
 #endif
 
+#define  DllImport extern "C" _declspec(dllimport)
+DllImport int Add(int d1,int d2);
+DllImport int Sub(int d1,int d2);
+DllImport int Mul(int d1,int d2);
+DllImport int Div(int d1,int d2);
+DllImport int Mod(int d1,int d2);
 
 // CAboutDlg dialog used for App About
 
@@ -156,5 +162,38 @@ HCURSOR Ctest_dllDlg::OnQueryDragIcon()
 
 void Ctest_dllDlg::OnBnClickedButtonUseDll()
 {
-  
+  int result;
+
+  int nID = 1;
+  int data1 = 2, data2 = 1;
+  double dr = 0;
+
+  switch(nID)
+  {
+  case 1: 
+    {
+      result = Add(data1, data2);
+    }    
+    break;
+  case 2: 
+    {
+      result = Sub(data1, data2);
+    }
+    break;
+  case 3: 
+    {
+      result = Mul(data1, data2);
+    }
+    break;
+  case 4: 
+    {
+      dr = Div(data1, data2);
+    }
+    break;
+  case 5: 
+    {
+      result = Mod(data1, data2);
+    }
+    break; 
+  }
 }

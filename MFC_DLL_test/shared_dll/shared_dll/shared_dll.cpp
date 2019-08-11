@@ -64,6 +64,7 @@ BOOL Cshared_dllApp::InitInstance()
 
 //注意，函数前的extern "C"是不可少的，它指定按C语言约定来生成导出函数。不然，缺省情况下，C++编译器会生成冗长的函数修饰符，不能简单地用函数名来调用。
 
+/*
 extern "C" int Add(int d1,int d2){	return d1+d2; }
 extern "C" int Sub(int d1,int d2){	return d1-d2; } 
 extern "C" int Mul(int d1,int d2){	return d1*d2; }
@@ -88,6 +89,33 @@ extern "C" int Mod(int d1,int d2)
   }
   return d1%d2;
 
+}
+*/
+
+#define DllExport extern "C" _declspec(dllexport)
+
+DllExport int Add(int d1,int d2){	return d1+d2; }
+DllExport int Sub(int d1,int d2){	return d1-d2; } 
+DllExport int Mul(int d1,int d2){	return d1*d2; } 
+
+DllExport double Div(int d1,int d2)
+{
+  if (d2 == 0)
+  {
+    AfxMessageBox(L"Divided by zero!");
+    return 0;
+  }
+  return (double)d1/d2;
+}
+
+DllExport int Mod(int d1,int d2)
+{
+  if (d2 == 0)
+  {
+    AfxMessageBox(L"Divided by zero!");
+    return 0;
+  }
+  return d1%d2;
 }
 
 /*使用关键字__declspec(dllexport)导出函数
@@ -168,6 +196,3 @@ EXPORTS
 这些代码行确保内部使用的MFC变量或添加到类的变量是从扩展DLL导出（或导入）的。例如，当使用DECLARE_DYNAMIC派生类时，该宏扩展以将CRuntimeClass成员变量添加到类。省去这四行代码可能会导致不能正确编译或链接DLL，或在客户端应用程序链接到DLL时导致错误。
 当生成DLL时，链接器使用.def文件创建导出(.exp)文件和导入库(.lib)文件。然后，链接器使用导出文件生成DLL文件。隐式链接到DLL的可执行文件在生成时链接到导入库。请注意，MFC本身就是使用.def文件从MFCx0.dll导出函数和类的。
 */
---------------------- 
-版权声明：本文为CSDN博主「ouyangshima」的原创文章，遵循CC 4.0 by-sa版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/shimazhuge/article/details/9219393
