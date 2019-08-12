@@ -202,8 +202,7 @@ void Ctest_dllDlg::OnBnClickedButtonUseDll()
 
 }
 
-
-void Ctest_dllDlg::OnBnClickedButtonLoad()
+DWORD WINAPI Ctest_dllDlg::ThreadProc(LPVOID lpParameter)
 {
   typedef VOID (CALLBACK *Add)(int, int);
   Add add;
@@ -214,16 +213,28 @@ void Ctest_dllDlg::OnBnClickedButtonLoad()
   if ( g_hInstanceDll == NULL)
   {
     AfxMessageBox(_T("加载DLL失败"));
-    return;
+
+    return -1L;
   }
 
   add = (Add) ::GetProcAddress(g_hInstanceDll, "Add");
   if (add == NULL)
   {
     int i = 0;
+    ///TODO 调用 add 函数有问题
   }
   else
   {
     int i = 0;
   }
+
+  Sleep(1000000);
+
+  return 0L;
+}
+
+void Ctest_dllDlg::OnBnClickedButtonLoad()
+{
+  int ThreadInputData = 0;
+  HANDLE thread1 = CreateThread(NULL, 0, Ctest_dllDlg::ThreadProc, &ThreadInputData, 0, NULL);
 }

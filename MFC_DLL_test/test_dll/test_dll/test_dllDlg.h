@@ -32,4 +32,6 @@ protected:
 public:
   afx_msg void OnBnClickedButtonUseDll();
   afx_msg void OnBnClickedButtonLoad();
+
+  static DWORD WINAPI ThreadProc(LPVOID lpParameter);
 };
