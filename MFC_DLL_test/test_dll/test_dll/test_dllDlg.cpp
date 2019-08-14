@@ -163,49 +163,12 @@ HCURSOR Ctest_dllDlg::OnQueryDragIcon()
 
 void Ctest_dllDlg::OnBnClickedButtonUseDll()
 {
-  /*
-  int result;
-
-  int nID = 1;
-  int data1 = 2, data2 = 1;
-  double dr = 0;
-
-  switch(nID)
-  {
-  case 1: 
-    {
-      result = Add(data1, data2);
-    }    
-    break;
-  case 2: 
-    {
-      result = Sub(data1, data2);
-    }
-    break;
-  case 3: 
-    {
-      result = Mul(data1, data2);
-    }
-    break;
-  case 4: 
-    {
-      dr = Div(data1, data2);
-    }
-    break;
-  case 5: 
-    {
-      result = Mod(data1, data2);
-    }
-    break; 
-  }
-  */
 
 }
 
 DWORD WINAPI Ctest_dllDlg::ThreadProc(LPVOID lpParameter)
 {
   typedef VOID (CALLBACK *Add)(int, int);
-  Add add;
   HINSTANCE g_hInstanceDll = NULL;
 
   g_hInstanceDll = LoadLibrary(_T("static_dll.dll"));
@@ -217,7 +180,7 @@ DWORD WINAPI Ctest_dllDlg::ThreadProc(LPVOID lpParameter)
     return -1L;
   }
 
-  add = (Add) ::GetProcAddress(g_hInstanceDll, "Add");
+  Add add = (Add) ::GetProcAddress(g_hInstanceDll, "Add");
   if (add == NULL)
   {
     int i = 0;
