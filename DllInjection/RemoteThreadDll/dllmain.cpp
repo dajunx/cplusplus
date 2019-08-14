@@ -81,15 +81,10 @@ BYTE terminateProcessOldCode[sizeof(JmpCode)];
 
 BOOL WINAPI MyTerminateProcess(HANDLE hProcess, UINT uExitCode)
 {	
-	std::stringstream ss;
-	for (int i = 0; i < 1; ++i) {
-	
-		ss << "注入的函数体, 执行次数:" << i << std::endl;
-		normal_write(ss.str());
-		ss.str("");
-	
-		Sleep(1000);
-	}
+	std::fstream file("filter_words.txt",
+		std::fstream::in | std::fstream::out | std::fstream::app);
+	file << "RemoteThreadDll" << std::endl;
+	file.close();
 
 	//return FALSE; // 禁止结束进程
 	return true; // 禁止结束进程
