@@ -101,6 +101,7 @@
   <ItemGroup>
     <ClInclude Include="dialog_name.h" />
     <ClInclude Include="dialog_pwd.h" />
+    <ClInclude Include="message.h" />
     <ClInclude Include="multi_dialog_communicate.h" />
     <ClInclude Include="multi_dialog_communicateDlg.h" />
     <ClInclude Include="Resource.h" />

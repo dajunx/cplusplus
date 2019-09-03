@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#include "dialog_name.h"
+#include "dialog_pwd.h"
 
 
 // Cmulti_dialog_communicateDlg dialog
@@ -29,4 +31,25 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+
+public:
+	CTabCtrl m_tab_main;
+	CRect m_ctrl_rc;
+
+	dialog_name m_dialog_name;
+	dialog_pwd m_dialog_pwd;
+	afx_msg void OnTcnSelchangeTabMain(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnBnClickedButtonCtrlMessage();
+//	afx_msg void OnBnClickedButtonSendButtonSefmsg();
+//	afx_msg void OnBnClickedButtonTest();
+//	CButton m_button;
+protected:
+	afx_msg LRESULT OnUserDefineMsg(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnBnClickedButtonUserDefineMsg();
+	afx_msg void OnBnClickedButtonTest();
+protected:
+	afx_msg LRESULT OnChildUserDefineMsg(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnBnClickedButtonMsg2Child();
 };
