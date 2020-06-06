@@ -24,16 +24,10 @@
     <ClCompile Include="get_has_socket_progress_in_linux.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="spiral_query.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="test_class_virtual.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="turn_off_screen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="count_onenum_appear_count.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

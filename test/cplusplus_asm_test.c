@@ -20,16 +20,19 @@ void * buildCode()
 	*((int*)(&pJmp[2])) = (int)&address;
 	return code;
 }
+
 int main()
 {
 	void * code = buildCode();
 	_asm{
 		mov address, offset _dl1
 	}
+
 	a = 12;
 	printf("the a value %x.", &a);
 	_asm jmp code			// 执行我们自己构建的代码
 	a = 13;
+
 _dl1:
 	printf("the a value %x.", &a);
 	return 0;

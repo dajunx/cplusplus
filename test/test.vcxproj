@@ -74,11 +74,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="count_onenum_appear_count.cpp" />
     <ClCompile Include="cpluspls_virtual_table_test.cpp" />
     <ClCompile Include="cplusplus_asm_test.c" />
     <ClCompile Include="get_has_socket_progress_in_linux.cpp" />
-    <ClCompile Include="spiral_query.cpp" />
     <ClCompile Include="test_class_virtual.cpp" />
     <ClCompile Include="turn_off_screen.cpp" />
   </ItemGroup>
